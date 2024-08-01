@@ -1,0 +1,18 @@
+export const images: Record<string, any> = {
+  yoga_image_1: require("../assets/group/yoga_image_1.jpg"),
+  book_image_1: require("../assets/group/book_image_1.jpg"),
+  yoga_image_2: require("../assets/group/yoga_image_2.jpg"),
+  book_image_2: require("../assets/group/book_image_2.jpg"),
+  yoga_image_3: require("../assets/group/yoga_image_3.jpg"),
+  book_image_3: require("../assets/group/book_image_3.jpg"),
+  yoga_image_4: require("../assets/group/yoga_image_4.jpg"),
+  book_image_4: require("../assets/group/book_image_4.jpg"),
+  yoga_image_5: require("../assets/group/yoga_image_5.jpg"),
+  book_image_5: require("../assets/group/book_image_5.jpg"),
+  yoga_image_6: require("../assets/group/yoga_image_6.jpg"),
+  book_image_6: require("../assets/group/book_image_6.jpg"),
+  yoga_image_7: require("../assets/group/yoga_image_7.jpg"),
+  book_image_7: require("../assets/group/book_image_7.jpg"),
+  yoga_image_8: require("../assets/group/yoga_image_8.jpg"),
+  book_image_8: require("../assets/group/book_image_8.jpg"),
+};

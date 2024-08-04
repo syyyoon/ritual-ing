@@ -73,7 +73,7 @@ export const ritualDataList: RitualData[] = [
     type: "night",
     title: "퀸의 대각선 1일차",
     date: "2024-07-24 WED",
-    imageUrl: "book_image_4",
+    imageUrl: "",
     content: "그닥 구미를 당기는 책은 아니지만 읽기 시작했으니 끝을 보자!",
   },
   {

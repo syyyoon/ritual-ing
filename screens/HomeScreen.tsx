@@ -1,5 +1,5 @@
 import { Button, Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import { login, logout, unlink, me } from "@react-native-kakao/user";
 import Logo from "../components/Logo";
@@ -13,11 +13,18 @@ import {
   BalooBhai2_700Bold,
   BalooBhai2_800ExtraBold,
 } from "@expo-google-fonts/baloo-bhai-2";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, "RitualSetup1st">;
 };
+type UserData = {
+  id: number;
+  nickname: string;
+  profileImageUrl: string;
+};
 const HomeScreen = ({ navigation }: Props) => {
+  const [userData, setUserData] = useState<UserData | null>(null);
   let [fontsLoaded] = useFonts({
     BalooBhai2_400Regular,
     BalooBhai2_500Medium,
@@ -27,25 +34,41 @@ const HomeScreen = ({ navigation }: Props) => {
   });
 
   const backgroundImage = require("../assets/bgImage.png");
-  // const loginHandler = () => {
-  //   login()
-  //     .then((res) => {
-  //       // console.log("res", res);
-  //       me().then((res) => console.log(res));
-  //       // navigation.navigate("RitualSetup1st");
-  //     })
-  //     .catch(console.error);
-  // };
 
   const loginHandler = async (): Promise<void> => {
     try {
-      const token = await login();
+      await login();
       const result = await me();
-      console.log(JSON.stringify(result));
+      // 유저 정보 저장
+      const user = {
+        id: result.id,
+        nickname: result.nickname,
+        profileImageUrl: result.profileImageUrl,
+      };
+
+      await AsyncStorage.setItem("userData", JSON.stringify(user));
+      console.log("User data saved:", JSON.stringify(user));
+      setUserData(user);
+      navigation.navigate("RitualSetup1st");
     } catch (err) {
       console.error("login err", err);
     }
   };
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userDataJson = await AsyncStorage.getItem("userData");
+        if (userDataJson) {
+          setUserData(JSON.parse(userDataJson));
+        }
+      } catch (err) {
+        console.error("Failed to load user data", err);
+      }
+    };
+
+    loadUserData();
+  }, []);
 
   if (!fontsLoaded) return null;
   return (
@@ -109,7 +132,6 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     marginTop: 40,
     width: "80%",
-    // backgroundColor: "green",
     flexDirection: "row",
     justifyContent: "center",
   },

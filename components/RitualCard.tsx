@@ -22,12 +22,17 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
   const handleMoveDetail = () => {
     navigation.navigate("Detail", { item });
   };
+  const defaultImage = require("../assets/default.png");
+
   return (
     <View style={[styles.cardLayout, { marginHorizontal: marginValue }]}>
-      {/*  TouchableOpacity 가 상단에서 감싸면 css 적용이 안됨.. 왜 안됨?*/}
       <TouchableOpacity onPress={handleMoveDetail}>
         <View style={styles.contentWrapper}>
-          <Image source={images[item.imageUrl]} style={styles.image} />
+          {!images[item.imageUrl] ? (
+            <Image source={defaultImage} style={[styles.image, { borderWidth: 0.5, borderColor: "#c5c2b6" }]} />
+          ) : (
+            <Image source={images[item.imageUrl]} style={styles.image} />
+          )}
           <View style={{ paddingLeft: 5 }}>
             <CustomText>{item.title}</CustomText>
             {filter !== "all" && <CustomText fontSize={12}>{item.content}</CustomText>}

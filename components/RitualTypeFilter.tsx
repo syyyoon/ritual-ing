@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import CircleSticker from "./CircleSticker";
 import CustomText from "./CustomText";
 
@@ -33,11 +33,6 @@ const RitualTypeFilter = ({ filter, setFilter }: FilterProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flexDirection: "row",
-    // justifyContent: "flex-end",
-    // marginRight: 30,
-    // borderRightWidth: 0.5,
-    // borderColor: "gray",
     marginTop: 10,
   },
   button: {

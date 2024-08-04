@@ -11,7 +11,9 @@ export type RootStackParamList = {
   RitualSetup3rd: undefined;
   List: undefined;
   Detail: { item: RitualData };
-  RitualForm: undefined;
+
+  ImagePicker: undefined;
+  RitualForm: { imageUri: string | null };
   Search: undefined;
   // drawer 안에 있는 스택
   Profile: { userId: number };
@@ -21,6 +23,8 @@ export type RootStackParamList = {
 export type HomeScreenRouteProp = RouteProp<RootStackParamList, "Home">;
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, "Profile">;
 export type ListScreenRouteProp = RouteProp<RootStackParamList, "List">;
+export type RitualFormRouteProp = RouteProp<RootStackParamList, "RitualForm">;
+
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "RitualSetup1st">;
 
 // 'Detail' 화면으로 이동하기 위한 네비게이션 타입을 정의
@@ -28,6 +32,8 @@ export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamL
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Detail">;
 // 현재 화면에 대한 정보를 제공. 현재 화면의 파라미터와 라우트 관련 정보를 가져오는데 사용
 export type DetailScreenRouteProp = RouteProp<RootStackParamList, "Detail">;
+
+export type ImagePickerScreenNavigation = NativeStackNavigationProp<RootStackParamList, "RitualForm">;
 
 // navigation: 화면을 이동하거나 네비게이션 관련 작업을 수행하는 데 사용됨.
 // route: 현재 화면에 대한 정보와 파라미터를 읽는 데 사용됨.

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
 
   mainSection: {
-    marginTop: 10,
+    paddingTop: 10,
     flexDirection: "row",
   },
 });

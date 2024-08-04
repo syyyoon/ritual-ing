@@ -1,6 +1,7 @@
 import React from "react";
 import "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { createDrawerNavigator, DrawerNavigationProp } from "@react-navigation/drawer";
 import ProfileScreen from "../screens/ProfileScreen";
 import RitualListScreen from "../screens/RitualListScreen";
@@ -8,13 +9,8 @@ import SettingScreen from "../screens/SettingScreen";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../type";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Entypo from "@expo/vector-icons/Entypo";
 import Octicons from "@expo/vector-icons/Octicons";
 
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-// type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 const Drawer = createDrawerNavigator();
 
@@ -27,20 +23,32 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={{
+        // overlayColor: "transparent",
         headerTitleStyle: {
-          fontWeight: "200",
+          fontFamily: "NotoSansKR_400Regular",
+          fontSize: 15,
         },
         headerStyle: {
-          height: 100, // 헤더 높이 변경
+          // height: 110, // 헤더 높이 변경
           elevation: 0, // 안드로이드에서 그림자 제거
           shadowOpacity: 0, // iOS에서 그림자 제거
-          borderBottomWidth: 3, // 보더 제거
-          borderBottomColor: "#F8CD2D",
+          borderBottomWidth: 2,
+          borderBottomColor: "#f9e088",
+        },
+
+        drawerLabelStyle: {
+          fontFamily: "NotoSansKR_400Regular",
+        },
+        drawerActiveBackgroundColor: "#ae8b0a",
+        drawerActiveTintColor: "white",
+        drawerStyle: {
+          backgroundColor: "#fdfbef",
+          width: 200,
         },
         headerLeft: () => (
           <TouchableOpacity onPress={openDrawer}>
-            <View style={{ marginLeft: 10 }}>
-              <Entypo name="dots-two-vertical" size={24} />
+            <View style={styles.headerIconWrapper}>
+              <Octicons name="rows" size={15} />
             </View>
           </TouchableOpacity>
         ),
@@ -50,21 +58,15 @@ const DrawerNavigator = () => {
         name="List"
         component={RitualListScreen}
         options={{
-          title: "리추얼 목록",
-          // headerLeft: () => (
-          //   <TouchableOpacity onPress={openDrawer}>
-          //     <View style={{ marginLeft: 10 }}>
-          //       <Entypo name="dots-two-vertical" size={24} />
-          //     </View>
-          //   </TouchableOpacity>
-          // ),
+          title: "Archive",
+          drawerLabel: "Archive",
           headerRight: () => (
-            <View style={styles.headerRightContainer}>
+            <View style={styles.headerIconWrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-                <Octicons name="search" size={20} style={styles.icon} onPress={() => console.log("Search Pressed")} />
+                <Octicons name="search" size={15} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("RitualForm")}>
-                <MaterialIcons name="add" size={28} />
+              <TouchableOpacity onPress={() => navigation.navigate("ImagePicker")}>
+                <Octicons name="plus" size={15} />
               </TouchableOpacity>
             </View>
           ),
@@ -80,12 +82,9 @@ const DrawerNavigator = () => {
 export default DrawerNavigator;
 
 const styles = StyleSheet.create({
-  headerRightContainer: {
+  headerIconWrapper: {
     flexDirection: "row",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  icon: {
-    marginRight: 10,
+    marginHorizontal: 20,
+    gap: 18,
   },
 });

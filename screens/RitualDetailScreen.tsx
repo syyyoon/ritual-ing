@@ -14,7 +14,7 @@ const RitualDetailScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Button title="뒤로" />
+      <View style={styles.topBorder}></View>
       <Image source={images[item.imageUrl]} style={styles.image} />
       <Text>{item.id}</Text>
       <Text>{item.title}</Text>
@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fdfbef",
+  },
+  topBorder: {
+    borderTopWidth: 2,
+    borderColor: "#f9e088",
   },
   image: {
     width: "100%",

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import Colors from "../constants/colors";
 
 type Props = { stage: number };
 const StageBar = ({ stage }: Props) => {
@@ -30,5 +31,5 @@ const styles = StyleSheet.create({
     height: 6,
     backgroundColor: "#dddbdb",
   },
-  stageStatus: { height: 6, backgroundColor: "#F8CD2D" },
+  stageStatus: { height: 6, backgroundColor: Colors.PRIMARY },
 });

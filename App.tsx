@@ -86,7 +86,7 @@ const AppNavigator = () => {
         name="ImagePicker"
         component={ImagePickerScreen}
         options={({ navigation }) => ({
-          headerTitle: "1st step",
+          headerTitle: "Add an image",
           // headerRight: () => (
           //   <TouchableOpacity
           //     onPress={() => navigation.navigate("RitualForm", { imageUri: null })}

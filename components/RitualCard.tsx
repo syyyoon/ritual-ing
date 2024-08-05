@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { RitualData } from "../ritualData";
 import CustomText from "./CustomText";
@@ -34,8 +34,8 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
             <Image source={images[item.imageUrl]} style={styles.image} />
           )}
           <View style={{ paddingLeft: 5 }}>
-            <CustomText>{item.title}</CustomText>
-            {filter !== "all" && <CustomText fontSize={12}>{item.content}</CustomText>}
+            {item.title && <CustomText>{item.title}</CustomText>}
+            {filter !== "all" && item.content && <CustomText fontSize={12}>{item.content}</CustomText>}
             <View style={styles.date}>
               <MaterialCommunityIcons name="tag" size={12} color="#828080" />
               <CustomText fontSize={12} style={{ color: "#7c7d80" }}>

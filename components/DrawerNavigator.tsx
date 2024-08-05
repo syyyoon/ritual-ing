@@ -10,6 +10,7 @@ import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../type";
 import Octicons from "@expo/vector-icons/Octicons";
+import Colors from "../constants/colors";
 
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 const Drawer = createDrawerNavigator();
@@ -33,16 +34,16 @@ const DrawerNavigator = () => {
           elevation: 0, // 안드로이드에서 그림자 제거
           shadowOpacity: 0, // iOS에서 그림자 제거
           borderBottomWidth: 2,
-          borderBottomColor: "#f9e088",
+          borderBottomColor: Colors.PRIMARY,
         },
 
         drawerLabelStyle: {
           fontFamily: "NotoSansKR_400Regular",
         },
-        drawerActiveBackgroundColor: "#ae8b0a",
-        drawerActiveTintColor: "white",
+        drawerActiveBackgroundColor: Colors.DRAWER_ACTIVE_BG,
+        drawerActiveTintColor: Colors.DRAWER_ACTIVE_TEXT,
         drawerStyle: {
-          backgroundColor: "#fdfbef",
+          backgroundColor: Colors.BACKGROUND,
           width: 200,
         },
         headerLeft: () => (

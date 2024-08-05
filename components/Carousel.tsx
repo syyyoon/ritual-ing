@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import PagerView from "react-native-pager-view";
+import Colors from "../constants/colors";
 
 const Carousel = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   },
   pagerView: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: Colors.BACKGROUND,
   },
   page: {
     justifyContent: "center",

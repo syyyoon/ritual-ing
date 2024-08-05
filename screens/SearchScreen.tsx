@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import Colors from "../constants/colors";
 
 const SearchScreen = () => {
   const router = useRouter();
@@ -23,17 +24,17 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: Colors.SECONDARY,
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: Colors.BACKGROUND,
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: Colors.BORDER,
     marginBottom: 20,
     padding: 10,
   },

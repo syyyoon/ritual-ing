@@ -3,6 +3,7 @@ import React from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../type";
 import { images } from "../source/image";
+import Colors from "../constants/colors";
 
 type RitualDetailScreenRouteProp = RouteProp<RootStackParamList, "Detail">;
 
@@ -28,16 +29,15 @@ export default RitualDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fdfbef",
+    backgroundColor: Colors.BACKGROUND,
   },
   topBorder: {
     borderTopWidth: 2,
-    borderColor: "#f9e088",
+    borderColor: Colors.PRIMARY,
   },
   image: {
     width: "100%",
-    height: undefined, // aspectRatio 값에 따라 높이 자동으로 계산됨.
+    height: undefined,
     aspectRatio: 1.5,
-    // marginBottom: 5
   },
 });

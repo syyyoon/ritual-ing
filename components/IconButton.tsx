@@ -1,8 +1,8 @@
 import React from "react";
 import { MaterialIcons, Octicons } from "@expo/vector-icons";
-
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomText from "./CustomText";
+import Colors from "../constants/colors";
 
 type MaterialIconsName = keyof typeof MaterialIcons.glyphMap;
 type OcticonsName = keyof typeof Octicons.glyphMap;
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderWidth: 6,
-    borderColor: "#F8CD2D",
-    borderRadius: 30,
+    borderColor: Colors.PRIMARY,
+    borderRadius: 40,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
   iconButtonLabel: {
     textAlign: "center",
     fontWeight: 500,
-    color: "#F8CD2D",
+    color: Colors.PRIMARY,
   },
 });

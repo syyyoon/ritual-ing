@@ -2,6 +2,7 @@ import { SafeAreaView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import RitualTypeFilter from "../components/RitualTypeFilter";
 import FilterableCardList from "../components/FilterableCardList";
+import Colors from "../constants/colors";
 
 const RitualListScreen = () => {
   const [filterValue, setFilterValue] = useState<"all" | "morning" | "night">("all");
@@ -21,7 +22,7 @@ export default RitualListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fdfbef",
+    backgroundColor: Colors.BACKGROUND,
   },
 
   mainSection: {

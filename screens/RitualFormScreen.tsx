@@ -3,6 +3,7 @@ import React from "react";
 import Editor from "../components/Editor";
 import { RitualFormRouteProp } from "../type";
 import { useRoute } from "@react-navigation/native";
+import Colors from "../constants/colors";
 
 const RitualFormScreen = () => {
   const route = useRoute<RitualFormRouteProp>();
@@ -10,9 +11,8 @@ const RitualFormScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View style={styles.borderTop}></View> */}
       <View style={styles.mainSection}>
-        <Editor image={imageUri} />
+        <Editor image={imageUri} isEdit={false} />
       </View>
     </SafeAreaView>
   );
@@ -23,11 +23,11 @@ export default RitualFormScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fdfbef",
+    backgroundColor: Colors.BACKGROUND,
   },
   borderTop: {
     borderTopWidth: 2,
-    borderColor: "#F8CD2D",
+    borderColor: Colors.PRIMARY,
   },
   mainSection: {
     marginTop: 10,

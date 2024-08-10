@@ -1,19 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useFonts, ConcertOne_400Regular } from "@expo-google-fonts/concert-one";
 import Colors from "../constants/colors";
+import { RitualFilterValue } from "../types/ritual";
+import { useConcertFontsHook } from "../hook/useCustomFonts";
 
 type Props = {
   size?: "default" | "large";
-  type: "morning" | "night" | "all";
+  type: RitualFilterValue;
   text?: string;
 };
 
 const CircleSticker = ({ size = "default", type, text }: Props) => {
-  let [fontsLoaded] = useFonts({
-    ConcertOne_400Regular,
-  });
-  const color = type === "morning" ? Colors.TYPE_MORNING : Colors.TYPE_NIGHTL;
+  const { fontsLoaded } = useConcertFontsHook();
+  const color = type === "morning" ? Colors.TYPE_MORNING : Colors.TYPE_NIGHT;
   const circleSize = size === "default" ? 20 : 25;
   const borderRadius = circleSize / 2;
   const marginLeft = type === "all" ? 8 : 5;

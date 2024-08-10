@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useFonts, Comfortaa_400Regular, Comfortaa_700Bold } from "@expo-google-fonts/comfortaa";
+import { useComfortaaFontsHook } from "../hook/useCustomFonts";
 
 type Props = {
   mainTitle: string;
@@ -8,10 +7,7 @@ type Props = {
 };
 
 const StepTitle = ({ mainTitle, subTitle }: Props) => {
-  let [fontsLoaded] = useFonts({
-    Comfortaa_400Regular,
-    Comfortaa_700Bold,
-  });
+  const { fontsLoaded } = useComfortaaFontsHook();
 
   if (!fontsLoaded) return null;
   return (
@@ -28,8 +24,6 @@ const styles = StyleSheet.create({
   layout: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    // borderBottomWidth: 4,
-    // borderBottomColor: "#F8CD2D",
   },
   mainText: { fontFamily: "Comfortaa_700Bold", fontSize: 22, marginBottom: 10 },
   subText: { fontFamily: "Comfortaa_400Regular", fontSize: 20 },

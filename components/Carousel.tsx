@@ -1,10 +1,10 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import PagerView from "react-native-pager-view";
 import Colors from "../constants/colors";
 
 const Carousel = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   return (
     <View style={styles.container}>

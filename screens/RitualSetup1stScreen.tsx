@@ -5,14 +5,12 @@ import StepTitle from "../components/StepTitle";
 import CircleSticker from "../components/CircleSticker";
 import TimePicker from "../components/TimePicker";
 import CustomButton from "../components/CustomButton";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import CustomCheckBox from "../components/CustomCheckBox";
 import StageBar from "../components/StageBar";
-import { RootStackParamList } from "../type";
+import { RitualSetup1stNavigationProp } from "../types/navigation";
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "RitualSetup2nd">;
+  navigation: RitualSetup1stNavigationProp;
 };
 
 const RitualSetup1stScreen = ({ navigation }: Props) => {
@@ -34,7 +32,6 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
       <View style={{ alignItems: "center" }}>
         <CustomButton
           label="Next"
-          // theme="light"
           size="large"
           onPress={() => {
             navigation.navigate("RitualSetup2nd");

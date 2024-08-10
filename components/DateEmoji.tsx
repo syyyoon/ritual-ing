@@ -2,8 +2,8 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useFonts, BalooBhai2_700Bold } from "@expo-google-fonts/baloo-bhai-2";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useBalooFontsHook } from "../hook/useCustomFonts";
 
 type Props = {
   text: string;
@@ -13,11 +13,8 @@ type Props = {
 };
 
 const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
-  let [fontsLoaded] = useFonts({
-    BalooBhai2_700Bold,
-  });
-
   const [showTrashIcon, setShowTrashIcon] = useState(false);
+  const { fontsLoaded } = useBalooFontsHook();
 
   const isLongDateEmoji = text.includes("+");
 
@@ -79,13 +76,13 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: "BalooBhai2_700Bold",
-    fontSize: 25,
+    fontSize: 30,
     textAlign: "center",
   },
   firstLineText: {
     fontSize: 30,
   },
-  secondLineText: { fontSize: 20, marginTop: -18 },
+  secondLineText: { fontSize: 23, marginTop: -18 },
 
   trashIcon: {
     position: "absolute",

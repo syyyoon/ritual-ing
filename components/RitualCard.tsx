@@ -1,21 +1,20 @@
-import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { RitualData } from "../ritualData";
+import { Image, StyleSheet, View } from "react-native";
 import CustomText from "./CustomText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../type";
+import { ListScreenNavigationProp } from "../types/navigation";
 import { images } from "../source/image";
+import { RitualData, RitualFilterValue } from "../types/ritual";
 
 type RitualCardProps = {
   item: RitualData;
-  filter: "all" | "morning" | "night";
+  filter: RitualFilterValue;
 };
 
 const RitualCard = ({ item, filter }: RitualCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, "Detail">>();
+  const navigation = useNavigation<ListScreenNavigationProp>();
 
   const marginValue = filter === "all" ? 1 : 10;
 
@@ -28,10 +27,15 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
     <View style={[styles.cardLayout, { marginHorizontal: marginValue }]}>
       <TouchableOpacity onPress={handleMoveDetail}>
         <View style={styles.contentWrapper}>
-          {!images[item.imageUrl] ? (
-            <Image source={defaultImage} style={[styles.image, { borderWidth: 0.5, borderColor: "#c5c2b6" }]} />
+          {item.imageUrl && item.id > 10 ? (
+            <Image source={{ uri: item.imageUrl }} style={styles.image} />
           ) : (
-            <Image source={images[item.imageUrl]} style={styles.image} />
+            // *TODO : 코드 수정
+            <Image
+              source={images[item.imageUrl]}
+              defaultSource={defaultImage}
+              style={[styles.image, { borderWidth: 0.5, borderColor: "#c5c2b6" }]}
+            />
           )}
           <View style={{ paddingLeft: 5 }}>
             {item.title && <CustomText>{item.title}</CustomText>}

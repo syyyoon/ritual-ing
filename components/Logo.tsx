@@ -1,22 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import {
-  useFonts,
-  BalooBhai2_400Regular,
-  BalooBhai2_500Medium,
-  BalooBhai2_600SemiBold,
-  BalooBhai2_700Bold,
-  BalooBhai2_800ExtraBold,
-} from "@expo-google-fonts/baloo-bhai-2";
+import { useBalooFontsHook } from "../hook/useCustomFonts";
 
 const Logo = () => {
-  let [fontsLoaded] = useFonts({
-    BalooBhai2_400Regular,
-    BalooBhai2_500Medium,
-    BalooBhai2_600SemiBold,
-    BalooBhai2_700Bold,
-    BalooBhai2_800ExtraBold,
-  });
+  const { fontsLoaded } = useBalooFontsHook();
 
   if (!fontsLoaded) return null;
   return (
@@ -35,7 +21,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingVertical: 8,
     justifyContent: "center",
-    // borderWidth: 1,
   },
   logoStyle: {
     fontSize: 35,

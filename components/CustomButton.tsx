@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useFonts, Comfortaa_600SemiBold } from "@expo-google-fonts/comfortaa";
+import { useComfortaaFontsHook } from "../hook/useCustomFonts";
 
 type Props = {
   label: string;
@@ -10,9 +10,8 @@ type Props = {
 };
 
 const CustomButton = ({ label, theme = "light", size = "default", onPress }: Props) => {
-  let [fontsLoaded] = useFonts({
-    Comfortaa_600SemiBold,
-  });
+  const { fontsLoaded } = useComfortaaFontsHook();
+
   const bgColor = theme === "light" ? "#fff" : "#000";
   const textColor = theme === "light" ? "#000" : "#fff";
   const buttonSize = size === "default" ? 150 : "80%";

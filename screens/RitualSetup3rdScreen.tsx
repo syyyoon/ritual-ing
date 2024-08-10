@@ -4,14 +4,12 @@ import Logo from "../components/Logo";
 import StepTitle from "../components/StepTitle";
 import CircleSticker from "../components/CircleSticker";
 import CustomButton from "../components/CustomButton";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import StageBar from "../components/StageBar";
 import Carousel from "../components/Carousel";
-import { RootStackParamList } from "../type";
+import { RitualSetup3rdNavigationProp } from "../types/navigation";
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "Main">;
+  navigation: RitualSetup3rdNavigationProp;
 };
 
 const RitualSetup3rdScreen = ({ navigation }: Props) => {

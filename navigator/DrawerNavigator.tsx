@@ -3,12 +3,11 @@ import "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createDrawerNavigator, DrawerNavigationProp } from "@react-navigation/drawer";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../types/navigation";
 import ProfileScreen from "../screens/ProfileScreen";
 import RitualListScreen from "../screens/RitualListScreen";
 import SettingScreen from "../screens/SettingScreen";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../type";
 import Octicons from "@expo/vector-icons/Octicons";
 import Colors from "../constants/colors";
 

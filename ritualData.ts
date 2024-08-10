@@ -1,22 +1,13 @@
-// mockData.ts
-export interface RitualData {
-  id: number;
-  type: "morning" | "night";
-  date: string;
-  imageUrl: string;
-  title?: string;
-  content?: string;
-}
+import { RitualData } from "./types/ritual";
 
 export const ritualDataList: RitualData[] = [
   {
     id: 1,
     type: "morning",
-    title: "Hata Yoga 50mins",
-    date: "2024-07-21 SUN",
+    title: "",
+    date: "2024-07-21 ",
     imageUrl: "yoga_image_1",
-    content:
-      "Today, I started my journey with yoga. The initial session was challenging, yet invigorating. I'm excited to see how this practice will transform my mind and body.",
+    content: "",
   },
   {
     id: 2,
@@ -38,7 +29,7 @@ export const ritualDataList: RitualData[] = [
   {
     id: 4,
     type: "night",
-    title: "데미안 21-50page",
+    title: "",
     date: "2024-07-22 MON",
     imageUrl: "book_image_2",
     content:

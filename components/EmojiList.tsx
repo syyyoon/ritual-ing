@@ -1,8 +1,8 @@
 import React from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { generateDateOptions } from "../utils/dateFormats";
-import { useFonts, BalooBhai2_700Bold } from "@expo-google-fonts/baloo-bhai-2";
 import Octicons from "@expo/vector-icons/Octicons";
+import { useBalooFontsHook } from "../hook/useCustomFonts";
 
 type Props = {
   onSelect: (item: string) => void;
@@ -11,10 +11,7 @@ type Props = {
 };
 const EmojiList = ({ onSelect, pickedEmoji, selectedColor }: Props) => {
   const emojiList = generateDateOptions();
-
-  let [fontsLoaded] = useFonts({
-    BalooBhai2_700Bold,
-  });
+  const { fontsLoaded } = useBalooFontsHook();
 
   if (!fontsLoaded) return null;
   return (

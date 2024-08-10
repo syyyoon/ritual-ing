@@ -5,14 +5,12 @@ import StepTitle from "../components/StepTitle";
 import CircleSticker from "../components/CircleSticker";
 import TimePicker from "../components/TimePicker";
 import CustomButton from "../components/CustomButton";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import CustomCheckBox from "../components/CustomCheckBox";
 import StageBar from "../components/StageBar";
-import { RootStackParamList } from "../type";
+import { RitualSetup2ndNavigationProp } from "../types/navigation";
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "RitualSetup3rd">;
+  navigation: RitualSetup2ndNavigationProp;
 };
 
 const RitualSetup2ndScreen = ({ navigation }: Props) => {

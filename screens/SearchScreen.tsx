@@ -1,20 +1,24 @@
 import React from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
 import Colors from "../constants/colors";
+import { SearchScreenNavigation } from "../types/navigation";
+import CustomButton from "../components/CustomButton";
 
-const SearchScreen = () => {
-  const router = useRouter();
-
+type Props = {
+  navigation: SearchScreenNavigation;
+};
+const SearchScreen = ({ navigation }: Props) => {
   const closeModal = () => {
-    router.back();
+    // navigation.navigate("List");
+    navigation.goBack();
   };
 
   return (
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
         <TextInput placeholder="Search..." style={styles.input} />
-        <Button title="Close" onPress={closeModal} />
+        <CustomButton label="Search" onPress={() => {}} />
+        <CustomButton label="Close" onPress={closeModal} />
       </View>
     </View>
   );
@@ -31,6 +35,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    height: 300,
   },
   input: {
     borderBottomWidth: 1,

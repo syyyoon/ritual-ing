@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -36,11 +36,11 @@ const AFTERNOON_TIME_LIST = [
   { label: "24:00", value: "2400" },
 ];
 
-type Props = {
+type timeProp = {
   time: "morning" | "afternoon";
 };
 
-const TimePicker = ({ time }: Props) => {
+const TimePicker = ({ time }: timeProp) => {
   return (
     <View>
       <RNPickerSelect

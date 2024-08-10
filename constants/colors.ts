@@ -6,7 +6,7 @@ const Colors = {
   BORDER: "#dddddd", // border color
 
   TYPE_MORNING: "#F14E1F", //red
-  TYPE_NIGHTL: "#85CA0F", // green
+  TYPE_NIGHT: "#85CA0F", // green
   // Drawer
   DRAWER_ACTIVE_BG: "#AE8B0A", // dark yellow
   DRAWER_ACTIVE_TEXT: "#FFFFFF", // white

@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import CircleSticker from "./CircleSticker";
-import CustomText from "./CustomText";
+import { RitualType } from "../types/ritual";
 
 type TypeSelectorProps = {
-  type: "morning" | "night";
+  type: RitualType;
   onTypeSelect: (type: "morning" | "night") => void;
 };
 

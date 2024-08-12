@@ -23,15 +23,13 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        // overlayColor: "transparent",
         headerTitleStyle: {
           fontFamily: "NotoSansKR_400Regular",
           fontSize: 15,
         },
         headerStyle: {
-          // height: 110, // 헤더 높이 변경
-          elevation: 0, // 안드로이드에서 그림자 제거
-          shadowOpacity: 0, // iOS에서 그림자 제거
+          elevation: 0,
+          shadowOpacity: 0,
           borderBottomWidth: 2,
           borderBottomColor: Colors.PRIMARY,
         },

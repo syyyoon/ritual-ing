@@ -1,10 +1,8 @@
-import { Button, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 import React from "react";
 import { Calendar, DateData } from "react-native-calendars";
 import Colors from "../constants/colors";
-
 import AntDesign from "@expo/vector-icons/AntDesign";
-import CustomText from "./CustomText";
 
 type CalendarProps = {
   visible: boolean;
@@ -24,16 +22,6 @@ const ModalCalendar = ({ visible, onClose, onSelectDate, selectedDate }: Calenda
           style={{ textAlign: "right", marginRight: 20, marginBottom: 20, color: "white" }}
         />
         <Calendar
-          // theme={{
-          //   backgroundColor: "#ffffff",
-          //   calendarBackground: Colors.BACKGROUND,
-          //   textSectionTitleColor: "#b6c1cd",
-          //   selectedDayBackgroundColor: Colors.PRIMARY,
-          //   selectedDayTextColor: "#ffffff",
-          //   todayTextColor: "#1866e3",
-          //   dayTextColor: "#2d4150",
-          //   textDisabledColor: "#a8a7a9",
-          // }}
           onDayPress={(day: DateData) => {
             onSelectDate(day.dateString);
             onClose();
@@ -42,8 +30,6 @@ const ModalCalendar = ({ visible, onClose, onSelectDate, selectedDate }: Calenda
             [selectedDate]: { selected: true },
           }}
         />
-
-        {/* <Button title="close" onPress={onClose} /> */}
       </View>
     </Modal>
   );

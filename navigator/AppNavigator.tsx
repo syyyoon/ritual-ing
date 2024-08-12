@@ -11,6 +11,8 @@ import ImagePickerScreen from "../screens/ImagePickerScreen";
 import RitualFormScreen from "../screens/RitualFormScreen";
 import SearchScreen from "../screens/SearchScreen";
 import RitualDetailScreen from "../screens/RitualDetailScreen";
+import HomeScreen from "../screens/HomeScreen";
+import { Button, Text, View } from "react-native";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,6 +31,7 @@ const AppNavigator = () => {
         ),
       })}
     >
+      <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="RitualSetup1st" component={RitualSetup1stScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="RitualSetup2nd" component={RitualSetup2ndScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="RitualSetup3rd" component={RitualSetup3rdScreen} options={{ headerShown: false }} />
@@ -37,7 +40,7 @@ const AppNavigator = () => {
       <RootStack.Screen
         name="RitualForm"
         component={RitualFormScreen}
-        options={{ headerTitle: "Complete ritual activity" }}
+        options={{ headerTitle: "Today's ritual log" }}
       />
       <RootStack.Screen name="Search" component={SearchScreen} options={{ presentation: "modal" }} />
       <RootStack.Screen name="Detail" component={RitualDetailScreen} />

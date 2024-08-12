@@ -18,6 +18,8 @@ export const generateDateOptions = () => {
   const option5 = `${currentTimeKR}+${option3} (${weekDayKR})`;
   const option6 = `${currentTimeENG}+${currentDateENG}`;
   const option7 = `${weekDayENG}+${currentDateENG} `;
+  const option8 = `${day}+${monthENG}`;
+  const option9 = `${year}+${weekDayENG.substring(0, 3)}. ${monthENG} ${day}`;
 
   const options = [
     currentDateKR, // 2024-08-06 (화)
@@ -33,6 +35,8 @@ export const generateDateOptions = () => {
     option5, // 2024.08.08 + 오전1:49
     option6, // 1:49 AM + Aug 08 2024
     option7, //THURSDAY + Aug 08 2024
+    option8, // 08+Aug
+    option9, // 2024+THU. Aug 08
   ];
 
   return options;

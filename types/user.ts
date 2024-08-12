@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   id: string;
   nickname: string;
   profileImageUrl: string;
@@ -6,4 +6,4 @@ export interface User {
     morning: string;
     night: string;
   };
-}
+};

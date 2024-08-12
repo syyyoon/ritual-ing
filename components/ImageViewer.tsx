@@ -7,17 +7,11 @@ type Props = {
 };
 
 const ImageViewer = React.memo(({ selectedImage }: Props) => {
-  useEffect(() => {
-    console.log("ImageViewer URI:", selectedImage);
-  }, [selectedImage]);
-
   if (!selectedImage) {
-    console.log("이미지 없음");
     return (
       <Image source={require("../assets/default.png")} style={[styles.image, { backgroundColor: Colors.BACKGROUND }]} />
     );
   } else {
-    console.log("이미지 존재");
     return <Image source={{ uri: selectedImage }} style={styles.image} />;
   }
 });

@@ -3,6 +3,5 @@ export const getRitualType = (): "morning" | "night" => {
   const koreaTimeDiff = 9 * 60 * 60 * 1000;
   const koreaTime = new Date(now.getTime() + koreaTimeDiff);
   const hours = koreaTime.getUTCHours();
-  console.log(hours);
   return hours < 12 ? "morning" : "night";
 };

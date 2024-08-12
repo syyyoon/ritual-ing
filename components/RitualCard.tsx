@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ListScreenNavigationProp } from "../types/navigation";
 import { images } from "../source/image";
 import { RitualData, RitualFilterValue } from "../types/ritual";
+import Colors from "../constants/colors";
 
 type RitualCardProps = {
   item: RitualData;
@@ -15,7 +16,6 @@ type RitualCardProps = {
 
 const RitualCard = ({ item, filter }: RitualCardProps) => {
   const navigation = useNavigation<ListScreenNavigationProp>();
-
   const marginValue = filter === "all" ? 1 : 10;
 
   const handleMoveDetail = () => {
@@ -30,11 +30,10 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
           {item.imageUrl && item.id > 10 ? (
             <Image source={{ uri: item.imageUrl }} style={styles.image} />
           ) : (
-            // *TODO : 코드 수정
             <Image
-              source={images[item.imageUrl]}
+              source={item.imageUrl ? images[item.imageUrl] : defaultImage}
               defaultSource={defaultImage}
-              style={[styles.image, { borderWidth: 0.5, borderColor: "#c5c2b6" }]}
+              style={[styles.image, { borderWidth: 0.5, borderColor: Colors.BORDER }]}
             />
           )}
           <View style={{ paddingLeft: 5 }}>

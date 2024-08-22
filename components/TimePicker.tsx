@@ -1,6 +1,8 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import RNPickerSelect from "react-native-picker-select";
+import Colors from "../constants/colors";
+import { useTheme } from "../context/ThemeContext";
 
 const MORNING_TIME_LIST = [
   { label: "05:00", value: "0500" },
@@ -37,10 +39,12 @@ const AFTERNOON_TIME_LIST = [
 ];
 
 type timeProp = {
-  time: "morning" | "afternoon";
+  time: "morning" | "night";
+  onTimeChange: (time: string) => void;
 };
 
-const TimePicker = ({ time }: timeProp) => {
+const TimePicker = ({ time, onTimeChange }: timeProp) => {
+  const { theme } = useTheme();
   return (
     <View>
       <RNPickerSelect
@@ -48,13 +52,13 @@ const TimePicker = ({ time }: timeProp) => {
           label: "시간을 선택하세요.",
         }}
         style={{
-          inputIOS: styles.IOS,
-          inputWeb: styles.WEB,
+          inputIOS: [styles.IOS, { color: theme.TEXT }],
+          inputWeb: [styles.WEB, { color: theme.TEXT }],
           placeholder: {
-            color: "#a9a9a9",
+            color: Colors.BORDER,
           },
         }}
-        onValueChange={(value) => console.log(value)}
+        onValueChange={(value) => onTimeChange(value)}
         items={time === "morning" ? MORNING_TIME_LIST : AFTERNOON_TIME_LIST}
       />
     </View>
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
     width: "50%",
     padding: 10,
     borderWidth: 1,
-    borderColor: "#999",
+    borderColor: Colors.BORDER,
     borderRadius: 8,
     marginTop: 10,
   },

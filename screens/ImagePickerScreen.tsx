@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import React, { useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -8,11 +8,12 @@ import { useNavigation } from "@react-navigation/native";
 import { ImagePickerScreenNavigation } from "../types/navigation";
 import IconButton from "../components/IconButton";
 import ImageViewer from "../components/ImageViewer";
-import Colors from "../constants/colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EmojiPicker from "../components/EmojiPicker";
 import EmojiList from "../components/EmojiList";
 import DateEmoji from "../components/DateEmoji";
+import { useTheme } from "../context/ThemeContext";
+
 
 const ImagePickerScreen = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -22,8 +23,8 @@ const ImagePickerScreen = () => {
   const [selectedColor, setSelectedColor] = useState<string>("#ffff");
 
   const imageRef = useRef<View>(null);
-
   const navigation = useNavigation<ImagePickerScreenNavigation>();
+  const { theme } = useTheme();
 
   const pickImage = async () => {
     const permissionMediaLibray = await MediaLibrary.requestPermissionsAsync();
@@ -42,7 +43,7 @@ const ImagePickerScreen = () => {
         setImageUri(result.assets[0].uri);
         setShowActionOptions(true);
       } else {
-        alert("선택한 사진이 없습니다.");
+        Alert.alert("알림", "선택한 사진이 없습니다.");
       }
 
       return result;
@@ -76,7 +77,7 @@ const ImagePickerScreen = () => {
 
       await MediaLibrary.saveToLibraryAsync(localUri);
       if (localUri) {
-        alert("성공적으로 저장되었습니다!");
+        Alert.alert("성공적으로 저장되었습니다!");
       }
     } catch (error) {
       alert("다시 시도해주세요.");
@@ -118,7 +119,7 @@ const ImagePickerScreen = () => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
       <View ref={imageRef} collapsable={false} style={{ position: "relative" }}>
         <ImageViewer selectedImage={imageUri ?? undefined} />
         {pickedEmoji && (
@@ -175,10 +176,10 @@ export default ImagePickerScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.BACKGROUND_DARK,
     flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   buttonsContainer: {

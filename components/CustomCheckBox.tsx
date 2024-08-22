@@ -1,9 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useState } from "react";
 import Checkbox from "expo-checkbox";
+import Colors from "../constants/colors";
+import CustomText from "./CustomText";
 
-const CustomCheckBox = () => {
+type Props = {
+  text: string;
+};
+const CustomCheckBox = ({ text }: Props) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
+
 
   return (
     <View style={styles.container}>
@@ -11,9 +17,9 @@ const CustomCheckBox = () => {
         style={styles.checkBox}
         value={isChecked}
         onValueChange={setIsChecked}
-        color={isChecked ? "#666666" : undefined}
+        color={isChecked ? Colors.SECONDARY : undefined}
       />
-      <Text style={styles.paragraph}>메세지 알림에 동의합니다.</Text>
+      {text && <CustomText>{text}</CustomText>}
     </View>
   );
 };
@@ -25,9 +31,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
-  },
-  paragraph: {
-    fontWeight: "200",
   },
   checkBox: {
     margin: 8,

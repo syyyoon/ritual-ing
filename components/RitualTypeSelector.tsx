@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import CircleSticker from "./CircleSticker";
 import { RitualType } from "../types/ritual";
+import CustomText from "./CustomText";
 
 type TypeSelectorProps = {
   type: RitualType;
@@ -16,14 +17,14 @@ const RitualTypeSelector = ({ type, onTypeSelect }: TypeSelectorProps) => {
         style={[styles.flexRow, type === "morning" && styles.selected]}
       >
         <CircleSticker type="morning" />
-        <Text>Morning</Text>
+        <CustomText>Morning</CustomText>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => onTypeSelect("night")}
         style={[styles.flexRow, type === "night" && styles.selected]}
       >
         <CircleSticker type="night" />
-        <Text>Night</Text>
+        <CustomText>Night</CustomText>
       </TouchableOpacity>
     </View>
   );

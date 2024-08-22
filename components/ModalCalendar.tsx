@@ -1,8 +1,8 @@
 import { Modal, StyleSheet, View } from "react-native";
 import React from "react";
 import { Calendar, DateData } from "react-native-calendars";
-import Colors from "../constants/colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useTheme } from "../context/ThemeContext";
 
 type CalendarProps = {
   visible: boolean;
@@ -12,14 +12,15 @@ type CalendarProps = {
 };
 
 const ModalCalendar = ({ visible, onClose, onSelectDate, selectedDate }: CalendarProps) => {
+  const { theme } = useTheme()
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
-      <View style={styles.modalContainer}>
+      <View style={[styles.modalContainer, { backgroundColor: theme.BACKGROUND }]}>
         <AntDesign
           name="close"
           size={24}
           onPress={onClose}
-          style={{ textAlign: "right", marginRight: 20, marginBottom: 20, color: "white" }}
+          style={{ textAlign: "right", marginRight: 20, marginBottom: 20, color: theme.BACKGROUND }}
         />
         <Calendar
           onDayPress={(day: DateData) => {
@@ -41,7 +42,5 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
-    backgroundColor: Colors.BACKGROUND_DARK,
   },
 });

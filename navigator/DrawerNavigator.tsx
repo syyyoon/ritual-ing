@@ -10,11 +10,13 @@ import RitualListScreen from "../screens/RitualListScreen";
 import SettingScreen from "../screens/SettingScreen";
 import Octicons from "@expo/vector-icons/Octicons";
 import Colors from "../constants/colors";
+import { useTheme } from "../context/ThemeContext";
 
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const { theme } = useTheme()
   const navigation = useNavigation<NavigationProp>();
   const openDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -26,27 +28,31 @@ const DrawerNavigator = () => {
         headerTitleStyle: {
           fontFamily: "NotoSansKR_400Regular",
           fontSize: 15,
+          color: theme.TEXT
         },
         headerStyle: {
+          height: 100,
           elevation: 0,
           shadowOpacity: 0,
-          borderBottomWidth: 2,
+          borderBottomWidth: 1,
           borderBottomColor: Colors.PRIMARY,
+          backgroundColor: theme.BACKGROUND
+
         },
 
         drawerLabelStyle: {
+          color: theme.TEXT,
           fontFamily: "NotoSansKR_400Regular",
         },
         drawerActiveBackgroundColor: Colors.DRAWER_ACTIVE_BG,
-        drawerActiveTintColor: Colors.DRAWER_ACTIVE_TEXT,
         drawerStyle: {
-          backgroundColor: Colors.BACKGROUND,
+          backgroundColor: theme.BACKGROUND,
           width: 200,
         },
         headerLeft: () => (
           <TouchableOpacity onPress={openDrawer}>
             <View style={styles.headerIconWrapper}>
-              <Octicons name="rows" size={15} />
+              <Octicons name="rows" size={15} color={theme.TEXT} />
             </View>
           </TouchableOpacity>
         ),
@@ -61,10 +67,10 @@ const DrawerNavigator = () => {
           headerRight: () => (
             <View style={styles.headerIconWrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-                <Octicons name="search" size={15} />
+                <Octicons name="search" size={18} color={theme.TEXT} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("ImagePicker")}>
-                <Octicons name="plus" size={15} />
+                <Octicons name="plus" size={18} color={theme.TEXT} />
               </TouchableOpacity>
             </View>
           ),
@@ -82,7 +88,7 @@ export default DrawerNavigator;
 const styles = StyleSheet.create({
   headerIconWrapper: {
     flexDirection: "row",
-    marginHorizontal: 20,
-    gap: 18,
+    marginHorizontal: 25,
+    gap: 20,
   },
 });

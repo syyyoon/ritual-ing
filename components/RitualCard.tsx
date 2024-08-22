@@ -8,6 +8,7 @@ import { ListScreenNavigationProp } from "../types/navigation";
 import { images } from "../source/image";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import Colors from "../constants/colors";
+import { useTheme } from "../context/ThemeContext";
 
 type RitualCardProps = {
   item: RitualData;
@@ -16,6 +17,7 @@ type RitualCardProps = {
 
 const RitualCard = ({ item, filter }: RitualCardProps) => {
   const navigation = useNavigation<ListScreenNavigationProp>();
+  const { theme } = useTheme()
   const marginValue = filter === "all" ? 1 : 10;
 
   const handleMoveDetail = () => {
@@ -28,22 +30,24 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
       <TouchableOpacity onPress={handleMoveDetail}>
         <View style={styles.contentWrapper}>
           {item.imageUrl && item.id > 10 ? (
-            <Image source={{ uri: item.imageUrl }} style={styles.image} />
+            <Image source={{ uri: item.imageUrl }} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]} />
           ) : (
             <Image
               source={item.imageUrl ? images[item.imageUrl] : defaultImage}
               defaultSource={defaultImage}
-              style={[styles.image, { borderWidth: 0.5, borderColor: Colors.BORDER }]}
+              style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]}
             />
           )}
           <View style={{ paddingLeft: 5 }}>
             {item.title && <CustomText>{item.title}</CustomText>}
             {filter !== "all" && item.content && <CustomText fontSize={12}>{item.content}</CustomText>}
             <View style={styles.date}>
-              <MaterialCommunityIcons name="tag" size={12} color="#828080" />
-              <CustomText fontSize={12} style={{ color: "#7c7d80" }}>
-                {item.date}
-              </CustomText>
+              <MaterialCommunityIcons name="tag" size={12} color={Colors.BORDER} />
+              <CustomText fontSize={12}>{item.date}</CustomText>
+            </View>
+            {/* like ritual */}
+            <View>
+
             </View>
           </View>
         </View>

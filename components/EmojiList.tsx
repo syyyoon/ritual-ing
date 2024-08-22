@@ -20,7 +20,6 @@ const EmojiList = ({ onSelect, pickedEmoji, selectedColor }: Props) => {
       contentContainerStyle={styles.listContainer}
       keyExtractor={(item) => item}
       renderItem={({ item }) => {
-        // 선택 여부 표시
         const isSelected = item === pickedEmoji;
         return (
           <Pressable

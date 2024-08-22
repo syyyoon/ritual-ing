@@ -2,6 +2,7 @@ import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import ColorPicker, { Panel1, Swatches, Preview, HueSlider } from "reanimated-color-picker";
 import CustomText from "./CustomText";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   isVisible: boolean;
@@ -11,7 +12,7 @@ type Props = {
 
 const CustomColorPicker = ({ isVisible, onClose, onColorSelected }: Props) => {
   const [selectedColor, setSelectedColor] = useState<string>("#ffff");
-
+  const { theme } = useTheme()
   const onSelectColor = ({ hex }: any) => {
     setSelectedColor(hex);
   };
@@ -24,7 +25,7 @@ const CustomColorPicker = ({ isVisible, onClose, onColorSelected }: Props) => {
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.modalContent}>
-        <View style={styles.colorPickerContainer}>
+        <View style={[styles.colorPickerContainer, { backgroundColor: theme.TEXT }]}>
           <ColorPicker value={selectedColor} onComplete={onSelectColor}>
             <Panel1 style={{ marginBottom: 20 }} />
             <Swatches />
@@ -33,7 +34,7 @@ const CustomColorPicker = ({ isVisible, onClose, onColorSelected }: Props) => {
           </ColorPicker>
 
           <TouchableOpacity style={styles.buttonWrapper} onPress={handleSaveColor}>
-            <CustomText fontFamily="NotoSansKR_700Bold" style={styles.button}>
+            <CustomText fontSize={15} style={{ color: theme.BACKGROUND }}>
               SELECT
             </CustomText>
           </TouchableOpacity>
@@ -47,7 +48,7 @@ export default CustomColorPicker;
 const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -55,12 +56,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 20,
     width: "80%",
-    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
   },
-  buttonWrapper: { flexDirection: "row", justifyContent: "center" },
-  button: {
-    fontSize: 15,
+  buttonWrapper: {
+    flexDirection: "row",
+    justifyContent: "center"
   },
+
 });

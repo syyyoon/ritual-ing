@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Image, StyleSheet } from "react-native";
-import Colors from "../constants/colors";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   selectedImage: string | undefined;
 };
 
 const ImageViewer = React.memo(({ selectedImage }: Props) => {
+  const { theme } = useTheme()
+
   if (!selectedImage) {
     return (
-      <Image source={require("../assets/default.png")} style={[styles.image, { backgroundColor: Colors.BACKGROUND }]} />
+      <Image source={require("../assets/default.png")} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]} />
     );
   } else {
     return <Image source={{ uri: selectedImage }} style={styles.image} />;
@@ -23,5 +25,6 @@ const styles = StyleSheet.create({
     width: "95%",
     height: undefined,
     aspectRatio: 1.5,
+    // aspectRatio: 1.0, // 1:1 비율
   },
 });

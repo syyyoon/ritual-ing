@@ -16,7 +16,7 @@ const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
   const [showTrashIcon, setShowTrashIcon] = useState(false);
   const { fontsLoaded } = useBalooFontsHook();
 
-  const isLongDateEmoji = text.includes("+");
+  const isFullDateText = text.includes("+");
 
   //  이미지 드래그 시 X,Y값 0,0 으로 초기 위치 설정 (시작점)
   const translateX = useSharedValue(0);
@@ -47,7 +47,7 @@ const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
     <GestureDetector gesture={drag}>
       <Animated.View style={[styles.container, containerStyle]}>
         <TouchableOpacity onLongPress={handleLongPress} onPress={openModal}>
-          {isLongDateEmoji ? (
+          {isFullDateText ? (
             <>
               <Animated.Text style={[styles.date, styles.firstLineText, { color: color }]}>
                 {text.split("+")[0]}

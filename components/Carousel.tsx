@@ -2,14 +2,15 @@ import { Image, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import PagerView from "react-native-pager-view";
 import Colors from "../constants/colors";
+import { useTheme } from "../context/ThemeContext";
 
 const Carousel = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
-
+  const { theme } = useTheme()
   return (
     <View style={styles.container}>
       <PagerView
-        style={styles.pagerView}
+        style={[styles.pagerView, { backgroundColor: theme.BACKGROUND }]}
         initialPage={0}
         onPageSelected={(e) => setCurrentPage(e.nativeEvent.position)}
       >
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
   },
   pagerView: {
     flex: 1,
-    backgroundColor: Colors.BACKGROUND,
   },
   page: {
     justifyContent: "center",
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "gray",
+    backgroundColor: Colors.SECONDARY,
     marginHorizontal: 4,
   },
   activeIndicator: {
-    backgroundColor: "black",
+    backgroundColor: Colors.PRIMARY,
   },
 });

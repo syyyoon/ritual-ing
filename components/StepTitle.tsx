@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useComfortaaFontsHook } from "../hook/useCustomFonts";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   mainTitle: string;
@@ -8,12 +9,13 @@ type Props = {
 
 const StepTitle = ({ mainTitle, subTitle }: Props) => {
   const { fontsLoaded } = useComfortaaFontsHook();
+  const { theme } = useTheme()
 
   if (!fontsLoaded) return null;
   return (
     <View style={styles.layout}>
-      <Text style={styles.mainText}>{mainTitle}</Text>
-      <Text style={styles.subText}>{subTitle}</Text>
+      <Text style={[styles.mainText, { color: theme.TEXT }]}>{mainTitle}</Text>
+      <Text style={[styles.subText, { color: theme.TEXT }]}>{subTitle}</Text>
     </View>
   );
 };

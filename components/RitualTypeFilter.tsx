@@ -1,8 +1,8 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import CircleSticker from "./CircleSticker";
-import CustomText from "./CustomText";
 import { RitualFilterValue } from "../types/ritual";
+import CustomText from "./CustomText";
 
 interface FilterProps {
   filter: RitualFilterValue;
@@ -18,7 +18,7 @@ const RitualTypeFilter = ({ filter, setFilter }: FilterProps) => {
         <TouchableOpacity
           key={label}
           style={[
-            styles.button,
+            styles.typeButton,
             {
               opacity: filter === label ? 1 : 0.5,
             },
@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
   },
-  button: {
+  typeButton: {
     paddingLeft: 10,
     flexDirection: "row",
+    marginBottom: 5,
   },
 });
 

@@ -1,18 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Colors from "../constants/colors";
 import { RitualFilterValue } from "../types/ritual";
 import { useConcertFontsHook } from "../hook/useCustomFonts";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   size?: "default" | "large";
   type: RitualFilterValue;
   text?: string;
+  textSize?: number;
 };
 
-const CircleSticker = ({ size = "default", type, text }: Props) => {
+const CircleSticker = ({ size = "default", type, text, textSize = 20 }: Props) => {
   const { fontsLoaded } = useConcertFontsHook();
-  const color = type === "morning" ? Colors.TYPE_MORNING : Colors.TYPE_NIGHT;
+  const { theme } = useTheme()
+
+  const color = type === "morning" ? theme.TYPE_MORNING : theme.TYPE_NIGHT;
   const circleSize = size === "default" ? 20 : 25;
   const borderRadius = circleSize / 2;
   const marginLeft = type === "all" ? 8 : 5;
@@ -34,7 +37,7 @@ const CircleSticker = ({ size = "default", type, text }: Props) => {
               styles.circle,
               ,
               {
-                backgroundColor: Colors.TYPE_MORNING,
+                backgroundColor: theme.TYPE_MORNING,
                 width: circleSize,
                 height: circleSize,
                 position: "absolute",
@@ -53,7 +56,7 @@ const CircleSticker = ({ size = "default", type, text }: Props) => {
           ]}
         ></View>
       )}
-      <Text style={[styles.text, { marginLeft: marginLeft }]}>{text}</Text>
+      <Text style={[styles.text, { marginLeft: marginLeft, fontSize: textSize, color: theme.TEXT }]}>{text}</Text>
     </View>
   );
 };
@@ -68,6 +71,5 @@ const styles = StyleSheet.create({
   circle: { margin: 2 },
   text: {
     fontFamily: "ConcertOne_400Regular",
-    fontSize: 20,
   },
 });

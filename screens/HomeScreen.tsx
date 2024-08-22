@@ -4,99 +4,70 @@ import CustomButton from "../components/CustomButton";
 import { login, logout, unlink, me } from "@react-native-kakao/user";
 import Logo from "../components/Logo";
 import { HomeScreenNavigationProp } from "../types/navigation";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User } from "../types/user";
+import CustomText from "../components/CustomText";
+import { generateUniqueId } from "../utils/uniqueId";
+import { saveUserData } from "../service/userDataService";
+import Layout from "../components/Layout";
 
 type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-// type UserData = {
-//   id: string;
-//   nickname: string;
-//   profileImageUrl: string;
-// };
-
 const HomeScreen = ({ navigation }: Props) => {
-  const [userData, setUserData] = useState<User | null>(null);
-
   const backgroundImage = require("../assets/bgImage.png");
 
-  // const findUser = async () => {
-  //   const result = await AsyncStorage.getItem("user");
-  //   setUserData(JSON.parse(result));
-
-  //   console.log("user result", result);
-  // };
-
-  const loginHandler = async (): Promise<void> => {
+  const handleLogin = async (): Promise<void> => {
     try {
-      await login();
-      const result = await me();
-      // 유저 정보 저장
+      // npx expo run: ios 
+      // await login();
+      // const result = await me();
+      // console.log(result)
+      // const user = {
+      //   id: result.id,
+      //   nickname: result.nickname,
+      //   profileImageUrl: result.profileImageUrl,
+      // };
+
+
+      // npx expo  start 로 실행할때
       const user = {
-        id: result.id,
-        nickname: result.nickname,
-        profileImageUrl: result.profileImageUrl,
+        id: generateUniqueId(),
+        nickname: "윤선영",
+        profileImageUrl: undefined,
       };
 
       await AsyncStorage.setItem("user", JSON.stringify(user));
-      console.log("User data saved:", JSON.stringify(user));
-      // setUserData(user);
       navigation.navigate("RitualSetup1st");
     } catch (err) {
       console.error("login err", err);
     }
   };
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        const userDataJson = await AsyncStorage.getItem("userData");
-        if (userDataJson) {
-          setUserData(JSON.parse(userDataJson));
-        }
-      } catch (err) {
-        console.error("Failed to load user data", err);
-      }
-    };
-
-    loadUserData();
-  }, []);
-
-  useEffect(() => {
-    console.log("find User 실행");
-    // findUser();
-  }, []);
 
   return (
-    <SafeAreaView style={styles.mainLayout}>
+    <Layout style={styles.homeLayout}>
       <View style={styles.bgImageContainer}>
         <Image source={backgroundImage} style={styles.bgImage} />
       </View>
       <Logo />
-      <Text style={styles.mainTitle}>내 삶의 주도권 찾기 프로젝트</Text>
-      <Text style={styles.definition}>*Ritual : 매일 나 자신을 위해 반복적, 규칙적으로 하는 의식적 행위</Text>
+
+      <CustomText style={{ marginBottom: 5 }} fontSize={18} >내 삶의 주도권 찾기 프로젝트</CustomText>
+      <CustomText fontSize={12}>*Ritual : 매일 나 자신을 위해 반복적, 규칙적으로 하는 의식적 행위</CustomText>
+
+
+
       <View style={styles.buttonsContainer}>
-        <CustomButton label="Login" size="large" onPress={loginHandler} />
+        <CustomButton theme="light" label="Login" size="large" onPress={handleLogin} />
       </View>
-      {/* 개발 중 사용할 버튼  */}
-      <Button
-        title="skip"
-        onPress={() => {
-          navigation.navigate("Main");
-        }}
-      />
-    </SafeAreaView>
+    </Layout>
   );
 };
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  mainLayout: {
-    flex: 1,
+  homeLayout: {
     alignItems: "center",
     justifyContent: "center",
   },
@@ -109,12 +80,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  mainTitle: { fontSize: 18, fontWeight: "200", marginBottom: 3 },
-  definition: {
-    fontSize: 13,
-    fontWeight: "200",
-    color: "#65645f",
-  },
+
   buttonsContainer: {
     marginTop: 40,
     width: "80%",

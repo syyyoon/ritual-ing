@@ -1,17 +1,20 @@
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import RitualTypeFilter from "../components/RitualTypeFilter";
 import FilterableCardList from "../components/FilterableCardList";
-import Colors from "../constants/colors";
+
 import { useFocusEffect } from "@react-navigation/native";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import { getRitualDataList } from "../service/ritualDataService";
+import Layout from "../components/Layout";
+
 
 const RitualListScreen = () => {
   const [filterValue, setFilterValue] = useState<RitualFilterValue>("all");
   const [rituals, setRituals] = useState<RitualData[]>([]);
 
-  const loadData = async () => {
+
+  const loadRitualListData = async () => {
     let data = await getRitualDataList();
     if (!data) {
       setRituals([]);
@@ -20,28 +23,39 @@ const RitualListScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      loadData();
+      loadRitualListData();
     }, [])
   );
 
+  if (!rituals) {
+    return (
+      <Layout>
+        <ActivityIndicator />
+      </Layout>)
+  }
+
+
+  if (!rituals) {
+    return (
+      <Layout>
+        <ActivityIndicator />
+      </Layout>
+
+    );
+  }
   return (
-    <SafeAreaView style={styles.container}>
+    <Layout>
       <View style={styles.mainSection}>
         <RitualTypeFilter filter={filterValue} setFilter={setFilterValue} />
         <FilterableCardList filter={filterValue} ritualDataList={rituals} />
       </View>
-    </SafeAreaView>
+    </Layout>
   );
 };
 
 export default RitualListScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.BACKGROUND,
-  },
-
   mainSection: {
     paddingTop: 10,
     flexDirection: "row",

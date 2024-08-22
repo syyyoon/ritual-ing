@@ -1,37 +1,34 @@
 import React from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
 import { SearchScreenNavigation } from "../types/navigation";
 import CustomButton from "../components/CustomButton";
+import Layout from "../components/Layout";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   navigation: SearchScreenNavigation;
 };
 const SearchScreen = ({ navigation }: Props) => {
+  const { theme } = useTheme();
   const closeModal = () => {
-    // navigation.navigate("List");
     navigation.goBack();
   };
 
   return (
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
+    <Layout style={{ justifyContent: "flex-end" }}>
+      <View style={[styles.modalContent, { backgroundColor: theme.DEFAULT_IMG_BG }]}>
         <TextInput placeholder="Search..." style={styles.input} />
-        <CustomButton label="Search" onPress={() => {}} />
+        <CustomButton label="Search" onPress={() => { }} />
         <CustomButton label="Close" onPress={closeModal} />
       </View>
-    </View>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: Colors.SECONDARY,
-  },
+
   modalContent: {
-    backgroundColor: Colors.BACKGROUND,
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

@@ -1,9 +1,13 @@
 export type User = {
-  id: string;
+  id: number;
   nickname: string;
-  profileImageUrl: string;
-  ritual: {
-    morning: string;
-    night: string;
-  };
+  profileImageUrl?: string;
+  morningRitual :{
+    activity:string;
+    time?:string;
+  }
+  nightRitual :{
+    activity:string;
+    time?:string;
+  }
 };

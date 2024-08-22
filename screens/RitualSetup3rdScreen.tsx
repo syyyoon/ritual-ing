@@ -1,5 +1,5 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import StepTitle from "../components/StepTitle";
 import CircleSticker from "../components/CircleSticker";
@@ -7,23 +7,72 @@ import CustomButton from "../components/CustomButton";
 import StageBar from "../components/StageBar";
 import Carousel from "../components/Carousel";
 import { RitualSetup3rdNavigationProp } from "../types/navigation";
+import { User } from "../types/user";
+import { useTheme } from "../context/ThemeContext";
+import Layout from "../components/Layout";
+import { getUserData } from "../service/userDataService";
 
 type Props = {
   navigation: RitualSetup3rdNavigationProp;
 };
 
 const RitualSetup3rdScreen = ({ navigation }: Props) => {
+  const [userData, setUserData] = useState<User | null>(null)
+  const { theme } = useTheme()
+
+
+
+  const isUserDataValid = (data: User | null): boolean => {
+    if (!data) return false;
+    return (
+      data.id !== undefined && data.nickname.length > 1 && data.morningRitual.activity.length > 1 && data.nightRitual.activity.length > 1
+    );
+  };
+
+
+  const startHandler = async () => {
+    if (isUserDataValid(userData)) {
+      navigation.navigate('Main');
+    } else {
+      Alert.alert(
+        "",
+        "리추얼 양식을 완성시켜주세요.",
+        [{ text: "OK" }]
+      );
+    }
+  };
+
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userData = await getUserData()
+        if (userData) {
+          setUserData(userData)
+        }
+      } catch (error) {
+        console.warn("Failed to load user data:", error);
+        Alert.alert(
+          "알림",
+          "유저 데이터를 불러오는 중 문제가 발생했습니다. 다시 시도해주세요.",
+          [{ text: "확인" }]
+        )
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Layout>
       <Logo />
       <StepTitle mainTitle={"The Last Step"} subTitle="나의 ' 리추얼 ' 시작하기" />
       <StageBar stage={3} />
       <View style={styles.section}>
         <CircleSticker type="all" text="Well begun is half done." />
-        <Text style={styles.comment}>
+        <Text style={[styles.comment, { color: theme.TEXT }]}>
           단조롭고 무기력한 일상에서 벗어나 자신에게 맞는 리추얼을 찾아 작은 것부터 실천해보세요.
         </Text>
-        {/* 예시 리추얼 활동 이미지 캐러셀로 보여주기 */}
         <View style={styles.carouselContainer}>
           <Carousel />
         </View>
@@ -39,19 +88,16 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
         <CustomButton
           label="Start"
           theme="dark"
-          onPress={() => {
-            navigation.navigate("Main");
-          }}
+          onPress={startHandler}
         />
       </View>
-    </SafeAreaView>
+    </Layout>
   );
 };
 
 export default RitualSetup3rdScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
   section: {
     marginHorizontal: 35,
     paddingTop: 50,
@@ -59,7 +105,7 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginTop: 20,
-    height: 200,
+    height: 220,
   },
   comment: {
     fontSize: 18,

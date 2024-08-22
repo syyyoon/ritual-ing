@@ -1,4 +1,13 @@
-import { Alert, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "./CustomButton";
@@ -8,12 +17,14 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Colors from "../constants/colors";
 import ModalCalendar from "./ModalCalendar";
 import { getCurrentDate } from "../utils/currentDate";
-import { ScrollView } from "react-native-gesture-handler";
 import { getRitualType } from "../utils/ritualType";
 import { generateUniqueId } from "../utils/uniqueId";
 import { RitualFormScreenNavigation } from "../types/navigation";
 import { RitualData, RitualType } from "../types/ritual";
 import { getRitualDataList, saveRitualDataList, deleteRitualData } from "../service/ritualDataService";
+import FlexRowTexts from "./FlexRowTexts";
+import CustomText from "./CustomText";
+import { useTheme } from "../context/ThemeContext";
 
 type Props = {
   image: string | null;
@@ -35,6 +46,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   const navigation = useNavigation<RitualFormScreenNavigation>();
   const scrollViewRef = useRef<ScrollView>(null);
   const contentInputRef = useRef<TextInput>(null);
+  const { theme } = useTheme()
 
   const handleTypeSelect = (type: RitualType) => {
     setRitualData((prevData) => ({ ...prevData, type }));
@@ -106,7 +118,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   useEffect(() => {
     setRitualData((prevData) => ({
       ...prevData,
-      date: getCurrentDate("ENG"),
+      date: getCurrentDate("ENG"), // Aug 22 2024
       type: getRitualType(),
       imageUrl: image ?? "",
     }));
@@ -134,16 +146,21 @@ const Editor = ({ image, isEdit, originData }: Props) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} ref={scrollViewRef}>
         {/* 리추얼 타입 */}
-        <View style={styles.common}>
-          <Text style={styles.label}>Type</Text>
-          <RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />
-        </View>
+        <FlexRowTexts
+          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
+          second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
+          gap={5}
+          style={styles.common}
+        />
+
         {/* 날짜 + 모달 캘린더 */}
-        <View style={styles.common}>
-          <Text style={styles.label}>Date</Text>
-          <TextInput placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />
-          <MaterialIcons name="calendar-month" size={22} onPress={() => setShowDatePicker(true)} />
-        </View>
+        <FlexRowTexts
+          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
+          second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
+          third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
+          gap={5}
+          style={styles.common}
+        />
         <ModalCalendar
           visible={showDatePicker}
           onClose={() => setShowDatePicker(false)}
@@ -151,27 +168,30 @@ const Editor = ({ image, isEdit, originData }: Props) => {
           selectedDate={ritualData.date}
         />
         {/* 타이틀 */}
-        <View style={styles.common}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.title}
-            value={ritualData.title}
-            onChangeText={(text) => handleChange("title", text)}
-            placeholder="제목을 입력하세요"
-            placeholderTextColor={Colors.BORDER}
-          />
-        </View>
+        <FlexRowTexts
+          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
+          second={
+            <TextInput
+              style={styles.title}
+              value={ritualData.title}
+              onChangeText={(text) => handleChange("title", text)}
+              placeholder="제목을 입력하세요"
+              placeholderTextColor={Colors.BORDER}
+            />
+          }
+          gap={5}
+          style={styles.common}
+        />
+
         {/* 이미지 */}
-        <Text style={[styles.label, { margin: 10 }]}>Image</Text>
+        <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
         <View style={styles.imagePicker}>
-          {/* DetailScreen에서는 originData.imageUrl이 selectedImage로 전달  */}
-          {/* RitualFormScreen에서는 image 가 null 일경우(이미지 선택 없이 넘어온 경우) undefined 로 전달 */}
           <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
         </View>
 
         {/* 컨텐츠 */}
         <View style={{ paddingVertical: 10 }}>
-          <Text style={styles.label}>Content</Text>
+          <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
           <TextInput
             ref={contentInputRef}
             value={ritualData.content}
@@ -190,10 +210,11 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         </View>
         <View style={styles.buttonWrapper}>
           {originData && isEdit ? (
-            <View style={{ flexDirection: "row" }}>
-              <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
-              <CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />
-            </View>
+            <FlexRowTexts
+              first={<CustomButton label="OK" theme="dark" onPress={saveRitualData} />}
+              second={<CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />}
+              style={{ marginTop: 10, justifyContent: "space-between" }}
+            />
           ) : (
             <CustomButton label="OK" theme="dark" onPress={saveRitualData} size="large" />
           )}
@@ -210,19 +231,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    paddingHorizontal: 20,
+
   },
   scrollContainer: {
-    // padding: 20,
-  },
-  flexRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    padding: 15,
   },
 
-  selectedType: {
-    opacity: 1,
-  },
   imagePicker: {
     flexDirection: "column",
     alignItems: "center",
@@ -241,7 +255,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 10,
     padding: 10,
-
     backgroundColor: "white",
     textAlignVertical: "top",
     borderColor: Colors.PRIMARY,
@@ -250,13 +263,9 @@ const styles = StyleSheet.create({
   },
   label: {
     marginHorizontal: 10,
-    fontWeight: "bold",
   },
   common: {
-    flexDirection: "row",
-    alignItems: "center",
     paddingVertical: 10,
-    gap: 5,
   },
   buttonWrapper: {
     alignItems: "center",

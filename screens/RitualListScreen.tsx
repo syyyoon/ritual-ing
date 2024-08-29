@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import RitualTypeFilter from "../components/RitualTypeFilter";
 import FilterableCardList from "../components/FilterableCardList";

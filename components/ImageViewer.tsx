@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   image: {
     width: "95%",
     height: undefined,
-    aspectRatio: 1.5,
-    // aspectRatio: 1.0, // 1:1 비율
+    // aspectRatio: 1.5,
+    aspectRatio: 1.0, // 1:1 비율
   },
 });

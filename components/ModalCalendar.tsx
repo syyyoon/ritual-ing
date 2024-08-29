@@ -3,6 +3,7 @@ import React from "react";
 import { Calendar, DateData } from "react-native-calendars";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useTheme } from "../context/ThemeContext";
+import { formatSelectedDate } from "../utils/formatDate";
 
 type CalendarProps = {
   visible: boolean;
@@ -13,6 +14,7 @@ type CalendarProps = {
 
 const ModalCalendar = ({ visible, onClose, onSelectDate, selectedDate }: CalendarProps) => {
   const { theme } = useTheme()
+
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={[styles.modalContainer, { backgroundColor: theme.BACKGROUND }]}>
@@ -24,7 +26,8 @@ const ModalCalendar = ({ visible, onClose, onSelectDate, selectedDate }: Calenda
         />
         <Calendar
           onDayPress={(day: DateData) => {
-            onSelectDate(day.dateString);
+            const selectedDate = formatSelectedDate(day.dateString)
+            onSelectDate(selectedDate);
             onClose();
           }}
           markedDates={{

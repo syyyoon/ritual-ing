@@ -9,7 +9,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import InQuiryForm from "../components/InquiryForm";
 import FlexRowTexts from "../components/FlexRowTexts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingScreenNavigation } from "../types/navigation";
 import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
@@ -32,27 +31,10 @@ const SettingScreen = ({ navigation }: Props) => {
   };
 
 
-  // const handleWithdrawalOfMembership = async () => {
-  //   try {
-  //     await removeUserData('user') // async storage에서 유저 데이터 삭제
-  //     // await unlink()  // 해당 앱 연결 끊기
-  //     navigation.reset({
-  //       index: 0, routes: [{ name: "Home" }]
-  //     })
-  //   } catch (error) {
-  //     console.warn("Failed to remove user data:", error);
-  //     Alert.alert(
-  //       "알림",
-  //       "계정 삭제가 실패하였습니다. 다시 시도해주세요.",
-  //       [{ text: "OK" }]
-  //     );
-  //   }
-
-  // }
-
   const handleLogout = async () => {
     try {
-      await removeUserData('user')
+      await removeUserData('user') // async storage에서 유저 데이터 삭제
+      await unlink()  // 해당 앱 연결 끊기
       navigation.reset({
         index: 0, routes: [{ name: "Home" }]
       })
@@ -64,7 +46,9 @@ const SettingScreen = ({ navigation }: Props) => {
         [{ text: "OK" }]
       );
     }
-  };
+
+  }
+
 
   const confirmLogout = () => {
     Alert.alert(

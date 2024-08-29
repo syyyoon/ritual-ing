@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RitualData } from "../types/ritual";
+import { Alert } from "react-native";
 
 const RITUAL_DATA_KEY = "ritualDataList";
 
@@ -8,7 +9,7 @@ export const getRitualDataList = async (): Promise<RitualData[]> => {
     const storedData = await AsyncStorage.getItem(RITUAL_DATA_KEY);
     return storedData ? JSON.parse(storedData) : [];
   } catch (error) {
-    console.error("리추얼 데이터 가져오기 중 오류 발생:", error);
+     Alert.alert("알림", "리추얼 데이터 조회 중 오류가 발생했습니다. 다시 시도해주세요.");
     return [];
   }
 };
@@ -17,9 +18,9 @@ export const getRitualDataList = async (): Promise<RitualData[]> => {
 export const saveRitualDataList = async (ritualDataList: RitualData[]) => {
   try {
     await AsyncStorage.setItem(RITUAL_DATA_KEY, JSON.stringify(ritualDataList));
-    console.log("새로운 리추얼 데이터가 성공적으로 저장되었습니다!");
+   Alert.alert("알림", "오늘 리추얼 성공!");
   } catch (error) {
-    console.error("리추얼 데이터 저장 중 오류 발생:", error);
+   Alert.alert("알림", "리추얼 저장 중 오류가 발생했습니다.");
   }
 };
 
@@ -30,6 +31,6 @@ export const deleteRitualData = async (id: number) => {
     const updatedRitualDataList = ritualDataList.filter((ritual) => ritual.id !== id);
     await saveRitualDataList(updatedRitualDataList);
   } catch (error) {
-    console.error("리추얼 데이터 삭제 중 오류 발생:", error);
+     Alert.alert("알림", "리추얼 삭제 중 오류가 발생했습니다.");
   }
 };

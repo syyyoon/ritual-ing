@@ -5,6 +5,7 @@ export type RitualData = {
   imageUrl?: string;
   title?: string;
   content?: string;
+  like?:boolean;
 };
 
 export type RitualType = "morning" | "night";

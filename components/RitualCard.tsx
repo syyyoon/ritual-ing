@@ -9,6 +9,7 @@ import { images } from "../source/image";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import Colors from "../constants/colors";
 import { useTheme } from "../context/ThemeContext";
+import Entypo from '@expo/vector-icons/Entypo';
 
 type RitualCardProps = {
   item: RitualData;
@@ -19,6 +20,8 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
   const navigation = useNavigation<ListScreenNavigationProp>();
   const { theme } = useTheme()
   const marginValue = filter === "all" ? 1 : 10;
+  const imageRatio = filter === "all" ? 1 : 1.5
+  // const contentSize = filter === "all" ? "100%" : "80%"
 
   const handleMoveDetail = () => {
     navigation.navigate("Detail", { item });
@@ -28,27 +31,44 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
   return (
     <View style={[styles.cardLayout, { marginHorizontal: marginValue }]}>
       <TouchableOpacity onPress={handleMoveDetail}>
-        <View style={styles.contentWrapper}>
+        <View style={[styles.contentWrapper]}>
           {item.imageUrl && item.id > 10 ? (
-            <Image source={{ uri: item.imageUrl }} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]} />
+            <Image source={{ uri: item.imageUrl }} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG, aspectRatio: imageRatio }]} />
           ) : (
             <Image
               source={item.imageUrl ? images[item.imageUrl] : defaultImage}
               defaultSource={defaultImage}
-              style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]}
+              style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG, aspectRatio: imageRatio }]}
             />
           )}
+
           <View style={{ paddingLeft: 5 }}>
-            {item.title && <CustomText>{item.title}</CustomText>}
-            {filter !== "all" && item.content && <CustomText fontSize={12}>{item.content}</CustomText>}
-            <View style={styles.date}>
-              <MaterialCommunityIcons name="tag" size={12} color={Colors.BORDER} />
-              <CustomText fontSize={12}>{item.date}</CustomText>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 3 }}>
+              {item.title && <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>{item.title}</CustomText>}
+              {!item.title && <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>-</CustomText>}
+              {filter !== "all" && item.like && <Entypo
+                name="heart"
+                size={12}
+                color="#f15b5b"
+              />}
             </View>
-            {/* like ritual */}
-            <View>
+
+            {filter !== "all" && item.content && <CustomText fontSize={12}>{item.content}</CustomText>}
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <View style={styles.date}>
+                <MaterialCommunityIcons name="tag" size={12} color={Colors.BORDER} />
+                <CustomText fontSize={12}>{item.date}</CustomText>
+
+              </View>
+              {/* like ritual */}
+              {filter === "all" && item.like && <Entypo
+                name="heart"
+                size={12}
+                color="#f15b5b"
+              />}
 
             </View>
+
           </View>
         </View>
       </TouchableOpacity>
@@ -64,14 +84,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 25,
+
   },
   contentWrapper: {
     width: "100%",
+
   },
   image: {
     width: "100%",
     height: undefined, // aspectRatio 값에 따라 높이 자동으로 계산됨.
-    aspectRatio: 1.5,
+    // aspectRatio: 1.5,
     // aspectRatio: 1, // 정사각형 타입
     marginBottom: 5,
   },
@@ -79,6 +101,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 2,
-    marginTop: 5,
+    // marginTop: 5,
   },
 });

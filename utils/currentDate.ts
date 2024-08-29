@@ -13,7 +13,7 @@ export const getCurrentDate = (type: "KR" | "ENG"): string => {
     return `${year}-${month}-${day}`;
   } else {
     const monthENG = monthNamesENG[monthNum];
-    return `${monthENG} ${day} ${year}`;
+    return `${monthENG} ${day}, ${year}`;
   }
 };
 

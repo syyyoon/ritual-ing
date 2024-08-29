@@ -12,7 +12,10 @@ type Props = {
 const FilterableCardList = ({ filter, ritualDataList }: Props) => {
   const filteredData = filter === "all" ? ritualDataList : ritualDataList.filter((ritual) => ritual.type === filter);
 
+  // const filteredData = []
+
   const numColumns = filter === "all" ? 2 : 1;
+
 
   return (
     <View style={styles.listContainer}>

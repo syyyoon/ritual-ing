@@ -34,7 +34,7 @@ export type RitualSetup2ndNavigationProp = NativeStackNavigationProp<RootStackPa
 export type RitualSetup3rdNavigationProp = NativeStackNavigationProp<RootStackParamList, "RitualSetup3rd">;
 
 export type ListScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "List">;
-
+export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList,"Profile">
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Detail">;
 export type ImagePickerScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
 export type RitualFormScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;

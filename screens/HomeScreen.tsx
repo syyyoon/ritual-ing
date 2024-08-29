@@ -19,23 +19,23 @@ const HomeScreen = ({ navigation }: Props) => {
 
   const handleLogin = async (): Promise<void> => {
     try {
-      // npx expo run: ios 
-      // await login();
-      // const result = await me();
-      // console.log(result)
-      // const user = {
-      //   id: result.id,
-      //   nickname: result.nickname,
-      //   profileImageUrl: result.profileImageUrl,
-      // };
+      // npx expo run: ios
+      await login();
+      const result = await me();
+      console.log(result)
+      const user = {
+        id: result.id,
+        nickname: result.nickname,
+        profileImageUrl: result.profileImageUrl,
+      };
 
 
       // npx expo  start 로 실행할때
-      const user = {
-        id: generateUniqueId(),
-        nickname: "윤선영",
-        profileImageUrl: undefined,
-      };
+      // const user = {
+      //   id: generateUniqueId(),
+      //   nickname: "윤선영",
+      //   profileImageUrl: undefined,
+      // };
 
       await AsyncStorage.setItem("user", JSON.stringify(user));
       navigation.navigate("RitualSetup1st");

@@ -20,7 +20,12 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
   const [userData, setUserData] = useState<User | null>(null)
   const { theme } = useTheme()
 
-
+  const carouselImages = [
+    require("../assets/example/example1.jpg"),
+    require("../assets/example/example2.jpg"),
+    require("../assets/example/example3.jpg"),
+    require("../assets/example/example4.jpg"),
+  ];
 
   const isUserDataValid = (data: User | null): boolean => {
     if (!data) return false;
@@ -74,7 +79,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
           단조롭고 무기력한 일상에서 벗어나 자신에게 맞는 리추얼을 찾아 작은 것부터 실천해보세요.
         </Text>
         <View style={styles.carouselContainer}>
-          <Carousel />
+          <Carousel images={carouselImages} />
         </View>
       </View>
 
@@ -104,8 +109,7 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   carouselContainer: {
-    marginTop: 20,
-    height: 220,
+    height: 260,
   },
   comment: {
     fontSize: 18,

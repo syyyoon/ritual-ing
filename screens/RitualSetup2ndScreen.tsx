@@ -1,6 +1,5 @@
 import { Alert, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RitualSetup2ndNavigationProp } from "../types/navigation";
 import { User } from "../types/user";
 import Layout from "../components/Layout";

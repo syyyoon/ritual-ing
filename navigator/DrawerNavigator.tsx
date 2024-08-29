@@ -37,14 +37,13 @@ const DrawerNavigator = () => {
           borderBottomWidth: 1,
           borderBottomColor: Colors.PRIMARY,
           backgroundColor: theme.BACKGROUND
-
         },
-
         drawerLabelStyle: {
-          color: theme.TEXT,
           fontFamily: "NotoSansKR_400Regular",
         },
         drawerActiveBackgroundColor: Colors.DRAWER_ACTIVE_BG,
+        drawerActiveTintColor: Colors.DRAWER_ACTIVE_TEXT,
+        drawerInactiveTintColor: Colors.DRAWER_ACTIVE_BG,
         drawerStyle: {
           backgroundColor: theme.BACKGROUND,
           width: 200,
@@ -67,7 +66,7 @@ const DrawerNavigator = () => {
           headerRight: () => (
             <View style={styles.headerIconWrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-                <Octicons name="search" size={18} color={theme.TEXT} />
+                <Octicons name="search" size={16} color={theme.TEXT} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("ImagePicker")}>
                 <Octicons name="plus" size={18} color={theme.TEXT} />
@@ -88,6 +87,7 @@ export default DrawerNavigator;
 const styles = StyleSheet.create({
   headerIconWrapper: {
     flexDirection: "row",
+    alignItems: "center",
     marginHorizontal: 25,
     gap: 20,
   },

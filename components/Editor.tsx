@@ -14,6 +14,7 @@ import CustomButton from "./CustomButton";
 import ImageViewer from "./ImageViewer";
 import RitualTypeSelector from "./RitualTypeSelector";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Entypo from '@expo/vector-icons/Entypo';
 import Colors from "../constants/colors";
 import ModalCalendar from "./ModalCalendar";
 import { getCurrentDate } from "../utils/currentDate";
@@ -40,13 +41,17 @@ const Editor = ({ image, isEdit, originData }: Props) => {
     title: "",
     imageUrl: "",
     content: "",
+    like: false
   });
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-
+  // const [isLiked, setIsLiked] = useState<boolean>(false)
   const navigation = useNavigation<RitualFormScreenNavigation>();
   const scrollViewRef = useRef<ScrollView>(null);
   const contentInputRef = useRef<TextInput>(null);
   const { theme } = useTheme()
+
+  console.log('editor', ritualData)
+
 
   const handleTypeSelect = (type: RitualType) => {
     setRitualData((prevData) => ({ ...prevData, type }));
@@ -58,6 +63,12 @@ const Editor = ({ image, isEdit, originData }: Props) => {
       [field]: value,
     }));
   };
+
+  const toggleLike = () => {
+    // setIsLiked((prevLiked) => !prevLiked);
+    setRitualData((prevData) => ({ ...prevData, like: !prevData.like }));
+  };
+
 
   const saveRitualData = async () => {
     try {
@@ -74,7 +85,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
       }
       navigation.navigate("List");
     } catch (e) {
-      console.error("오류 발생:", e);
+      Alert.alert("알림", "리추얼 저장 중 오류가 발생했습니다.");
     }
   };
 
@@ -112,17 +123,15 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   useEffect(() => {
     if (isEdit && originData) {
       setRitualData(originData);
+    } else {
+      setRitualData((prevData) => ({
+        ...prevData,
+        date: getCurrentDate("ENG"),
+        type: getRitualType(),
+        imageUrl: image ?? "",
+      }));
     }
   }, [isEdit, originData, image]);
-
-  useEffect(() => {
-    setRitualData((prevData) => ({
-      ...prevData,
-      date: getCurrentDate("ENG"), // Aug 22 2024
-      type: getRitualType(),
-      imageUrl: image ?? "",
-    }));
-  }, [image]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
@@ -152,15 +161,16 @@ const Editor = ({ image, isEdit, originData }: Props) => {
           gap={5}
           style={styles.common}
         />
-
         {/* 날짜 + 모달 캘린더 */}
-        <FlexRowTexts
-          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
-          second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
-          third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
-          gap={5}
-          style={styles.common}
-        />
+        <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
+          <FlexRowTexts
+            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
+            second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
+            third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
+            gap={5}
+            style={styles.common}
+          />
+        </View>
         <ModalCalendar
           visible={showDatePicker}
           onClose={() => setShowDatePicker(false)}
@@ -191,7 +201,18 @@ const Editor = ({ image, isEdit, originData }: Props) => {
 
         {/* 컨텐츠 */}
         <View style={{ paddingVertical: 10 }}>
-          <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
+          <View style={{ flexDirection: "row", paddingVertical: 3 }}>
+            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
+            {/* 좋아요 */}
+            <Entypo
+              style={{ marginRight: 10 }}
+              name={ritualData.like ? "heart" : "heart-outlined"}
+              size={20}
+              color={ritualData.like ? "#f15b5b" : theme.TEXT}
+              onPress={toggleLike}
+            />
+          </View>
+
           <TextInput
             ref={contentInputRef}
             value={ritualData.content}

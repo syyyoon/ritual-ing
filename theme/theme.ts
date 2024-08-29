@@ -1,8 +1,8 @@
 
 export const lightColors = {
   BACKGROUND: "#fdfbef",
-  FORM_BG: "#FFFFFF",
   TEXT: "#343232",
+  FORM_BG: "#FFFFFF",
   DEFAULT_IMG_BG: "#f8f2d1",
   TYPE_MORNING: "#F14E1F",
   TYPE_NIGHT: "#85CA0F",

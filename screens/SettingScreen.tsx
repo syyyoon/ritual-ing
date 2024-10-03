@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, StyleSheet, Switch, TouchableOpacity, View } from "react-native";
+import { Alert, Button, SafeAreaView, StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import Colors from "../constants/colors";
 import { logout, unlink } from "@react-native-kakao/user";
@@ -6,13 +6,15 @@ import CustomText from "../components/CustomText";
 import SettingInfoBox from "../components/SettingInfoBox";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { removeUserData } from "../service/userDataService";
 import InQuiryForm from "../components/InquiryForm";
 import FlexRowTexts from "../components/FlexRowTexts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SettingScreenNavigation } from "../types/navigation";
 import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
-import { removeUserData } from "../service/userDataService";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { deleteAllRitualData } from "../service/ritualDataService";
 
 
 
@@ -53,13 +55,22 @@ const SettingScreen = ({ navigation }: Props) => {
   const confirmLogout = () => {
     Alert.alert(
       "회원탈퇴",
-      "정말로 회원 탈퇴 하시겠습니까?",
+      "회원 탈퇴 하시겠습니까?",
       [
         { text: "취소" },
         { text: "확인", onPress: handleLogout },
       ]
     );
   };
+
+  const confirmDeleteHandler = () => {
+    Alert.alert("전체삭제", "모든 리추얼 데이터를 삭제하시겠습니까?", [
+      { text: "취소" },
+      {
+        text: "확인", onPress: deleteAllRitualData
+      }
+    ])
+  }
 
 
   return (
@@ -130,6 +141,17 @@ const SettingScreen = ({ navigation }: Props) => {
           />
 
           <SettingInfoBox name="1:1 문의" content={<InQuiryForm />} />
+          <SettingInfoBox name="리추얼 삭제" content={<View style={[styles.content, {
+            backgroundColor: theme.FORM_BG,
+            borderColor: Colors.BORDER,
+          }]}>
+
+            <TouchableOpacity onPress={confirmDeleteHandler} style={styles.modeButton}>
+              <FontAwesome5 name="trash" size={20} color={Colors.BORDER} />
+              <CustomText fontFamily="NotoSansKR_400Regular">데이터 전체 삭제</CustomText>
+            </TouchableOpacity>
+
+          </View>} />
         </View>
       </KeyboardAwareScrollView>
     </Layout >

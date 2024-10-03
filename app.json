@@ -14,8 +14,10 @@
       "handleKakaoOpenUrl": true
     },
     "ios": {
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "We need access to your photo library to allow you to select and upload photos."
+       "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera to capture photos.",
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library to save photos.",
+        "NSPhotoLibraryAddUsageDescription": "We need access to your photo library to save photos."
       },
       "bundleIdentifier": "com.syyyoon.rituallifev01"
     },

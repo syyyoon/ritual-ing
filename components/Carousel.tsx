@@ -15,7 +15,6 @@ const Carousel = ({ images, rituals, onImagePress }: CarouselProps) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const { theme } = useTheme()
 
-
   const handleImagePress = (index: number) => {
     console.log('index', index)
     if (rituals && onImagePress) {
@@ -30,11 +29,6 @@ const Carousel = ({ images, rituals, onImagePress }: CarouselProps) => {
         initialPage={0}
         onPageSelected={(e) => setCurrentPage(e.nativeEvent.position)}
       >
-        {/* {images.map((image, index) => (
-          <View key={index.toString()} style={styles.page}>
-            <Image style={styles.image} source={image} />
-          </View>
-        ))} */}
         {images.map((image, index) => (
           <TouchableOpacity
             key={index.toString()}

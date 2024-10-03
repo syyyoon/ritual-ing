@@ -16,11 +16,6 @@ const RitualDetailScreen = () => {
   const route = useRoute<DetailScreenRouteProp>();
   const { item } = route.params;
 
-  // const checkFileExists = async (fileUri: string) => {
-  //   const fileInfo = await FileSystem.getInfoAsync(fileUri);
-  //   console.log("File exists:", fileInfo.exists);
-  // };
-
   useEffect(() => {
     const fetchRitualData = async () => {
       try {

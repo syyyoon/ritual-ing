@@ -41,17 +41,13 @@ const Editor = ({ image, isEdit, originData }: Props) => {
     title: "",
     imageUrl: "",
     content: "",
-    like: false
+    like: false//
   });
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  // const [isLiked, setIsLiked] = useState<boolean>(false)
   const navigation = useNavigation<RitualFormScreenNavigation>();
   const scrollViewRef = useRef<ScrollView>(null);
   const contentInputRef = useRef<TextInput>(null);
   const { theme } = useTheme()
-
-  console.log('editor', ritualData)
-
 
   const handleTypeSelect = (type: RitualType) => {
     setRitualData((prevData) => ({ ...prevData, type }));
@@ -71,6 +67,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
 
 
   const saveRitualData = async () => {
+    console.log('save')
     try {
       const ritualDataList = await getRitualDataList();
 
@@ -90,6 +87,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   };
 
   const confirmDeleteRitualLog = async () => {
+    console.log('delete')
     Alert.alert(
       "삭제 확인",
       "이 리추얼 로그를 정말로 삭제하시겠습니까?",
@@ -101,7 +99,6 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         {
           text: "삭제",
           style: "destructive",
-
           onPress: async () => {
             try {
               if (originData) {

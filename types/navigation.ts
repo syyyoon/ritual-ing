@@ -38,7 +38,7 @@ export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackPar
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Detail">;
 export type ImagePickerScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
 export type RitualFormScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
-export type SearchScreenNavigation = NativeStackNavigationProp<RootStackParamList, "Search">;
+export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Search">;
 export type SettingScreenNavigation = NativeStackNavigationProp<RootStackParamList, "Setting">;
 
 

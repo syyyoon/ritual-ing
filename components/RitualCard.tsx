@@ -4,7 +4,7 @@ import CustomText from "./CustomText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { ListScreenNavigationProp } from "../types/navigation";
+import { ListScreenNavigationProp, SearchScreenNavigationProp } from "../types/navigation";
 import { images } from "../source/image";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import Colors from "../constants/colors";
@@ -18,12 +18,13 @@ type RitualCardProps = {
 
 const RitualCard = ({ item, filter }: RitualCardProps) => {
   const navigation = useNavigation<ListScreenNavigationProp>();
+
   const { theme } = useTheme()
   const marginValue = filter === "all" ? 1 : 10;
   const imageRatio = filter === "all" ? 1 : 1.5
-  // const contentSize = filter === "all" ? "100%" : "80%"
 
   const handleMoveDetail = () => {
+
     navigation.navigate("Detail", { item });
   };
   const defaultImage = require("../assets/default.png");
@@ -60,15 +61,12 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
                 <CustomText fontSize={12}>{item.date}</CustomText>
 
               </View>
-              {/* like ritual */}
               {filter === "all" && item.like && <Entypo
                 name="heart"
                 size={12}
                 color="#f15b5b"
               />}
-
             </View>
-
           </View>
         </View>
       </TouchableOpacity>

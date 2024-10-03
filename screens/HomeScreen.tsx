@@ -1,13 +1,12 @@
-import { Button, Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, View } from "react-native";
+import React from "react";
 import CustomButton from "../components/CustomButton";
-import { login, logout, unlink, me } from "@react-native-kakao/user";
+import { login, me } from "@react-native-kakao/user";
 import Logo from "../components/Logo";
 import { HomeScreenNavigationProp } from "../types/navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomText from "../components/CustomText";
 import { generateUniqueId } from "../utils/uniqueId";
-import { saveUserData } from "../service/userDataService";
 import Layout from "../components/Layout";
 
 type Props = {
@@ -20,22 +19,22 @@ const HomeScreen = ({ navigation }: Props) => {
   const handleLogin = async (): Promise<void> => {
     try {
       // npx expo run: ios
-      await login();
-      const result = await me();
-      console.log(result)
-      const user = {
-        id: result.id,
-        nickname: result.nickname,
-        profileImageUrl: result.profileImageUrl,
-      };
+      // await login();
+      // const result = await me();
+      // console.log(result)
+      // const user = {
+      //   id: result.id,
+      //   nickname: result.nickname,
+      //   profileImageUrl: result.profileImageUrl,
+      // };
 
 
       // npx expo  start 로 실행할때
-      // const user = {
-      //   id: generateUniqueId(),
-      //   nickname: "윤선영",
-      //   profileImageUrl: undefined,
-      // };
+      const user = {
+        id: generateUniqueId(),
+        nickname: "윤선영",
+        profileImageUrl: undefined,
+      };
 
       await AsyncStorage.setItem("user", JSON.stringify(user));
       navigation.navigate("RitualSetup1st");

@@ -66,7 +66,6 @@ const SearchScreen = ({ navigation }: Props) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={90}
     >
       <Layout>
         {isLoading ? (  // 로딩 상태일 때 로딩중 메시지 표시

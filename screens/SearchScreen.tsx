@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Text, ActivityIndicator, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { ScrollView, View, TextInput, StyleSheet, Text, ActivityIndicator, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import Colors from "../constants/colors";
 import { SearchScreenNavigationProp } from "../types/navigation";
 import CustomButton from "../components/CustomButton";
@@ -63,9 +63,11 @@ const SearchScreen = ({ navigation }: Props) => {
 
 
   return (
+
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
+      behavior={"height"}
+      keyboardVerticalOffset={50}
     >
       <Layout>
         {isLoading ? (  // 로딩 상태일 때 로딩중 메시지 표시
@@ -115,9 +117,9 @@ const SearchScreen = ({ navigation }: Props) => {
           />
 
         </View>
-
       </Layout>
     </KeyboardAvoidingView>
+
   );
 };
 

@@ -249,7 +249,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-
   },
   scrollContainer: {
     padding: 15,

@@ -64,61 +64,61 @@ const SearchScreen = ({ navigation }: Props) => {
 
   return (
 
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={"height"}
-      keyboardVerticalOffset={50}
-    >
-      <Layout>
-        {isLoading ? (  // 로딩 상태일 때 로딩중 메시지 표시
-          <View style={styles.indicatorWrapper}>
-            <ActivityIndicator size="large" color={Colors.PRIMARY} />
-            <Text style={{ color: theme.TEXT }}>조회중</Text>
-          </View>
-        ) : (
-          <View>
-            {isSearched && filteredData.length === 0 ? (
-              // 검색 결과가 없을 때 표시할 메시지
-              <View style={{ alignItems: 'center', marginTop: 20 }}>
-                <Text style={{ color: theme.TEXT }}>검색한 단어에 대한 리추얼이 존재하지 않습니다.</Text>
-              </View>
-            ) : (
-              // 검색 결과가 있을 때 데이터를 보여줌
-              <View style={styles.listContainer}>
-                <FlatList
-                  data={filteredData}
-                  keyExtractor={(item) => item.id.toString()}
-                  numColumns={1}
-                  contentContainerStyle={{ paddingBottom: 180 }}
-                  showsVerticalScrollIndicator={true}
-                  renderItem={({ item }) => (
-                    <View style={styles.cardContainer} >
-                      <TouchableOpacity onPress={() => {
-                        closeModalhandler()
-                        navigation.navigate("Detail", { item })
-                      }}>
-                        <SearchResultCard item={item} />
-                      </TouchableOpacity>
-
-                    </View>
-                  )}
-                />
-              </View>
-            )}
-          </View>
-        )
-        }
-        <View style={[styles.modalContent, { backgroundColor: theme.DEFAULT_IMG_BG, }]}>
-          <TextInput placeholder="단어로 리추얼 로그를 찾아보세요 :)" placeholderTextColor={Colors.BORDER} style={[styles.input, { color: theme.TEXT }]} value={searchText} onChangeText={setSearchText} />
-          <FlexRowTexts
-            first={<CustomButton label="Search" theme="dark" onPress={searchHandler} />}
-            second={<CustomButton label="Close" theme="light" onPress={closeModalhandler} />}
-            style={{ marginTop: 10, justifyContent: "space-between" }}
-          />
-
+    // <KeyboardAvoidingView
+    //   style={{ flex: 1 }}
+    //   behavior={"height"}
+    //   keyboardVerticalOffset={50}
+    // >
+    <Layout>
+      {isLoading ? (  // 로딩 상태일 때 로딩중 메시지 표시
+        <View style={styles.indicatorWrapper}>
+          <ActivityIndicator size="large" color={Colors.PRIMARY} />
+          <Text style={{ color: theme.TEXT }}>조회중</Text>
         </View>
-      </Layout>
-    </KeyboardAvoidingView>
+      ) : (
+        <View>
+          {isSearched && filteredData.length === 0 ? (
+            // 검색 결과가 없을 때 표시할 메시지
+            <View style={{ alignItems: 'center', marginTop: 20 }}>
+              <Text style={{ color: theme.TEXT }}>검색한 단어에 대한 리추얼이 존재하지 않습니다.</Text>
+            </View>
+          ) : (
+            // 검색 결과가 있을 때 데이터를 보여줌
+            <View style={styles.listContainer}>
+              <FlatList
+                data={filteredData}
+                keyExtractor={(item) => item.id.toString()}
+                numColumns={1}
+                contentContainerStyle={{ paddingBottom: 180 }}
+                showsVerticalScrollIndicator={true}
+                renderItem={({ item }) => (
+                  <View style={styles.cardContainer} >
+                    <TouchableOpacity onPress={() => {
+                      closeModalhandler()
+                      navigation.navigate("Detail", { item })
+                    }}>
+                      <SearchResultCard item={item} />
+                    </TouchableOpacity>
+
+                  </View>
+                )}
+              />
+            </View>
+          )}
+        </View>
+      )
+      }
+      <View style={[styles.modalContent, { backgroundColor: theme.DEFAULT_IMG_BG, }]}>
+        <TextInput placeholder="단어로 리추얼 로그를 찾아보세요 :)" placeholderTextColor={Colors.BORDER} style={[styles.input, { color: theme.TEXT }]} value={searchText} onChangeText={setSearchText} />
+        <FlexRowTexts
+          first={<CustomButton label="Search" theme="dark" onPress={searchHandler} />}
+          second={<CustomButton label="Close" theme="light" onPress={closeModalhandler} />}
+          style={{ marginTop: 10, justifyContent: "space-between" }}
+        />
+
+      </View>
+    </Layout>
+    // </KeyboardAvoidingView>
 
   );
 };

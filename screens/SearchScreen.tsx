@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, View, TextInput, StyleSheet, Text, ActivityIndicator, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, TextInput, StyleSheet, Text, ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
 import Colors from "../constants/colors";
 import { SearchScreenNavigationProp } from "../types/navigation";
 import CustomButton from "../components/CustomButton";
@@ -64,12 +64,14 @@ const SearchScreen = ({ navigation }: Props) => {
 
   return (
 
-    // <KeyboardAvoidingView
-    //   style={{ flex: 1 }}
-    //   behavior={"height"}
-    //   keyboardVerticalOffset={50}
-    // >
     <Layout>
+      <View>
+        <TextInput placeholder="단어로 리추얼 로그를 찾아보세요 :)" placeholderTextColor={Colors.BORDER} style={[styles.input, { color: theme.TEXT, borderColor: Colors.PRIMARY }]} value={searchText} onChangeText={setSearchText} />
+        <View style={styles.buttonWrapper}>
+          <CustomButton label="OK" theme="dark" onPress={searchHandler} />
+        </View>
+
+      </View>
       {isLoading ? (  // 로딩 상태일 때 로딩중 메시지 표시
         <View style={styles.indicatorWrapper}>
           <ActivityIndicator size="large" color={Colors.PRIMARY} />
@@ -108,17 +110,9 @@ const SearchScreen = ({ navigation }: Props) => {
         </View>
       )
       }
-      <View style={[styles.modalContent, { backgroundColor: theme.DEFAULT_IMG_BG, }]}>
-        <TextInput placeholder="단어로 리추얼 로그를 찾아보세요 :)" placeholderTextColor={Colors.BORDER} style={[styles.input, { color: theme.TEXT }]} value={searchText} onChangeText={setSearchText} />
-        <FlexRowTexts
-          first={<CustomButton label="Search" theme="dark" onPress={searchHandler} />}
-          second={<CustomButton label="Close" theme="light" onPress={closeModalhandler} />}
-          style={{ marginTop: 10, justifyContent: "space-between" }}
-        />
 
-      </View>
     </Layout>
-    // </KeyboardAvoidingView>
+
 
   );
 };
@@ -131,26 +125,15 @@ const styles = StyleSheet.create({
     margin: "30%"
   },
 
-  modalContent: {
+  input: {
+    margin: 20,
+    borderRadius: 15,
+    borderWidth: 1,
     padding: 20,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    height: 200,
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    backgroundColor: "gray",
-    flexDirection: "column",
-    alignItems: "center",
   },
 
-  input: {
-    width: "90%",
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.BORDER,
-    marginBottom: 20,
-    padding: 10,
-
+  buttonWrapper: {
+    alignItems: "center"
   },
 
   listContainer: {

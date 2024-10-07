@@ -234,7 +234,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
               style={{ marginTop: 10, justifyContent: "space-between" }}
             />
           ) : (
-            <CustomButton label="OK" theme="dark" onPress={saveRitualData} size="large" />
+            <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
           )}
         </View>
       </ScrollView>

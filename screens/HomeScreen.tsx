@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomText from "../components/CustomText";
 import { generateUniqueId } from "../utils/uniqueId";
 import Layout from "../components/Layout";
+import { getUserData } from "../service/userDataService";
 
 type Props = {
   navigation: HomeScreenNavigationProp;
@@ -36,8 +37,15 @@ const HomeScreen = ({ navigation }: Props) => {
         profileImageUrl: undefined,
       };
 
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      navigation.navigate("RitualSetup1st");
+
+      const savedUserData = await getUserData();
+
+      if (savedUserData?.setupDone) {
+        navigation.navigate("Main");
+      } else {
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+        navigation.navigate("RitualSetup1st");
+      }
     } catch (err) {
       console.error("login err", err);
     }

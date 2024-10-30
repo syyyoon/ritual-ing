@@ -18,9 +18,10 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   const { theme } = useTheme()
   const navigation = useNavigation<NavigationProp>();
-  const openDrawer = () => {
-    navigation.dispatch(DrawerActions.openDrawer());
-  };
+  const
+    openDrawer = () => {
+      navigation.dispatch(DrawerActions.openDrawer());
+    };
 
   return (
     <Drawer.Navigator
@@ -57,8 +58,7 @@ const DrawerNavigator = () => {
         ),
       }}
     >
-      <Drawer.Screen
-        name="List"
+      <Drawer.Screen name="List"
         component={RitualListScreen}
         options={{
           title: "Archive",

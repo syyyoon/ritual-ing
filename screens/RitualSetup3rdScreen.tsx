@@ -10,7 +10,8 @@ import { RitualSetup3rdNavigationProp } from "../types/navigation";
 import { User } from "../types/user";
 import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
-import { getUserData } from "../service/userDataService";
+import { getUserData, saveUserData } from "../service/userDataService";
+import { scheduleDailyPushNotification } from "../hook/usePushNotification";
 
 type Props = {
   navigation: RitualSetup3rdNavigationProp;
@@ -37,12 +38,26 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
 
   const startHandler = async () => {
     if (isUserDataValid(userData)) {
-      navigation.navigate('Main');
+      if (userData) {
+        userData.setupDone = true;
+        await saveUserData(userData)
+
+        // 모닝 리추얼 알림 설정
+        if (userData.morningRitual.isPushEnabled && userData.morningRitual.time) {
+          await scheduleDailyPushNotification(userData.morningRitual.time, "morning", userData.morningRitual.activity);
+        }
+
+        // 나이트 리추얼 알림 설정
+        if (userData.nightRitual.isPushEnabled && userData.nightRitual.time) {
+          await scheduleDailyPushNotification(userData.nightRitual.time, "night", userData.nightRitual.activity);
+        }
+
+        navigation.navigate('Main');
+      }
     } else {
       Alert.alert(
-        "",
-        "리추얼 양식을 완성시켜주세요.",
-        [{ text: "OK" }]
+        "알림",
+        "리추얼 양식을 완성하여주세요.",
       );
     }
   };

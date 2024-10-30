@@ -4,7 +4,6 @@ import { useTheme } from '../context/ThemeContext'
 import { RitualType } from '../types/ritual'
 import CircleSticker from './CircleSticker'
 import TimePicker from './TimePicker'
-import CustomCheckBox from './CustomCheckBox'
 import Colors from '../constants/colors'
 
 
@@ -31,18 +30,18 @@ const SetupForm = ({ type, activity, onChangeText, onTimeChange }: Props) => {
     }
   };
 
-  const { comment, ritualActivities, typeKR } = messages[type];
+  const { comment, ritualActivities } = messages[type];
 
 
   return (
     <View style={styles.section}>
       <CircleSticker type={type} text={title} />
       <Text style={[styles.comment, { color: theme.TEXT }]}>{comment}</Text>
-      <TextInput value={activity} onChangeText={onChangeText} placeholderTextColor={Colors.BORDER} placeholder={`예) ${ritualActivities} 등`} style={[styles.inputStyle, { borderColor: Colors.BORDER, color: theme.TEXT }]} />
+      <TextInput value={activity} onChangeText={onChangeText} placeholderTextColor={Colors.BORDER} placeholder={`예) ${ritualActivities} 등`} style={[styles.inputStyle, { color: theme.TEXT }]} />
+
       <View style={{ marginTop: 20 }}>
-        <Text style={[styles.comment, { color: theme.TEXT }]}>{typeKR} 리추얼 활동 시간을 정해보세요.</Text>
+        <Text style={[styles.comment, { color: theme.TEXT }]}>{ } 리추얼 활동 시간을 정해보세요.</Text>
         <TimePicker time={type} onTimeChange={onTimeChange} />
-        <CustomCheckBox text="메세지 알림에 동의합니다." />
       </View>
     </View>
 
@@ -55,7 +54,6 @@ const styles = StyleSheet.create({
   section: {
     marginHorizontal: 35,
     paddingTop: 50,
-    paddingBottom: 30,
   },
   comment: {
     fontSize: 18,
@@ -64,9 +62,12 @@ const styles = StyleSheet.create({
 
   },
   inputStyle: {
+    marginTop: 10,
     borderWidth: 1,
     borderRadius: 8,
     padding: 10,
-    marginTop: 10,
+    borderColor: Colors.PRIMARY,
+    lineHeight: 20,
+    fontSize: 17,
   },
 })

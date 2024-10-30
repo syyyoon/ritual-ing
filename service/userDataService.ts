@@ -9,12 +9,16 @@ const initialUserData  ={
   profileImageUrl: "",
   morningRitual :{
     activity:"string",
-    time:""
+    time:"",
+    isPushEnabled:false,
+
   },
   nightRitual :{
     activity:"",
-    time:""
-  }
+    time:"",
+    isPushEnabled:false,
+  },
+  setupDone:false
 
 };
 

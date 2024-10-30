@@ -23,11 +23,10 @@ const ProfileScreen = ({ }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [originalProfileImage, setOriginalProfileImage] = useState<string | undefined>(undefined);
   const [logQty, setLogQty] = useState({ morning: 0, night: 0 })
-  // const [ritualData, setRitualData] = useState<RitualData[] | null>(null)
   const [editMode, setEditMode] = useState<boolean>(false)
   const [likedRituals, setLikedRituals] = useState<RitualData[] | null>(null)
 
-
+  console.log(userData)
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const navigateDetailScreen = (item: RitualData) => {
@@ -144,12 +143,17 @@ const ProfileScreen = ({ }) => {
           <CircleSticker type="morning" text="Morinig Ritual" />
           <FlexRowTexts style={styles.marginLeft} gap={10} first={<CustomText fontSize={16}> ◦ 나의 모닝 리추얼 :</CustomText>} second={<CustomText fontSize={16}>{userData.morningRitual.activity}</CustomText>} />
           <CustomText style={styles.marginLeft} fontSize={16}> ◦ Number of days : {logQty.morning} days</CustomText>
+          {userData.morningRitual.time && <CustomText style={styles.marginLeft} fontSize={16}> ◦ Time : {userData.morningRitual.time.slice(0, 2)}시 {userData.morningRitual.time.slice(2, 4)}분</CustomText>}
+
+
         </View>
         <View style={styles.section}>
 
           <CircleSticker type="night" text="Night Ritual" />
           <FlexRowTexts style={styles.marginLeft} gap={10} first={<CustomText fontSize={16}> ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText fontSize={16}>{userData.nightRitual.activity}</CustomText>} />
           <CustomText style={styles.marginLeft} fontSize={16}> ◦ Number of days : {logQty.night} days</CustomText>
+          {userData.nightRitual.time && <CustomText style={styles.marginLeft} fontSize={16}> ◦ Time : {userData.nightRitual.time.slice(0, 2)}시 {userData.nightRitual.time.slice(2, 4)}분</CustomText>}
+
         </View>
 
         <View style={styles.section}>

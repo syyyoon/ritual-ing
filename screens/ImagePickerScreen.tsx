@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
-
 import { captureRef } from "react-native-view-shot";
 import { useNavigation } from "@react-navigation/native";
 import { ImagePickerScreenNavigation } from "../types/navigation";
@@ -16,13 +15,15 @@ import DateEmoji from "../components/DateEmoji";
 import { useTheme } from "../context/ThemeContext";
 
 
+
+
+
 const ImagePickerScreen = () => {
-  const [imageUri, setImageUri] = useState<string | null>(null);
   const [showActionOptions, setShowActionOptions] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const [pickedEmoji, setPickedEmoji] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("#ffff");
-
 
   const imageRef = useRef<View>(null);
   const navigation = useNavigation<ImagePickerScreenNavigation>();
@@ -39,13 +40,11 @@ const ImagePickerScreen = () => {
   }
 
 
-  // const checkFileExists = async (fileUri: string) => {
-  //   const fileInfo = await FileSystem.getInfoAsync(fileUri);
-  //   console.log("File exists:", fileInfo.exists);
-  // };
 
   const pickImage = async () => {
     const permissionMediaLibray = await MediaLibrary.requestPermissionsAsync();
+
+    console.log(permissionMediaLibray)
 
     if (permissionMediaLibray.granted === false) {
       alert("You've refused to allow this app to access your photos!");
@@ -114,74 +113,51 @@ const ImagePickerScreen = () => {
     setIsModalVisible(false);
   };
 
-
-  const copyImageFile = async (sourceUri: string, destinationUri: string) => {
-    try {
-      const response = await fetch(sourceUri);
-      const fileBlob = await response.blob();
-      // console.log('blob', fileBlob)
-
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        // fileBlob을 읽어낸 결과
-        const base64data = reader.result as string;
-
-        // 그 결과를 비동기로 destinationUri에 쓰는 작업을 수행
-        await FileSystem.writeAsStringAsync(destinationUri, base64data, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        console.log("파일이 성공적으로 복사되었습니다.");
-      };
-      reader.readAsDataURL(fileBlob);
-    } catch (error) {
-      console.error("파일 복사 중 오류 발생:", error);
-    }
-  };
-
+  const onEmojiSelected = (emoji: string) => {
+    console.log('selected emoji:', emoji)
+    setPickedEmoji(emoji)
+  }
 
 
   const captureAndNavigate = async () => {
     if (imageRef.current) {
-      // console.log(imageRef.current)
+      console.log('ImageRef 있음!')
       try {
-
-        // 스티커가 적용된 사진이기 때문에 캡쳐할 필요가 있는거구나
         let tempUri = await captureRef(imageRef.current, {
           format: "png",
           quality: 1,
         });
+        if (tempUri) {
+          console.log('teme uri!!')
+          // 정상적으로 캡쳐된 경우에만 아래 작업 실행
+          tempUri = 'file://' + tempUri
+          const newUri = imgDir + `${Date.now()}.png`
+          const fileInfo = await FileSystem.getInfoAsync(tempUri)
+          if (!fileInfo.exists) {
+            throw new Error("Temporary file does not exist.")
+          }
+          console.log('fileInfo')
 
-        tempUri = 'file://' + tempUri
-        const newUri = imgDir + `${Date.now()}.png`
-        const fileInfo = await FileSystem.getInfoAsync(tempUri)
-        if (!fileInfo.exists) {
-          throw new Error("Temporary file does not exist.")
+          await FileSystem.copyAsync({
+            from: tempUri,
+            to: newUri,
+          });
+          console.log('COpy 성공')
+
+          navigation.navigate("RitualForm", { imageUri: newUri });
         } else {
-          console.log('file size:', fileInfo.size)
+          console.warn("Capture failed: tempUri is null")
         }
-
-        await FileSystem.copyAsync({
-          from: tempUri,
-          to: newUri,
-        });
-
-        console.log('newUri', newUri)
-
-
-
-        // 복사가 성공하면 원본 파일 삭제
-        // await FileSystem.deleteAsync(tempUri);
-
-        //  위 작업이 성공할경우 리추얼폼 스크린으로 이동
-        navigation.navigate("RitualForm", { imageUri: newUri });
       } catch (error) {
         console.error("Error capturing view:", error);
       }
+    } else {
+      console.warn("imageRef is null when attempting to capture.")
     }
   };
 
   useEffect(() => {
+    console.log('useEffect 실행!')
     ensureDirExists()
   }, [])
 
@@ -189,7 +165,9 @@ const ImagePickerScreen = () => {
   return (
     <GestureHandlerRootView style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
       <View ref={imageRef} collapsable={false} style={{ position: "relative" }}>
+
         <ImageViewer selectedImage={imageUri ?? undefined} />
+
         {pickedEmoji && (
           <DateEmoji
             text={pickedEmoji}
@@ -203,15 +181,15 @@ const ImagePickerScreen = () => {
       {showActionOptions ? (
         <View style={styles.buttonsContainer}>
           <IconButton iconType="MaterialIcons" icon="refresh" onPress={onReset} />
-          {/* <IconButton
+          <IconButton
             iconType="MaterialIcons"
             icon="auto-awesome"
+            // onPress={captureAndNavigate}
             onPress={() => {
               setIsModalVisible(true);
             }}
-          /> */}
+          />
           <IconButton iconType="MaterialIcons" icon="download" onPress={saveImageToLibrary} />
-          {/* <IconButton iconType="MaterialIcons" icon="check" onPress={captureAndNavigate} /> */}
           <IconButton iconType="MaterialIcons" icon="check" onPress={captureAndNavigate} />
 
         </View>
@@ -229,15 +207,17 @@ const ImagePickerScreen = () => {
         </View>
       )}
 
-      <EmojiPicker
+      {/* <EmojiPicker
         isVisible={isModalVisible}
         onClose={() => {
           setIsModalVisible(false);
         }}
         onColorSelected={colorSelectHandler}
       >
-        <EmojiList onSelect={setPickedEmoji} pickedEmoji={pickedEmoji} selectedColor={selectedColor} />
-      </EmojiPicker>
+        <EmojiList onSelect={onEmojiSelected} pickedEmoji={pickedEmoji} selectedColor={selectedColor} />
+
+
+      </EmojiPicker> */}
     </GestureHandlerRootView>
   );
 };

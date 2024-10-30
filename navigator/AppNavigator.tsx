@@ -29,10 +29,7 @@ const AppNavigator = () => {
         const user = await getUserData();
 
         if (
-          user?.id !== undefined &&
-          user.nickname.length > 1 &&
-          user.morningRitual?.activity.length > 0 &&
-          user.nightRitual?.activity.length > 0
+          user?.setupDone
         ) {
           setInitialRoute("Main");
         } else {

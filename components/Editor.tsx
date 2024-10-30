@@ -61,13 +61,11 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   };
 
   const toggleLike = () => {
-    // setIsLiked((prevLiked) => !prevLiked);
     setRitualData((prevData) => ({ ...prevData, like: !prevData.like }));
   };
 
 
   const saveRitualData = async () => {
-    console.log('save')
     try {
       const ritualDataList = await getRitualDataList();
 
@@ -151,92 +149,96 @@ const Editor = ({ image, isEdit, originData }: Props) => {
       keyboardVerticalOffset={90}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} ref={scrollViewRef}>
-        {/* 리추얼 타입 */}
-        <FlexRowTexts
-          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
-          second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
-          gap={5}
-          style={styles.common}
-        />
-        {/* 날짜 + 모달 캘린더 */}
-        <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
+        <ScrollView>
+
+
+          {/* 리추얼 타입 */}
           <FlexRowTexts
-            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
-            second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
-            third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
+            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
+            second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
             gap={5}
             style={styles.common}
           />
-        </View>
-        <ModalCalendar
-          visible={showDatePicker}
-          onClose={() => setShowDatePicker(false)}
-          onSelectDate={(date) => handleChange("date", date)}
-          selectedDate={ritualData.date}
-        />
-        {/* 타이틀 */}
-        <FlexRowTexts
-          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
-          second={
-            <TextInput
-              style={styles.title}
-              value={ritualData.title}
-              onChangeText={(text) => handleChange("title", text)}
-              placeholder="제목을 입력하세요"
-              placeholderTextColor={Colors.BORDER}
-            />
-          }
-          gap={5}
-          style={styles.common}
-        />
-
-        {/* 이미지 */}
-        <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
-        <View style={styles.imagePicker}>
-          <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
-        </View>
-
-        {/* 컨텐츠 */}
-        <View style={{ paddingVertical: 10 }}>
-          <View style={{ flexDirection: "row", paddingVertical: 3 }}>
-            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
-            {/* 좋아요 */}
-            <Entypo
-              style={{ marginRight: 10 }}
-              name={ritualData.like ? "heart" : "heart-outlined"}
-              size={20}
-              color={ritualData.like ? "#f15b5b" : theme.TEXT}
-              onPress={toggleLike}
+          {/* 날짜 + 모달 캘린더 */}
+          <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
+            <FlexRowTexts
+              first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
+              second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
+              third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
+              gap={5}
+              style={styles.common}
             />
           </View>
-
-          <TextInput
-            ref={contentInputRef}
-            value={ritualData.content}
-            onChangeText={(content) => handleChange("content", content)}
-            style={styles.multilineTextInput}
-            placeholder="오늘을 기록해봐요 :-)"
-            multiline={true}
-            numberOfLines={10}
-            placeholderTextColor={Colors.BORDER}
-            onFocus={() => {
-              contentInputRef.current?.measure((fx, fy, width, height, px, py) => {
-                scrollViewRef.current?.scrollTo({ y: py, animated: true });
-              });
-            }}
+          <ModalCalendar
+            visible={showDatePicker}
+            onClose={() => setShowDatePicker(false)}
+            onSelectDate={(date) => handleChange("date", date)}
+            selectedDate={ritualData.date}
           />
-        </View>
-        <View style={styles.buttonWrapper}>
-          {originData && isEdit ? (
-            <FlexRowTexts
-              first={<CustomButton label="OK" theme="dark" onPress={saveRitualData} />}
-              second={<CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />}
-              style={{ marginTop: 10, justifyContent: "space-between" }}
+          {/* 타이틀 */}
+          <FlexRowTexts
+            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
+            second={
+              <TextInput
+                style={styles.title}
+                value={ritualData.title}
+                onChangeText={(text) => handleChange("title", text)}
+                placeholder="제목을 입력하세요"
+                placeholderTextColor={Colors.BORDER}
+              />
+            }
+            gap={5}
+            style={styles.common}
+          />
+
+          {/* 이미지 */}
+          <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
+          <View style={styles.imagePicker}>
+            <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
+          </View>
+
+          {/* 컨텐츠 */}
+          <View style={{ paddingVertical: 10 }}>
+            <View style={{ flexDirection: "row", paddingVertical: 3 }}>
+              <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
+              {/* 좋아요 */}
+              <Entypo
+                style={{ marginRight: 10 }}
+                name={ritualData.like ? "heart" : "heart-outlined"}
+                size={20}
+                color={ritualData.like ? "#f15b5b" : theme.TEXT}
+                onPress={toggleLike}
+              />
+            </View>
+
+            <TextInput
+              ref={contentInputRef}
+              value={ritualData.content}
+              onChangeText={(content) => handleChange("content", content)}
+              style={styles.multilineTextInput}
+              placeholder="오늘을 기록해봐요 :-)"
+              multiline={true}
+              numberOfLines={10}
+              placeholderTextColor={Colors.BORDER}
+              onFocus={() => {
+                contentInputRef.current?.measure((fx, fy, width, height, px, py) => {
+                  scrollViewRef.current?.scrollTo({ y: py, animated: true });
+                });
+              }}
             />
-          ) : (
-            <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
-          )}
-        </View>
+          </View>
+          <View style={styles.buttonWrapper}>
+            {originData && isEdit ? (
+              <FlexRowTexts
+                first={<CustomButton label="OK" theme="dark" onPress={saveRitualData} />}
+                second={<CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />}
+                style={{ marginTop: 10, justifyContent: "space-between" }}
+              />
+            ) : (
+              <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
+            )}
+          </View>
+        </ScrollView>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -266,6 +268,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     backgroundColor: "white",
+    lineHeight: 20,
+    fontSize: 15,
+
   },
   multilineTextInput: {
     height: 120,
@@ -286,5 +291,6 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     alignItems: "center",
+    marginBottom: 50
   },
 });

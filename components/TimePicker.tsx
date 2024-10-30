@@ -35,7 +35,7 @@ const AFTERNOON_TIME_LIST = [
   { label: "22:30", value: "2230" },
   { label: "23:00", value: "2300" },
   { label: "23:30", value: "2330" },
-  { label: "24:00", value: "2400" },
+  { label: "23:50", value: "2350" },
 ];
 
 type timeProp = {
@@ -44,16 +44,22 @@ type timeProp = {
 };
 
 const TimePicker = ({ time, onTimeChange }: timeProp) => {
+
   const { theme } = useTheme();
   return (
-    <View>
+    <View style={styles.frame}>
       <RNPickerSelect
         placeholder={{
           label: "시간을 선택하세요.",
+          inputLabel: "시간을 선택하세요.",
+          value: null,
+          key: 1
         }}
+        fixAndroidTouchableBug={true}
+        useNativeAndroidPickerStyle={false}
         style={{
           inputIOS: [styles.IOS, { color: theme.TEXT }],
-          inputWeb: [styles.WEB, { color: theme.TEXT }],
+          inputAndroid: [styles.WEB, { color: theme.TEXT }],
           placeholder: {
             color: Colors.BORDER,
           },
@@ -68,18 +74,20 @@ const TimePicker = ({ time, onTimeChange }: timeProp) => {
 export default TimePicker;
 
 const styles = StyleSheet.create({
+  frame: {
+
+  },
+
   IOS: {
     width: "50%",
-    padding: 10,
+    borderColor: Colors.PRIMARY,
     borderWidth: 1,
-    borderColor: Colors.BORDER,
     borderRadius: 8,
     marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    fontSize: 17,
   },
   WEB: {
-    width: "50%",
-    padding: 10,
-    borderRadius: 8,
-    marginTop: 10,
   },
 });

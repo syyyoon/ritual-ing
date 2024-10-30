@@ -8,7 +8,6 @@ import AppNavigator from "./navigator/AppNavigator";
 import { ThemeProvider } from "./context/ThemeContext";
 
 
-
 const App: React.FC = () => {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
 

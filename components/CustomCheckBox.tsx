@@ -5,10 +5,15 @@ import Colors from "../constants/colors";
 import CustomText from "./CustomText";
 
 type Props = {
-  text: string;
+  onCheckChange: (isChecked: boolean) => void;
 };
-const CustomCheckBox = ({ text }: Props) => {
+const CustomCheckBox = ({ onCheckChange }: Props) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckChange = (newValue: boolean) => {
+    setIsChecked(newValue);
+    onCheckChange(newValue); // Check 상태 변경 시 상위 컴포넌트에 전달
+  };
 
 
   return (
@@ -16,10 +21,10 @@ const CustomCheckBox = ({ text }: Props) => {
       <Checkbox
         style={styles.checkBox}
         value={isChecked}
-        onValueChange={setIsChecked}
+        onValueChange={handleCheckChange}
         color={isChecked ? Colors.SECONDARY : undefined}
       />
-      {text && <CustomText>{text}</CustomText>}
+      <CustomText>메세지 알림에 동의합니다.</CustomText>
     </View>
   );
 };
@@ -28,7 +33,9 @@ export default CustomCheckBox;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 5,
+    marginHorizontal: 30,
+    marginTop: 10,
+    marginBottom: 30,
     flexDirection: "row",
     alignItems: "center",
   },

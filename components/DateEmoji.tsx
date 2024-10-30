@@ -1,18 +1,18 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useBalooFontsHook } from "../hook/useCustomFonts";
 
-type Props = {
+type DateEmojiProps = {
   text: string;
   color: string;
   deleteEmoji: () => void;
   openModal: () => void;
 };
 
-const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
+const DateEmoji: React.FC<DateEmojiProps> = memo(({ text, color, deleteEmoji, openModal }) => {
   const [showTrashIcon, setShowTrashIcon] = useState(false);
   const { fontsLoaded } = useBalooFontsHook();
 
@@ -48,14 +48,14 @@ const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
       <Animated.View style={[styles.container, containerStyle]}>
         <TouchableOpacity onLongPress={handleLongPress} onPress={openModal}>
           {isFullDateText ? (
-            <>
+            <Animated.View>
               <Animated.Text style={[styles.date, styles.firstLineText, { color: color }]}>
                 {text.split("+")[0]}
               </Animated.Text>
               <Animated.Text style={[styles.date, styles.secondLineText, { color: color }]}>
                 {text.split("+")[1]}
               </Animated.Text>
-            </>
+            </Animated.View>
           ) : (
             <Animated.Text style={[styles.date, { color: color }]}>{text}</Animated.Text>
           )}
@@ -66,7 +66,7 @@ const DateEmoji = ({ text, color, deleteEmoji, openModal }: Props) => {
       </Animated.View>
     </GestureDetector>
   );
-};
+});
 
 export default DateEmoji;
 

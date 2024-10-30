@@ -28,7 +28,12 @@ const SettingScreen = ({ navigation }: Props) => {
 
   const handleKakaoLogout = () => {
     logout()
-      .then(() => console.log("logout!"))
+      .then(() => {
+        navigation.reset({
+          index: 0, routes: [{ name: "Home" }]
+        })
+
+      })
       .catch((error) => console.log(error));
   };
 
@@ -67,7 +72,10 @@ const SettingScreen = ({ navigation }: Props) => {
     Alert.alert("전체삭제", "모든 리추얼 데이터를 삭제하시겠습니까?", [
       { text: "취소" },
       {
-        text: "확인", onPress: deleteAllRitualData
+        text: "확인", onPress: async () => {
+          await deleteAllRitualData();
+          navigation.navigate("List");
+        },
       }
     ])
   }

@@ -125,11 +125,13 @@ const styles = StyleSheet.create({
     margin: "30%"
   },
 
+
   input: {
     margin: 20,
     borderRadius: 15,
     borderWidth: 1,
-    padding: 20,
+    padding: 18,
+    lineHeight: 20
   },
 
   buttonWrapper: {

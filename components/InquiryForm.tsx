@@ -41,7 +41,7 @@ const InquiryForm = () => {
     async function checkAvailablility() {
       const isMailAvailable = await MailComposer.isAvailableAsync();
       setIsAvailable(isMailAvailable);
-      setIsCheckingAvailability(false); // 체크 완료
+      setIsCheckingAvailability(false);
     }
 
     checkAvailablility();
@@ -77,6 +77,7 @@ const InquiryForm = () => {
     <View style={[styles.formContainer, { backgroundColor: theme.FORM_BG, borderColor: Colors.BORDER, }]}>
       <CustomText>제목</CustomText>
       <TextInput
+        autoFocus
         value={formValue.subject}
         onChangeText={(value) => handleChange("subject", value)}
         placeholder="문의 제목을 입력해주세요."
@@ -115,8 +116,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.PRIMARY,
     borderWidth: 2,
     borderRadius: 5,
-    padding: 10,
+    // padding: 10,
     backgroundColor: "white",
+    paddingVertical: 0,
+    paddingHorizontal: 10,
+    margin: 0,
+    height: 40,
+    lineHeight: 20,
   },
   multilineText: {
     height: 100,

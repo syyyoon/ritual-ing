@@ -16,7 +16,7 @@ const FlexRowTexts = ({ first, second, third, gap, style }: Props) => {
       {third}
     </View>
   );
-};
+}
 
 export default FlexRowTexts;
 

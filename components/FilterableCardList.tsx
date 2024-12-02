@@ -39,7 +39,9 @@ export default FilterableCardList;
 const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
-    padding: 20,
+    // padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: "row",
     justifyContent: "center",
   },

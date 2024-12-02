@@ -7,8 +7,8 @@ import StepTitle from "../components/StepTitle";
 import CustomButton from "../components/CustomButton";
 import StageBar from "../components/StageBar";
 import SetupForm from "../components/SetupForm";
-import { getUserData, saveUserData } from "../service/userDataService";
 import CustomCheckBox from "../components/CustomCheckBox";
+import useUserStore from "../store/userStore";
 
 type Props = {
   navigation: RitualSetup2ndNavigationProp;
@@ -20,7 +20,7 @@ const RitualSetup2ndScreen = ({ navigation }: Props) => {
   const [activity, setActivity] = useState<string>("")
   const [time, setTime] = useState<string>("")
   const [isPushEnabled, setIsPushEnabled] = useState<boolean>(false); // 알림 설정 상태
-
+  const { userData, setUserData, loadUserData } = useUserStore()
 
 
   const getTime = (time: string) => {
@@ -29,7 +29,7 @@ const RitualSetup2ndScreen = ({ navigation }: Props) => {
 
   const saveAndNavigateHandler = async () => {
     try {
-      const userData = await getUserData()
+      // const userData = await getUserData()
       if (userData) {
         if (activity.trim().length < 2) {
           Alert.alert(
@@ -52,7 +52,7 @@ const RitualSetup2ndScreen = ({ navigation }: Props) => {
           time,
           isPushEnabled
         };
-        await saveUserData(userData)
+        await setUserData(userData)
         navigation.navigate("RitualSetup3rd");
       }
     } catch (error) {
@@ -65,19 +65,20 @@ const RitualSetup2ndScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    const loadUserData = async () => {
+    const initializeUserData = async () => {
       try {
-        const userData = await getUserData();
+        // const userData = await getUserData();
+        await loadUserData();
         if (userData?.nightRitual) {
           setActivity(userData.nightRitual.activity || "");
           setTime(userData.nightRitual.time || "");
-          setIsPushEnabled(userData.nightRitual.isPushEnabled)
+          setIsPushEnabled(userData.nightRitual.isPushEnabled || false)
         }
       } catch (error) {
         console.warn("Failed to load user data:", error);
       }
     };
-    loadUserData();
+    initializeUserData();
   }, []);
 
   return (

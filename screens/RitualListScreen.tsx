@@ -1,51 +1,51 @@
-import { ActivityIndicator, Button, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import RitualTypeFilter from "../components/RitualTypeFilter";
 import FilterableCardList from "../components/FilterableCardList";
-
 import { useFocusEffect } from "@react-navigation/native";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import { getRitualDataList } from "../service/ritualDataService";
 import Layout from "../components/Layout";
 import Colors from "../constants/colors";
-import { me } from "@react-native-kakao/user";
-import { usePushNotifications } from "../hook/usePushNotification";
-import * as Notifications from "expo-notifications";
+import { parse } from "date-fns";
+import SortableButtons from "../components/SortableButtons";
 
 
-
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      sound: 'default',
-      title: '리추얼 라이프🌞',
-      body: '모닝 리추얼 할 시간입니다!',
-      data: { data: 'morning-ritual' },
-    },
-    trigger: { seconds: 2 },
-  });
+type RitualListScreenProps = {
+  rituals: RitualData[],
+  setRituals: React.Dispatch<React.SetStateAction<RitualData[]>>
 }
 
-const RitualListScreen = () => {
+const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
   const [filterValue, setFilterValue] = useState<RitualFilterValue>("all");
-  const [rituals, setRituals] = useState<RitualData[]>([]);
-  const { expoPushToken, notification } = usePushNotifications()
-  const tokenData = JSON.stringify(notification, undefined, 2)
+  // const [rituals, setRituals] = useState<RitualData[]>([]);
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+
+
+  const sortRituals = (data: RitualData[], order: "newest" | "oldest") => {
+    return [...data].sort((a, b) => {
+      const dateA = parse(a.date, "MMM d, yyyy", new Date()).getTime();
+      const dateB = parse(b.date, "MMM d, yyyy", new Date()).getTime();
+      return order === "newest" ? dateB - dateA : dateA - dateB; // 최신순 또는 오래된 순 정렬
+    });
+  };
+
+  const handleSortChange = (order: "newest" | "oldest") => {
+    setSortOrder(order);
+  };
 
   const loadRitualListData = async () => {
-    let data = await getRitualDataList();
-
-    if (!data) {
-      setRituals([]);
-    } else setRituals(data);
+    const data = await getRitualDataList();
+    if (data) {
+      setRituals(sortRituals(data, sortOrder)); // 데이터 로드 후 정렬
+    }
   };
 
   useFocusEffect(
     React.useCallback(() => {
       loadRitualListData();
-    }, [])
+    }, [sortOrder, rituals])
   );
-
 
   if (!rituals) {
     return (
@@ -59,29 +59,10 @@ const RitualListScreen = () => {
   }
   return (
     <Layout>
+      <SortableButtons currentSort={sortOrder} onSortChange={handleSortChange} />
       <View style={styles.mainSection}>
         <RitualTypeFilter filter={filterValue} setFilter={setFilterValue} />
         <FilterableCardList filter={filterValue} ritualDataList={rituals} />
-        {/* <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'space-around',
-          }}
-        >
-          <Text>Your expo push token: {expoPushToken?.data}</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Title: {notification && notification.request.content.title} </Text>
-            <Text>Body: {notification && notification.request.content.body}</Text>
-            <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-          </View>
-          <Button
-            title="Press to schedule a notification"
-            onPress={async () => {
-              await schedulePushNotification();
-            }}
-          />
-        </View> */}
       </View>
     </Layout>
   );
@@ -96,9 +77,7 @@ const styles = StyleSheet.create({
     gap: 10,
     margin: "30%"
   },
-
   mainSection: {
-    paddingTop: 10,
     flexDirection: "row",
   },
 });

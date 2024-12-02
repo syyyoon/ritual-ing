@@ -3,7 +3,6 @@ import { ImageSourcePropType } from "react-native";
 
 export const checkFileExists = async (fileUri: string) => {
   const fileInfo = await FileSystem.getInfoAsync(fileUri);
-  console.log('File exists ;', fileInfo.exists )
     return fileInfo.exists
 }
 

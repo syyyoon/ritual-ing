@@ -1,7 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../types/user";
 
-const USER_DATA_KEY="user"
+
+const USER_DATA_KEY = process.env.EXPO_PUBLIC_USER_DATA_KEY  || "user"
+
+// const USER_DATA_KEY = "user"
+
 
 const initialUserData  ={
   id: 0,
@@ -37,7 +41,7 @@ export const getUserData = async (): Promise<User | null> => {
 export const saveUserData = async (user:User) => {
   try {
     await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
-    console.log("새로운 유저 데이터 저장 완료!");
+    console.log("새로운 유저 데이터 저장 완료!",user);
   } catch (error) {
     console.error("유저 데이터 저장 중 오류 발생:", error);
   }

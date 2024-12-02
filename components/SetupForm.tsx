@@ -40,7 +40,7 @@ const SetupForm = ({ type, activity, onChangeText, onTimeChange }: Props) => {
       <TextInput value={activity} onChangeText={onChangeText} placeholderTextColor={Colors.BORDER} placeholder={`예) ${ritualActivities} 등`} style={[styles.inputStyle, { color: theme.TEXT }]} />
 
       <View style={{ marginTop: 20 }}>
-        <Text style={[styles.comment, { color: theme.TEXT }]}>{ } 리추얼 활동 시간을 정해보세요.</Text>
+        <Text style={[styles.comment, { color: theme.TEXT }]}> 리추얼 활동 시간을 정해보세요.</Text>
         <TimePicker time={type} onTimeChange={onTimeChange} />
       </View>
     </View>
@@ -65,9 +65,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderWidth: 1,
     borderRadius: 8,
-    padding: 10,
+    // padding: 10,
+    paddingVertical: 0,
+    paddingHorizontal: 10,
+
     borderColor: Colors.PRIMARY,
     lineHeight: 20,
-    fontSize: 17,
+    height: 40,
+    fontSize: 16,
+
+
+    // width: "80%",
+    // borderColor: Colors.PRIMARY,
+    // borderWidth: 2,
+    // borderRadius: 5,
+    // paddingVertical: 0,
+    // paddingHorizontal: 5,
+    // margin: 0,
+    // height: 40,
+    // backgroundColor: "white",
+    // lineHeight: 20,
   },
 })

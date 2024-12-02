@@ -1,6 +1,6 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-// import ColorPicker, { Panel1, Swatches, Preview, HueSlider } from "reanimated-color-picker";
+import ColorPicker, { Panel1, Swatches, Preview, HueSlider } from "reanimated-color-picker";
 import CustomText from "./CustomText";
 import { useTheme } from "../context/ThemeContext";
 
@@ -15,17 +15,12 @@ const CustomColorPicker = ({ isVisible, onClose, onColorSelected }: Props) => {
 
   const [selectedColor, setSelectedColor] = useState<string>("#ffff");
   const { theme } = useTheme()
-  // const onSelectColor = ({ hex }: any) => {
-  //   setSelectedColor(hex);
-  // };
-
-  const handleColorSelection = (color: string) => {
-    console.log('color selected', color)
-    setSelectedColor(color);
+  const onSelectColor = ({ hex }: any) => {
+    setSelectedColor(hex);
   };
 
+
   const handleSaveColor = () => {
-    console.log('selected Button clicked!')
     onColorSelected(selectedColor);
     onClose();
   };
@@ -34,26 +29,12 @@ const CustomColorPicker = ({ isVisible, onClose, onColorSelected }: Props) => {
     <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.modalContent}>
         <View style={[styles.colorPickerContainer, { backgroundColor: theme.TEXT }]}>
-          <View style={styles.colorOptionsContainer}>
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#FF0000" }]}
-              onPress={() => handleColorSelection("#FF0000")}
-            />
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#FFFF00" }]}
-              onPress={() => handleColorSelection("#FFFF00")}
-            />
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#FFC0CB" }]}
-              onPress={() => handleColorSelection("#FFC0CB")}
-            />
-          </View>
-          {/* <ColorPicker value={selectedColor} onComplete={onSelectColor}>
+          <ColorPicker value={selectedColor} onComplete={onSelectColor}>
             <Panel1 style={{ marginBottom: 20 }} />
             <Swatches />
             <Preview />
             <HueSlider />
-          </ColorPicker> */}
+          </ColorPicker>
 
           <TouchableOpacity style={styles.buttonWrapper} onPress={handleSaveColor}>
             <CustomText fontSize={15} style={{ color: theme.BACKGROUND }}>

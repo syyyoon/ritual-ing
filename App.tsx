@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppNavigator from "./navigator/AppNavigator";
 import { ThemeProvider } from "./context/ThemeContext";
 
+const kakaoSDKkey = process.env.EXPO_PUBLIC_KAKAO_SDK_KEY || "06f4334a34850c5d987422bb523d3a64"
 
 const App: React.FC = () => {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
@@ -40,7 +41,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // kakaoSDK 초기화
-    initializeKakaoSDK("06f4334a34850c5d987422bb523d3a64");
+    initializeKakaoSDK(kakaoSDKkey);
   }, []);
 
 

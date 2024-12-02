@@ -10,16 +10,19 @@ import { RitualSetup3rdNavigationProp } from "../types/navigation";
 import { User } from "../types/user";
 import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
-import { getUserData, saveUserData } from "../service/userDataService";
 import { scheduleDailyPushNotification } from "../hook/usePushNotification";
+import useUserStore from "../store/userStore";
 
 type Props = {
   navigation: RitualSetup3rdNavigationProp;
 };
 
 const RitualSetup3rdScreen = ({ navigation }: Props) => {
-  const [userData, setUserData] = useState<User | null>(null)
+  // const [userData, setUserData] = useState<User | null>(null)
   const { theme } = useTheme()
+  const { userData, setUserData, loadUserData } = useUserStore()
+
+
 
   const carouselImages = [
     require("../assets/example/example1.jpg"),
@@ -31,6 +34,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
   const isUserDataValid = (data: User | null): boolean => {
     if (!data) return false;
     return (
+      // * TO DO REVISE
       data.id !== undefined && data.nickname.length > 1 && data.morningRitual.activity.length > 1 && data.nightRitual.activity.length > 1
     );
   };
@@ -40,7 +44,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
     if (isUserDataValid(userData)) {
       if (userData) {
         userData.setupDone = true;
-        await saveUserData(userData)
+        await setUserData(userData)
 
         // 모닝 리추얼 알림 설정
         if (userData.morningRitual.isPushEnabled && userData.morningRitual.time) {
@@ -64,12 +68,13 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
 
 
   useEffect(() => {
-    const loadUserData = async () => {
+    const initializeUserData = async () => {
       try {
-        const userData = await getUserData()
-        if (userData) {
-          setUserData(userData)
-        }
+        // const userData = await getUserData()
+        await loadUserData();
+        // if (userData) {
+        //   setUserData(userData)
+        // }
       } catch (error) {
         console.warn("Failed to load user data:", error);
         Alert.alert(
@@ -80,7 +85,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
       }
     };
 
-    loadUserData();
+    initializeUserData();
   }, []);
 
   return (

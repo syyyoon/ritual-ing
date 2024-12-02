@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { generateDateOptions } from "../utils/dateFormats";
 import Octicons from "@expo/vector-icons/Octicons";
@@ -10,7 +10,7 @@ type Props = {
   selectedColor: string;
 };
 const EmojiList = ({ onSelect, pickedEmoji, selectedColor }: Props) => {
-  const emojiList = generateDateOptions();
+  const emojiList = useMemo(() => generateDateOptions(), []);
   const { fontsLoaded } = useBalooFontsHook();
 
   if (!fontsLoaded) return null;

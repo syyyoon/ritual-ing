@@ -14,10 +14,13 @@ const CustomButton = ({ label, theme = "light", size = "default", onPress }: Pro
   const { fontsLoaded } = useComfortaaFontsHook();
   const bgColor = theme === "light" ? "#fff" : Colors.PRIMARY;
   const buttonSize = size === "default" ? 150 : "80%";
+  const borderColor = theme === "light" ? Colors.BORDER : Colors.PRIMARY
 
   if (!fontsLoaded) return null;
   return (
-    <View style={[styles.buttonContainer, { backgroundColor: bgColor, width: buttonSize }]}>
+    <View style={[styles.buttonContainer, {
+      backgroundColor: bgColor, width: buttonSize, borderColor: borderColor
+    }]}>
       <Pressable style={styles.button} onPress={onPress}>
         <Text style={styles.buttonLabel}>{label}</Text>
       </Pressable>
@@ -30,12 +33,15 @@ export default CustomButton;
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 10,
-    borderColor: Colors.BORDER,
     borderWidth: 1,
     height: 50,
     marginHorizontal: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  border: {
+    borderWidth: 1,
+    borderColor: Colors.BORDER
   },
   button: {
     borderRadius: 10,

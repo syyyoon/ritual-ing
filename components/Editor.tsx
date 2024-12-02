@@ -41,13 +41,14 @@ const Editor = ({ image, isEdit, originData }: Props) => {
     title: "",
     imageUrl: "",
     content: "",
-    like: false//
+    like: false
   });
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const navigation = useNavigation<RitualFormScreenNavigation>();
   const scrollViewRef = useRef<ScrollView>(null);
   const contentInputRef = useRef<TextInput>(null);
   const { theme } = useTheme()
+
 
   const handleTypeSelect = (type: RitualType) => {
     setRitualData((prevData) => ({ ...prevData, type }));
@@ -72,11 +73,11 @@ const Editor = ({ image, isEdit, originData }: Props) => {
       if (!isEdit) {
         // 새로운 리추얼 데이터 추가
         const updatedRituals = [ritualData, ...ritualDataList];
-        await saveRitualDataList(updatedRituals);
+        await saveRitualDataList(updatedRituals, "create");
       } else if (originData) {
         // 기존 리추얼 데이터 업데이트
         const updatedRituals = ritualDataList.map((ritual) => (ritual.id === originData.id ? ritualData : ritual));
-        saveRitualDataList(updatedRituals);
+        await saveRitualDataList(updatedRituals, "update");
       }
       navigation.navigate("List");
     } catch (e) {
@@ -85,7 +86,6 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   };
 
   const confirmDeleteRitualLog = async () => {
-    console.log('delete')
     Alert.alert(
       "삭제 확인",
       "이 리추얼 로그를 정말로 삭제하시겠습니까?",
@@ -101,9 +101,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
             try {
               if (originData) {
                 deleteRitualData(originData.id);
-                Alert.alert("삭제 완료", "리추얼 데이터가 성공적으로 삭제되었습니다.", [
-                  { text: "OK", onPress: () => navigation.navigate("List") },
-                ]);
+                navigation.navigate("List")
               }
             } catch (error) {
               console.error("오류 발생:", error);
@@ -144,101 +142,99 @@ const Editor = ({ image, isEdit, originData }: Props) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
+      keyboardVerticalOffset={100}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} ref={scrollViewRef}>
-        <ScrollView>
-
-
-          {/* 리추얼 타입 */}
+        {/* <ScrollView> */}
+        {/* 리추얼 타입 */}
+        <FlexRowTexts
+          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
+          second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
+          gap={5}
+          style={styles.common}
+        />
+        {/* 날짜 + 모달 캘린더 */}
+        <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
           <FlexRowTexts
-            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
-            second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
+            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
+            second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
+            third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
             gap={5}
             style={styles.common}
           />
-          {/* 날짜 + 모달 캘린더 */}
-          <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
-            <FlexRowTexts
-              first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
-              second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
-              third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
-              gap={5}
-              style={styles.common}
-            />
-          </View>
-          <ModalCalendar
-            visible={showDatePicker}
-            onClose={() => setShowDatePicker(false)}
-            onSelectDate={(date) => handleChange("date", date)}
-            selectedDate={ritualData.date}
-          />
-          {/* 타이틀 */}
-          <FlexRowTexts
-            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
-            second={
-              <TextInput
-                style={styles.title}
-                value={ritualData.title}
-                onChangeText={(text) => handleChange("title", text)}
-                placeholder="제목을 입력하세요"
-                placeholderTextColor={Colors.BORDER}
-              />
-            }
-            gap={5}
-            style={styles.common}
-          />
-
-          {/* 이미지 */}
-          <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
-          <View style={styles.imagePicker}>
-            <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
-          </View>
-
-          {/* 컨텐츠 */}
-          <View style={{ paddingVertical: 10 }}>
-            <View style={{ flexDirection: "row", paddingVertical: 3 }}>
-              <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
-              {/* 좋아요 */}
-              <Entypo
-                style={{ marginRight: 10 }}
-                name={ritualData.like ? "heart" : "heart-outlined"}
-                size={20}
-                color={ritualData.like ? "#f15b5b" : theme.TEXT}
-                onPress={toggleLike}
-              />
-            </View>
-
+        </View>
+        <ModalCalendar
+          visible={showDatePicker}
+          onClose={() => setShowDatePicker(false)}
+          onSelectDate={(date) => handleChange("date", date)}
+          selectedDate={ritualData.date}
+        />
+        {/* 타이틀 */}
+        <FlexRowTexts
+          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
+          second={
             <TextInput
-              ref={contentInputRef}
-              value={ritualData.content}
-              onChangeText={(content) => handleChange("content", content)}
-              style={styles.multilineTextInput}
-              placeholder="오늘을 기록해봐요 :-)"
-              multiline={true}
-              numberOfLines={10}
+              style={[styles.title, { color: theme.TEXT }]}
+              value={ritualData.title}
+              onChangeText={(text) => handleChange("title", text)}
+              placeholder="제목을 입력하세요"
               placeholderTextColor={Colors.BORDER}
-              onFocus={() => {
-                contentInputRef.current?.measure((fx, fy, width, height, px, py) => {
-                  scrollViewRef.current?.scrollTo({ y: py, animated: true });
-                });
-              }}
+            />
+          }
+          gap={5}
+          style={styles.common}
+        />
+
+        {/* 이미지 */}
+        <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
+        <View style={styles.imagePicker}>
+          <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
+        </View>
+
+        {/* 컨텐츠 */}
+        <View style={{ paddingVertical: 10 }}>
+          <View style={{ flexDirection: "row", paddingVertical: 3 }}>
+            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
+            {/* 좋아요 */}
+            <Entypo
+              style={{ marginRight: 10 }}
+              name={ritualData.like ? "heart" : "heart-outlined"}
+              size={20}
+              color={ritualData.like ? "#f15b5b" : theme.TEXT}
+              onPress={toggleLike}
             />
           </View>
-          <View style={styles.buttonWrapper}>
-            {originData && isEdit ? (
-              <FlexRowTexts
-                first={<CustomButton label="OK" theme="dark" onPress={saveRitualData} />}
-                second={<CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />}
-                style={{ marginTop: 10, justifyContent: "space-between" }}
-              />
-            ) : (
-              <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
-            )}
-          </View>
-        </ScrollView>
+
+          <TextInput
+            ref={contentInputRef}
+            value={ritualData.content}
+            onChangeText={(content) => handleChange("content", content)}
+            // style={styles.multilineTextInput}
+            style={[styles.multilineTextInput, { color: theme.TEXT }]}
+            placeholder="오늘을 기록해봐요 :-)"
+            multiline={true}
+            numberOfLines={10}
+            placeholderTextColor={Colors.BORDER}
+            onFocus={() => {
+              contentInputRef.current?.measure((fx, fy, width, height, px, py) => {
+                scrollViewRef.current?.scrollTo({ y: py, animated: true });
+              });
+            }}
+          />
+        </View>
+        <View style={styles.buttonWrapper}>
+          {originData && isEdit ? (
+            <FlexRowTexts
+              first={<CustomButton label="OK" theme="dark" onPress={saveRitualData} />}
+              second={<CustomButton label="Delete" theme="light" onPress={confirmDeleteRitualLog} />}
+              style={{ marginTop: 10, justifyContent: "space-between" }}
+            />
+          ) : (
+            <CustomButton label="OK" theme="dark" onPress={saveRitualData} />
+          )}
+        </View>
+        {/* </ScrollView> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -247,47 +243,41 @@ const Editor = ({ image, isEdit, originData }: Props) => {
 export default Editor;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-  },
+
   scrollContainer: {
-    padding: 15,
+    padding: 10,
   },
 
   imagePicker: {
-    flexDirection: "column",
     alignItems: "center",
-    gap: 20,
   },
   title: {
     width: "80%",
     borderColor: Colors.PRIMARY,
     borderWidth: 2,
     borderRadius: 5,
-    padding: 10,
-    backgroundColor: "white",
+    paddingVertical: 0,
+    paddingHorizontal: 5,
+    margin: 0,
+    height: 40,
+    // backgroundColor: "white",
     lineHeight: 20,
-    fontSize: 15,
-
   },
   multilineTextInput: {
-    height: 120,
+    minHeight: 95,
     marginVertical: 10,
     marginHorizontal: 10,
     padding: 10,
-    backgroundColor: "white",
-    textAlignVertical: "top",
     borderColor: Colors.PRIMARY,
     borderWidth: 2,
     borderRadius: 5,
+
   },
   label: {
     marginHorizontal: 10,
   },
   common: {
-    paddingVertical: 10,
+    paddingVertical: 8,
   },
   buttonWrapper: {
     alignItems: "center",

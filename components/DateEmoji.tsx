@@ -1,19 +1,22 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useBalooFontsHook } from "../hook/useCustomFonts";
+import { throttle } from 'lodash';
 
 type DateEmojiProps = {
   text: string;
   color: string;
   deleteEmoji: () => void;
   openModal: () => void;
+
 };
 
-const DateEmoji: React.FC<DateEmojiProps> = memo(({ text, color, deleteEmoji, openModal }) => {
+const DateEmoji: React.FC<DateEmojiProps> = ({ text, color, deleteEmoji, openModal, }) => {
   const [showTrashIcon, setShowTrashIcon] = useState(false);
+
   const { fontsLoaded } = useBalooFontsHook();
 
   const isFullDateText = text.includes("+");
@@ -23,39 +26,43 @@ const DateEmoji: React.FC<DateEmojiProps> = memo(({ text, color, deleteEmoji, op
   const translateY = useSharedValue(0);
 
   //   drag pan 제스처를 처리할 객체 생성
-  const drag = Gesture.Pan().onChange((event) => {
-    translateX.value += event.changeX;
-    translateY.value += event.changeY;
-  });
+  // const drag = Gesture.Pan().onChange((event) => {
+  //   translateX.value += event.changeX;
+  //   translateY.value += event.changeY;
+  // });
+
+  const drag = Gesture.Pan().onChange(
+    throttle((event) => {
+      translateX.value = event.translationX;
+      translateY.value = event.translationY;
+    }, 16) // 16ms로 호출 빈도 제한
+  );
 
   const containerStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
     };
   });
-  // 길게 누르면 휴지통 아이콘 visible
+
   const handleLongPress = () => {
     setShowTrashIcon((prev) => !prev);
   };
 
-  useEffect(() => {
-    setShowTrashIcon(false);
-  }, [text]);
 
   if (!fontsLoaded) return null;
   return (
     <GestureDetector gesture={drag}>
       <Animated.View style={[styles.container, containerStyle]}>
-        <TouchableOpacity onLongPress={handleLongPress} onPress={openModal}>
+        <TouchableOpacity onLongPress={handleLongPress} >
           {isFullDateText ? (
-            <Animated.View>
+            <>
               <Animated.Text style={[styles.date, styles.firstLineText, { color: color }]}>
                 {text.split("+")[0]}
               </Animated.Text>
               <Animated.Text style={[styles.date, styles.secondLineText, { color: color }]}>
                 {text.split("+")[1]}
               </Animated.Text>
-            </Animated.View>
+            </>
           ) : (
             <Animated.Text style={[styles.date, { color: color }]}>{text}</Animated.Text>
           )}
@@ -66,7 +73,7 @@ const DateEmoji: React.FC<DateEmojiProps> = memo(({ text, color, deleteEmoji, op
       </Animated.View>
     </GestureDetector>
   );
-});
+};
 
 export default DateEmoji;
 

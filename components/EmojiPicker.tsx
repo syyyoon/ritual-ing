@@ -30,11 +30,9 @@ const EmojiPicker = ({ isVisible, children, onClose, onColorSelected }: Props) =
             </TouchableOpacity>
           </View>
         </View>
-        {/* EmojiList */}
         {children}
       </View>
 
-      {/* Color Picker component */}
       {isColorPickerVisible && (
         <CustomColorPicker
           isVisible={isColorPickerVisible}

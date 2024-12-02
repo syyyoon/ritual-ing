@@ -1,11 +1,10 @@
-import { ActivityIndicator, Alert, Image, ImageSourcePropType, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, Button, Image, ImageSourcePropType, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 import { User } from "../types/user";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
-import { getUserData, saveUserData } from "../service/userDataService";
 import { getRitualDataList } from "../service/ritualDataService";
 import { RitualData } from "../types/ritual";
 import CircleSticker from "../components/CircleSticker";
@@ -15,18 +14,24 @@ import IconButton from "../components/IconButton";
 import Layout from "../components/Layout";
 import Carousel from "../components/Carousel";
 import { ProfileScreenNavigationProp } from "../types/navigation";
+import CustomButton from "../components/CustomButton";
+import useUserStore from "../store/userStore";
+import TimePicker from "../components/TimePicker";
 
 
-const ProfileScreen = ({ }) => {
 
-  const [userData, setUserData] = useState<User | null>(null)
+// type RitualTime = { type: "morning" | "night", time: string }
+
+const ProfileScreen = () => {
+
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [originalProfileImage, setOriginalProfileImage] = useState<string | undefined>(undefined);
   const [logQty, setLogQty] = useState({ morning: 0, night: 0 })
   const [editMode, setEditMode] = useState<boolean>(false)
   const [likedRituals, setLikedRituals] = useState<RitualData[] | null>(null)
+  // const [time, setTime] = useState<RitualTime>({ type: "morning", time: "" })
+  const { userData, setUserData } = useUserStore();
 
-  console.log(userData)
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const navigateDetailScreen = (item: RitualData) => {
@@ -43,8 +48,9 @@ const ProfileScreen = ({ }) => {
 
 
 
-  const pickImage = async () => {
 
+
+  const pickImage = async () => {
     const { granted } = await MediaLibrary.requestPermissionsAsync();
     if (!granted) {
       Alert.alert("알림", "사진 접근 권한이 필요합니다.");
@@ -67,6 +73,7 @@ const ProfileScreen = ({ }) => {
     }
   }
 
+
   const changeProfileImage = async () => {
     if (!profileImage || !userData) return;
     const updatedUserData = {
@@ -74,7 +81,6 @@ const ProfileScreen = ({ }) => {
       profileImageUrl: profileImage,
     };
 
-    await saveUserData(updatedUserData)
     setUserData(updatedUserData);
     setEditMode(false)
     Alert.alert("알림", "프로필 이미지가 성공적으로 변경되었습니다.");
@@ -85,26 +91,41 @@ const ProfileScreen = ({ }) => {
     setEditMode(false);
   }
 
-  const fetchUserDataAndRituals = async () => {
-    const [userData, ritualData] = await Promise.all([getUserData(), getRitualDataList()])
-    setUserData(userData)
-    setProfileImage(userData?.profileImageUrl)
-    const morgningRitual = ritualData.filter((it) => it.type === "morning").length
-    const nightRitual = ritualData.filter((it) => it.type === "night").length
-    const likedRitual = ritualData.filter((it) => it.like === true)
-    setLogQty({ morning: morgningRitual, night: nightRitual })
-    setLikedRituals(likedRitual)
 
-  };
+
+
+  const fetchRitualData = React.useCallback(async () => {
+    try {
+      const ritualData = await getRitualDataList();
+
+      if (userData) {
+        setProfileImage(userData.profileImageUrl);
+
+        // Calculate ritual logs
+        const morningRitualCount = ritualData.filter((ritual) => ritual.type === "morning").length;
+        const nightRitualCount = ritualData.filter((ritual) => ritual.type === "night").length;
+        const likedRitualList = ritualData.filter((ritual) => ritual.like === true);
+
+        setLogQty({ morning: morningRitualCount, night: nightRitualCount });
+        setLikedRituals(likedRitualList);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to load user or ritual data.");
+      console.error("fetchRitualData error:", error);
+    }
+  }, [userData]);
+
 
 
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchUserDataAndRituals();
-      setEditMode(false)
-    }, [])
+      fetchRitualData();
+      setEditMode(false);
+    }, [fetchRitualData])
   );
+
+
 
   if (!userData) {
     return (
@@ -136,23 +157,29 @@ const ProfileScreen = ({ }) => {
         </View>
 
         <View style={styles.section}>
-          <CustomText style={{ textAlign: "center" }} fontSize={20}>{userData.nickname} / {userData.id} </CustomText>
+          <CustomText style={{ textAlign: "center" }} fontSize={20}>{userData.nickname} ᐧ {userData.id} </CustomText>
         </View>
 
         <View style={styles.section}>
-          <CircleSticker type="morning" text="Morinig Ritual" />
-          <FlexRowTexts style={styles.marginLeft} gap={10} first={<CustomText fontSize={16}> ◦ 나의 모닝 리추얼 :</CustomText>} second={<CustomText fontSize={16}>{userData.morningRitual.activity}</CustomText>} />
-          <CustomText style={styles.marginLeft} fontSize={16}> ◦ Number of days : {logQty.morning} days</CustomText>
-          {userData.morningRitual.time && <CustomText style={styles.marginLeft} fontSize={16}> ◦ Time : {userData.morningRitual.time.slice(0, 2)}시 {userData.morningRitual.time.slice(2, 4)}분</CustomText>}
+          <CircleSticker type="morning" text="Morning Ritual" />
+          <View style={styles.marginLeft}>
+            <FlexRowTexts gap={10} first={<CustomText > ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText >{userData.morningRitual.activity}</CustomText>} />
+            <CustomText > ◦ 리추얼 달성 : {logQty.night} days</CustomText>
+            <FlexRowTexts gap={5} first={<CustomText> ◦ 리추얼 시간 : </CustomText>} second={<CustomText>{userData.morningRitual.time ? `${userData.morningRitual.time.slice(0, 2)}시 ${userData.morningRitual.time.slice(2, 4)}분` : "설정한 데이터 없음"} </CustomText>} third={<TouchableOpacity onPress={() => { }}><CustomText fontSize={12} style={styles.editButton}>설정</CustomText></TouchableOpacity>} />
+
+            {/* <TimePicker time={"morning"} onTimeChange={() => { }} /> */}
+
+          </View>
 
 
         </View>
         <View style={styles.section}>
-
           <CircleSticker type="night" text="Night Ritual" />
-          <FlexRowTexts style={styles.marginLeft} gap={10} first={<CustomText fontSize={16}> ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText fontSize={16}>{userData.nightRitual.activity}</CustomText>} />
-          <CustomText style={styles.marginLeft} fontSize={16}> ◦ Number of days : {logQty.night} days</CustomText>
-          {userData.nightRitual.time && <CustomText style={styles.marginLeft} fontSize={16}> ◦ Time : {userData.nightRitual.time.slice(0, 2)}시 {userData.nightRitual.time.slice(2, 4)}분</CustomText>}
+          <View style={styles.marginLeft}>
+            <FlexRowTexts gap={10} first={<CustomText > ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText >{userData.nightRitual.activity}</CustomText>} />
+            <CustomText > ◦ 리추얼 달성 : {logQty.night} days</CustomText>
+            <FlexRowTexts gap={5} first={<CustomText> ◦ 리추얼 시간 : </CustomText>} second={<CustomText>{userData.nightRitual.time ? `${userData.nightRitual.time.slice(0, 2)}시 ${userData.nightRitual.time.slice(2, 4)}분` : "설정한 데이터 없음"} </CustomText>} third={<TouchableOpacity><CustomText fontSize={12} style={styles.editButton}>설정</CustomText></TouchableOpacity>} />
+          </View>
 
         </View>
 
@@ -172,7 +199,7 @@ const ProfileScreen = ({ }) => {
           )}
         </View>
       </View>
-    </Layout>
+    </Layout >
 
   );
 };
@@ -181,7 +208,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   section: {
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   imageSection: {
     flexDirection: "column",
@@ -203,5 +230,6 @@ const styles = StyleSheet.create({
   },
   marginLeft: {
     marginLeft: 25,
-  }
+  },
+  editButton: { flexDirection: "row", alignItems: "center", paddingVertical: 1, paddingHorizontal: 8, borderRadius: 12, borderWidth: 3, borderColor: Colors.PRIMARY, }
 });

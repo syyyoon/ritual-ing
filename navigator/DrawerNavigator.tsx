@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -11,17 +11,29 @@ import SettingScreen from "../screens/SettingScreen";
 import Octicons from "@expo/vector-icons/Octicons";
 import Colors from "../constants/colors";
 import { useTheme } from "../context/ThemeContext";
+import { RitualData } from "../types/ritual";
+import { getRitualDataList } from "../service/ritualDataService";
 
 type NavigationProp = DrawerNavigationProp<RootStackParamList>;
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const [rituals, setRituals] = useState<RitualData[]>([]);
+
+  const loadRitualListData = async () => {
+    const data = await getRitualDataList();
+    setRituals(data);
+  };
+
+  useEffect(() => {
+    loadRitualListData();
+  }, []);
+
   const { theme } = useTheme()
   const navigation = useNavigation<NavigationProp>();
-  const
-    openDrawer = () => {
-      navigation.dispatch(DrawerActions.openDrawer());
-    };
+  const openDrawer = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
 
   return (
     <Drawer.Navigator
@@ -32,7 +44,7 @@ const DrawerNavigator = () => {
           color: theme.TEXT
         },
         headerStyle: {
-          height: 100,
+          height: 110,
           elevation: 0,
           shadowOpacity: 0,
           borderBottomWidth: 1,
@@ -41,6 +53,8 @@ const DrawerNavigator = () => {
         },
         drawerLabelStyle: {
           fontFamily: "NotoSansKR_400Regular",
+          flex: 1,
+          height: 20
         },
         drawerActiveBackgroundColor: Colors.DRAWER_ACTIVE_BG,
         drawerActiveTintColor: Colors.DRAWER_ACTIVE_TEXT,
@@ -52,29 +66,32 @@ const DrawerNavigator = () => {
         headerLeft: () => (
           <TouchableOpacity onPress={openDrawer}>
             <View style={styles.headerIconWrapper}>
-              <Octicons name="rows" size={15} color={theme.TEXT} />
+              <Octicons name="rows" size={18} color={theme.TEXT} />
             </View>
           </TouchableOpacity>
         ),
       }}
     >
-      <Drawer.Screen name="List"
-        component={RitualListScreen}
+      <Drawer.Screen
+        name="List"
         options={{
           title: "Archive",
           drawerLabel: "Archive",
           headerRight: () => (
             <View style={styles.headerIconWrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-                <Octicons name="search" size={16} color={theme.TEXT} />
+                <Octicons name="search" size={19} color={theme.TEXT} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("ImagePicker")}>
-                <Octicons name="plus" size={18} color={theme.TEXT} />
+                <Octicons name="plus" size={22} color={theme.TEXT} />
               </TouchableOpacity>
             </View>
           ),
         }}
-      />
+      >
+        {/* component */}
+        {() => <RitualListScreen rituals={rituals} setRituals={setRituals} />}
+      </Drawer.Screen>
 
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Setting" component={SettingScreen} />
@@ -88,7 +105,7 @@ const styles = StyleSheet.create({
   headerIconWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 25,
-    gap: 20,
+    paddingHorizontal: 25,
+    gap: 30,
   },
 });

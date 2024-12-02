@@ -57,6 +57,7 @@ const TimePicker = ({ time, onTimeChange }: timeProp) => {
         }}
         fixAndroidTouchableBug={true}
         useNativeAndroidPickerStyle={false}
+        // pickerProps={{ style: { height: 214, overflow: 'hidden' } }}
         style={{
           inputIOS: [styles.IOS, { color: theme.TEXT }],
           inputAndroid: [styles.WEB, { color: theme.TEXT }],
@@ -84,9 +85,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 10,
-    paddingVertical: 10,
+    paddingVertical: 0,
     paddingHorizontal: 10,
-    fontSize: 17,
+    lineHeight: 20,
+    height: 40,
+    fontSize: 16,
   },
   WEB: {
   },

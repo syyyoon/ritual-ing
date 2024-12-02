@@ -1,6 +1,7 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { useTheme } from "../context/ThemeContext";
+import DateEmoji from "./DateEmoji";
 
 
 type Props = {
@@ -17,7 +18,9 @@ const ImageViewer = React.memo(({ selectedImage }: Props) => {
       <Image source={require("../assets/default.png")} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]} />
     );
   } else {
-    return <Image source={{ uri: selectedImage }} style={styles.image} />;
+    return (
+      <Image source={{ uri: selectedImage }} style={styles.image} />
+    )
   }
 });
 

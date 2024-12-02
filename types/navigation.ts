@@ -3,21 +3,19 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RitualData } from "./ritual";
 
 export type RootStackParamList = {
-  Home: undefined; // init screen
+  Home: undefined; 
   RitualSetup1st: undefined;
   RitualSetup2nd: undefined;
   RitualSetup3rd: undefined;
   Splash: undefined;
-  Main: undefined; // drawer navigator
+  Main: undefined; 
   List: undefined;
   Profile: { userId: string };
   Setting: undefined;
-
   ImagePicker: undefined;
   RitualForm: { imageUri: string | null };
   Search: undefined;
   Detail: { item: RitualData };
-  //  Feed: { sort: 'latest' | 'top' } | undefined;
 };
 
 //Route
@@ -37,7 +35,7 @@ export type ListScreenNavigationProp = NativeStackNavigationProp<RootStackParamL
 export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList,"Profile">
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Detail">;
 export type ImagePickerScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
-export type RitualFormScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
+export type RitualFormScreenNavigation = NativeStackNavigationProp<RootStackParamList, "RitualForm">;
 export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Search">;
 export type SettingScreenNavigation = NativeStackNavigationProp<RootStackParamList, "Setting">;
 

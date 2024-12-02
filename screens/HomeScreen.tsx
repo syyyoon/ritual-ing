@@ -1,55 +1,73 @@
 import { Image, StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { login, me } from "@react-native-kakao/user";
 import Logo from "../components/Logo";
 import { HomeScreenNavigationProp } from "../types/navigation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomText from "../components/CustomText";
 import { generateUniqueId } from "../utils/uniqueId";
 import Layout from "../components/Layout";
-import { getUserData } from "../service/userDataService";
+// import { getUserData } from "../service/userDataService";
+import useUserStore from "../store/userStore";
+import { User } from "../types/user";
+
 
 type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
+const USER_DATA_KEY = process.env.EXPO_PUBLIC_USER_DATA_KEY || "user"
+
+
 const HomeScreen = ({ navigation }: Props) => {
   const backgroundImage = require("../assets/bgImage.png");
+
+  // zustand state
+  const { userData, setUserData, loadUserData } = useUserStore()
 
   const handleLogin = async (): Promise<void> => {
     try {
       // npx expo run: ios
-      // await login();
-      // const result = await me();
-      // console.log(result)
+      await login();
+      const result = await me();
+      const user: User = {
+        id: result.id,
+        nickname: result.nickname,
+        profileImageUrl: result.profileImageUrl,
+        morningRitual: {
+          activity: "",
+          time: "",
+          isPushEnabled: false,
+        },
+        nightRitual: {
+          activity: "",
+          time: "",
+          isPushEnabled: false,
+        },
+        setupDone: false,
+      };
+      console.log('login', user)
+      // npx expo  start 로 실행할때 - 회원탈퇴나 로그아웃 기능은 사용 x
       // const user = {
-      //   id: result.id,
-      //   nickname: result.nickname,
-      //   profileImageUrl: result.profileImageUrl,
+      //   id: generateUniqueId(),
+      //   nickname: "윤선영",
+      //   profileImageUrl: undefined,
       // };
 
-
-      // npx expo  start 로 실행할때
-      const user = {
-        id: generateUniqueId(),
-        nickname: "윤선영",
-        profileImageUrl: undefined,
-      };
-
-
-      const savedUserData = await getUserData();
-
-      if (savedUserData?.setupDone) {
+      if (userData?.setupDone) {
+        console.log('기존유저')
         navigation.navigate("Main");
       } else {
-        await AsyncStorage.setItem("user", JSON.stringify(user));
+        console.log('new user')
+        await setUserData(user)
         navigation.navigate("RitualSetup1st");
       }
     } catch (err) {
       console.error("login err", err);
     }
   };
+
+
 
 
   return (

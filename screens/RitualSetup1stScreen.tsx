@@ -7,8 +7,8 @@ import CustomButton from "../components/CustomButton";
 import StageBar from "../components/StageBar";
 import Layout from "../components/Layout";
 import SetupForm from "../components/SetupForm";
-import { getUserData, saveUserData } from "../service/userDataService";
 import CustomCheckBox from "../components/CustomCheckBox";
+import useUserStore from "../store/userStore";
 
 
 type Props = {
@@ -19,7 +19,7 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
   const [activity, setActivity] = useState<string>("")
   const [time, setTime] = useState<string>("")
   const [isPushEnabled, setIsPushEnabled] = useState<boolean>(false); // 알림 설정 상태
-
+  const { userData, setUserData, loadUserData } = useUserStore()
 
   const getTime = (time: string) => {
     setTime(time)
@@ -27,7 +27,6 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
 
   const saveAndNavigateHandler = async () => {
     try {
-      const userData = await getUserData();
       if (userData) {
         // 리추얼 네이밍 2글자 이상 인지 확인 
         if (activity.trim().length < 2) {
@@ -51,7 +50,7 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
           time,
           isPushEnabled
         };
-        await saveUserData(userData);
+        setUserData(userData);
         navigation.navigate("RitualSetup2nd");
       }
     } catch (error) {
@@ -65,22 +64,19 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
 
 
   useEffect(() => {
-    const loadUserData = async () => {
+    const initializeUserData = async () => {
       try {
-        // homeScreen에서 저장한 유저 데이터 (id,nickname,profileImageUrl)
-        const userData = await getUserData();
+        await loadUserData();
         if (userData?.morningRitual) {
-          console.log('moringRitual data 있으면 여기')
           setActivity(userData.morningRitual.activity || "");
           setTime(userData.morningRitual.time || "");
-          setIsPushEnabled(userData.morningRitual.isPushEnabled)
+          setIsPushEnabled(userData.morningRitual.isPushEnabled || false)
         }
-        console.log('user data 에 아직 morning ritual data 없음!')
       } catch (error) {
         console.warn("Failed to load user data:", error);
       }
     };
-    loadUserData();
+    initializeUserData();
   }, []);
 
   return (

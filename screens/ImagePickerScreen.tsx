@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View, Text, Modal, TouchableOpacity } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -13,6 +13,12 @@ import EmojiPicker from "../components/EmojiPicker";
 import EmojiList from "../components/EmojiList";
 import DateEmoji from "../components/DateEmoji";
 import { useTheme } from "../context/ThemeContext";
+import Layout from "../components/Layout";
+import CustomText from "../components/CustomText";
+import { MaterialIcons } from "@expo/vector-icons";
+import Colors from "../constants/colors";
+import CustomColorPicker from "../components/CustomColorPicker";
+
 
 
 
@@ -43,8 +49,6 @@ const ImagePickerScreen = () => {
 
   const pickImage = async () => {
     const permissionMediaLibray = await MediaLibrary.requestPermissionsAsync();
-
-    console.log(permissionMediaLibray)
 
     if (permissionMediaLibray.granted === false) {
       alert("You've refused to allow this app to access your photos!");
@@ -102,48 +106,47 @@ const ImagePickerScreen = () => {
     }
   };
 
-  const onReset = () => {
+  const clearSelectedPhoto = () => {
     setShowActionOptions(false);
     setImageUri(null);
     setPickedEmoji(null);
   };
 
+  const resetEmojiSelection = () => {
+    setIsModalVisible(true);
+    setPickedEmoji(null)
+  }
+
   const colorSelectHandler = (color: string) => {
     setSelectedColor(color);
-    setIsModalVisible(false);
+    // 색부터 선택하면?
+    setTimeout(() => { setIsModalVisible(false) }, 1000)
   };
 
   const onEmojiSelected = (emoji: string) => {
-    console.log('selected emoji:', emoji)
     setPickedEmoji(emoji)
   }
 
 
   const captureAndNavigate = async () => {
     if (imageRef.current) {
-      console.log('ImageRef 있음!')
       try {
         let tempUri = await captureRef(imageRef.current, {
           format: "png",
           quality: 1,
         });
         if (tempUri) {
-          console.log('teme uri!!')
-          // 정상적으로 캡쳐된 경우에만 아래 작업 실행
           tempUri = 'file://' + tempUri
           const newUri = imgDir + `${Date.now()}.png`
           const fileInfo = await FileSystem.getInfoAsync(tempUri)
           if (!fileInfo.exists) {
             throw new Error("Temporary file does not exist.")
           }
-          console.log('fileInfo')
 
           await FileSystem.copyAsync({
             from: tempUri,
             to: newUri,
           });
-          console.log('COpy 성공')
-
           navigation.navigate("RitualForm", { imageUri: newUri });
         } else {
           console.warn("Capture failed: tempUri is null")
@@ -157,17 +160,14 @@ const ImagePickerScreen = () => {
   };
 
   useEffect(() => {
-    console.log('useEffect 실행!')
     ensureDirExists()
   }, [])
 
 
   return (
-    <GestureHandlerRootView style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
-      <View ref={imageRef} collapsable={false} style={{ position: "relative" }}>
-
+    <View style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
+      <View ref={imageRef} collapsable={false} >
         <ImageViewer selectedImage={imageUri ?? undefined} />
-
         {pickedEmoji && (
           <DateEmoji
             text={pickedEmoji}
@@ -180,14 +180,11 @@ const ImagePickerScreen = () => {
 
       {showActionOptions ? (
         <View style={styles.buttonsContainer}>
-          <IconButton iconType="MaterialIcons" icon="refresh" onPress={onReset} />
+          <IconButton iconType="MaterialIcons" icon="refresh" onPress={clearSelectedPhoto} />
           <IconButton
             iconType="MaterialIcons"
             icon="auto-awesome"
-            // onPress={captureAndNavigate}
-            onPress={() => {
-              setIsModalVisible(true);
-            }}
+            onPress={resetEmojiSelection}
           />
           <IconButton iconType="MaterialIcons" icon="download" onPress={saveImageToLibrary} />
           <IconButton iconType="MaterialIcons" icon="check" onPress={captureAndNavigate} />
@@ -207,7 +204,7 @@ const ImagePickerScreen = () => {
         </View>
       )}
 
-      {/* <EmojiPicker
+      <EmojiPicker
         isVisible={isModalVisible}
         onClose={() => {
           setIsModalVisible(false);
@@ -215,10 +212,9 @@ const ImagePickerScreen = () => {
         onColorSelected={colorSelectHandler}
       >
         <EmojiList onSelect={onEmojiSelected} pickedEmoji={pickedEmoji} selectedColor={selectedColor} />
+      </EmojiPicker>
+    </View>
 
-
-      </EmojiPicker> */}
-    </GestureHandlerRootView>
   );
 };
 
@@ -227,8 +223,7 @@ export default ImagePickerScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
+    paddingTop: "25%",
     alignItems: "center"
   },
 
@@ -239,4 +234,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
+
 });

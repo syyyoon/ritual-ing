@@ -119,7 +119,6 @@ const ImagePickerScreen = () => {
 
   const colorSelectHandler = (color: string) => {
     setSelectedColor(color);
-    // 색부터 선택하면?
     setTimeout(() => { setIsModalVisible(false) }, 1000)
   };
 

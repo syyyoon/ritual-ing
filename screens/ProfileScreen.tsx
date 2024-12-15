@@ -6,7 +6,7 @@ import { User } from "../types/user";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { getRitualDataList } from "../service/ritualDataService";
-import { RitualData } from "../types/ritual";
+import { RitualData, RitualType } from "../types/ritual";
 import CircleSticker from "../components/CircleSticker";
 import CustomText from "../components/CustomText";
 import FlexRowTexts from "../components/FlexRowTexts";
@@ -17,10 +17,11 @@ import { ProfileScreenNavigationProp } from "../types/navigation";
 import CustomButton from "../components/CustomButton";
 import useUserStore from "../store/userStore";
 import TimePicker from "../components/TimePicker";
+import LoadingIcon from "../components/LoadingIcon";
+import UserRitualDataForm from "../components/UserRitualDataForm";
 
 
 
-// type RitualTime = { type: "morning" | "night", time: string }
 
 const ProfileScreen = () => {
 
@@ -29,15 +30,12 @@ const ProfileScreen = () => {
   const [logQty, setLogQty] = useState({ morning: 0, night: 0 })
   const [editMode, setEditMode] = useState<boolean>(false)
   const [likedRituals, setLikedRituals] = useState<RitualData[] | null>(null)
-  // const [time, setTime] = useState<RitualTime>({ type: "morning", time: "" })
   const { userData, setUserData } = useUserStore();
-
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const navigateDetailScreen = (item: RitualData) => {
     navigation.navigate("Detail", { item })
   }
-
 
 
 
@@ -129,14 +127,9 @@ const ProfileScreen = () => {
 
   if (!userData) {
     return (
-      <Layout>
-        <ActivityIndicator />
-      </Layout>
-
+      <LoadingIcon />
     );
   }
-
-
   return (
     <Layout>
       <View style={{ padding: 20 }}>
@@ -159,29 +152,12 @@ const ProfileScreen = () => {
         <View style={styles.section}>
           <CustomText style={{ textAlign: "center" }} fontSize={20}>{userData.nickname} ᐧ {userData.id} </CustomText>
         </View>
-
-        <View style={styles.section}>
-          <CircleSticker type="morning" text="Morning Ritual" />
-          <View style={styles.marginLeft}>
-            <FlexRowTexts gap={10} first={<CustomText > ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText >{userData.morningRitual.activity}</CustomText>} />
-            <CustomText > ◦ 리추얼 달성 : {logQty.night} days</CustomText>
-            <FlexRowTexts gap={5} first={<CustomText> ◦ 리추얼 시간 : </CustomText>} second={<CustomText>{userData.morningRitual.time ? `${userData.morningRitual.time.slice(0, 2)}시 ${userData.morningRitual.time.slice(2, 4)}분` : "설정한 데이터 없음"} </CustomText>} third={<TouchableOpacity onPress={() => { }}><CustomText fontSize={12} style={styles.editButton}>설정</CustomText></TouchableOpacity>} />
-
-            {/* <TimePicker time={"morning"} onTimeChange={() => { }} /> */}
-
-          </View>
+        {/* Morning Ritual Section */}
+        <UserRitualDataForm type="morning" qty={logQty.morning} />
+        {/* Night Ritual Section */}
+        <UserRitualDataForm type="night" qty={logQty.night} />
 
 
-        </View>
-        <View style={styles.section}>
-          <CircleSticker type="night" text="Night Ritual" />
-          <View style={styles.marginLeft}>
-            <FlexRowTexts gap={10} first={<CustomText > ◦ 나의 나이트 리추얼 :</CustomText>} second={<CustomText >{userData.nightRitual.activity}</CustomText>} />
-            <CustomText > ◦ 리추얼 달성 : {logQty.night} days</CustomText>
-            <FlexRowTexts gap={5} first={<CustomText> ◦ 리추얼 시간 : </CustomText>} second={<CustomText>{userData.nightRitual.time ? `${userData.nightRitual.time.slice(0, 2)}시 ${userData.nightRitual.time.slice(2, 4)}분` : "설정한 데이터 없음"} </CustomText>} third={<TouchableOpacity><CustomText fontSize={12} style={styles.editButton}>설정</CustomText></TouchableOpacity>} />
-          </View>
-
-        </View>
 
         <View style={styles.section}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -192,7 +168,7 @@ const ProfileScreen = () => {
             <CustomText style={{ marginLeft: 30 }}>아직 좋아요를 누른 리추얼 로그가 없습니다.</CustomText>
 
           ) : (
-            <View style={{ height: 220 }}>
+            <View style={{ minHeight: 220 }}>
               {/* likedRituals가 null 일때, undefined로 변환 */}
               <Carousel images={images} rituals={likedRituals || undefined} onImagePress={navigateDetailScreen} />
             </View>
@@ -207,9 +183,7 @@ const ProfileScreen = () => {
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  section: {
-    paddingVertical: 8,
-  },
+
   imageSection: {
     flexDirection: "column",
     alignItems: "center",
@@ -219,7 +193,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
   },
-
+  section: {
+    paddingVertical: 8,
+  },
+  marginLeft: {
+    marginLeft: 25,
+  },
   profileImage: {
     width: 150,
     height: 150,
@@ -228,8 +207,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.PRIMARY,
     backgroundColor: Colors.DRAWER_ACTIVE_TEXT,
   },
-  marginLeft: {
-    marginLeft: 25,
-  },
+
   editButton: { flexDirection: "row", alignItems: "center", paddingVertical: 1, paddingHorizontal: 8, borderRadius: 12, borderWidth: 3, borderColor: Colors.PRIMARY, }
 });
+

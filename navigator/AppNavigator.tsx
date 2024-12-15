@@ -13,14 +13,13 @@ import SearchScreen from "../screens/SearchScreen";
 import RitualDetailScreen from "../screens/RitualDetailScreen";
 import HomeScreen from "../screens/HomeScreen";
 import { useTheme } from "../context/ThemeContext";
-// import { getUserData } from "../service/userDataService";
 import useUserStore from "../store/userStore";
 
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
-  const [initialRoute, setInitialRoute] = useState<keyof RootStackParamList>("Home");
+  const [initialRoute, setInitialRoute] = useState<keyof RootStackParamList | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { theme } = useTheme()
 
@@ -29,66 +28,39 @@ const AppNavigator = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
+      console.log("Initializing App...");
+      setIsLoading(true); // 로딩 시작
       try {
-        await loadUserData(); // AsyncStorage 접근하여 set user data
-        console.log('setup done? ', userData?.setupDone)
-        if (userData?.setupDone) {
-
-          // 기존 회원일 경우 'Main' 페이지가 첫페이지
-          setInitialRoute("Main");
-          console.log("기존 회원이니까 메인 페이지!")
-        }
-        // 아닐경우 'Home" 페이지가 첫페이지
-        console.log("신규 회원이니까 로그인페이지!")
-
+        await loadUserData(); // userData 상태 업데이트
       } catch (error) {
         console.warn("Failed to load user data:", error);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // 로딩 완료
       }
     };
 
     initializeApp();
   }, [loadUserData]);
 
-  // useEffect(() => {
-  //   const checkUserData = async () => {
-  //     try {
-  //       // const user = await getUserData();
-  //       if (userData?.setupDone) {
-  //         initialRoute.current = "Main";  // Ref를 사용하여 상태 업데이트가 아닌 직접 참조
-  //       }
-  //     } catch (error) {
-  //       console.warn("Failed to load user data:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   checkUserData();
-  // }, []);
+  useEffect(() => {
+    if (isLoading) return; // 로딩 중일 때는 실행 안 함
+    console.log("Final UserData:", userData);
+    if (userData?.setupDone) {
+      setInitialRoute("Main");
+    } else {
+      setInitialRoute("Home");
+    }
+  }, [isLoading, userData]); // isLoading이 완료되고 userData가 변경될 때 실행
 
 
-  // useEffect(() => {
-  //   const checkUserData = async () => {
-  //     try {
-  //       await loadUserData(); // zustand에서 유저 데이터 로드
-  //     } catch (error) {
-  //       console.warn("Failed to load user data:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
 
-  //   checkUserData();
-  // }, [loadUserData]);
 
-  if (isLoading) {
+  if (isLoading || !initialRoute) {
     return null;
   }
+
   return (
     <RootStack.Navigator
-      // initialRouteName={initialRoute.current}
       initialRouteName={initialRoute}
       screenOptions={({ navigation }) => ({
         headerTitleStyle: {

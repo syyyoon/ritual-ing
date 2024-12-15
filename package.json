@@ -19,7 +19,7 @@
     "@react-native-community/slider": "4.5.2",
     "@react-native-kakao/core": "^2.2.5",
     "@react-native-kakao/user": "^2.2.5",
-    "@react-native-picker/picker": "^2.7.5",
+    "@react-native-picker/picker": "2.7.5",
     "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.10.1",

@@ -1,10 +1,15 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import { RitualType } from '../types/ritual'
 import CircleSticker from './CircleSticker'
-import TimePicker from './TimePicker'
+
 import Colors from '../constants/colors'
+import Dropdown from './DropDown'
+import { formattedMorningTimes, formattedNightTimes } from '../utils/timeList'
+
+
+
 
 
 type Props = {
@@ -13,6 +18,7 @@ type Props = {
   onChangeText: (activity: string) => void;
   onTimeChange: (time: string) => void;
 }
+
 const SetupForm = ({ type, activity, onChangeText, onTimeChange }: Props) => {
   const { theme } = useTheme();
   const title = type.charAt(0).toUpperCase() + type.slice(1) + ` Ritual`;
@@ -33,6 +39,13 @@ const SetupForm = ({ type, activity, onChangeText, onTimeChange }: Props) => {
   const { comment, ritualActivities } = messages[type];
 
 
+  // `type`이 변경될 때만 `formattedTimes` 계산
+  const formattedTimes = useMemo(
+    () => (type === "morning" ? formattedMorningTimes : formattedNightTimes),
+    [type] // `type`이 변경될 때만 계산
+  );
+
+
   return (
     <View style={styles.section}>
       <CircleSticker type={type} text={title} />
@@ -41,7 +54,9 @@ const SetupForm = ({ type, activity, onChangeText, onTimeChange }: Props) => {
 
       <View style={{ marginTop: 20 }}>
         <Text style={[styles.comment, { color: theme.TEXT }]}> 리추얼 활동 시간을 정해보세요.</Text>
-        <TimePicker time={type} onTimeChange={onTimeChange} />
+
+        <Dropdown data={formattedTimes} onChange={(item) => { onTimeChange(item.value) }} placeholder='시간을 선택하세요' />
+
       </View>
     </View>
 
@@ -65,25 +80,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderWidth: 1,
     borderRadius: 8,
-    // padding: 10,
     paddingVertical: 0,
     paddingHorizontal: 10,
-
     borderColor: Colors.PRIMARY,
     lineHeight: 20,
     height: 40,
     fontSize: 16,
-
-
-    // width: "80%",
-    // borderColor: Colors.PRIMARY,
-    // borderWidth: 2,
-    // borderRadius: 5,
-    // paddingVertical: 0,
-    // paddingHorizontal: 5,
-    // margin: 0,
-    // height: 40,
-    // backgroundColor: "white",
-    // lineHeight: 20,
   },
 })

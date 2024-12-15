@@ -6,14 +6,15 @@ import Colors from "../constants/colors";
 type Props = {
   label: string;
   theme?: "light" | "dark";
-  size?: "default" | "large";
+  size?: "default" | "large" | "small";
   onPress: () => void;
 };
 
 const CustomButton = ({ label, theme = "light", size = "default", onPress }: Props) => {
   const { fontsLoaded } = useComfortaaFontsHook();
   const bgColor = theme === "light" ? "#fff" : Colors.PRIMARY;
-  const buttonSize = size === "default" ? 150 : "80%";
+  // const buttonSize = size === "default" ? 150 : "80%";
+  const buttonSize = size === "default" ? 150 : size === "large" ? "80%" : 100; // small 버튼 크기 설정
   const borderColor = theme === "light" ? Colors.BORDER : Colors.PRIMARY
 
   if (!fontsLoaded) return null;

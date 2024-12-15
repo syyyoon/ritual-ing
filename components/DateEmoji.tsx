@@ -1,10 +1,12 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useBalooFontsHook } from "../hook/useCustomFonts";
 import { throttle } from 'lodash';
+
+
 
 type DateEmojiProps = {
   text: string;
@@ -25,11 +27,6 @@ const DateEmoji: React.FC<DateEmojiProps> = ({ text, color, deleteEmoji, openMod
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
 
-  //   drag pan 제스처를 처리할 객체 생성
-  // const drag = Gesture.Pan().onChange((event) => {
-  //   translateX.value += event.changeX;
-  //   translateY.value += event.changeY;
-  // });
 
   const drag = Gesture.Pan().onChange(
     throttle((event) => {

@@ -14,9 +14,10 @@ import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { deleteAllRitualData } from "../service/ritualDataService";
-import { cancelAllScheduledNotifications, getScheduledNotifications, scheduleDailyPushNotification } from "../hook/usePushNotification";
+import { cancelAllScheduledNotifications, cancelScheduledNotification, scheduleDailyPushNotification } from "../hook/usePushNotification";
 import CustomToggleButton from "../components/CustomToggleButton";
 import useUserStore from "../store/userStore";
+import { RitualType } from "../types/ritual";
 
 
 
@@ -34,7 +35,6 @@ const SettingScreen = ({ navigation }: Props) => {
 
   const { userData, setUserData, clearUserData } = useUserStore();
 
-  // 초기 알림 상태를 userData로부터 설정
   const initialPushState = {
     morning: userData?.morningRitual?.isPushEnabled ?? false,
     night: userData?.nightRitual?.isPushEnabled ?? false,
@@ -59,8 +59,6 @@ const SettingScreen = ({ navigation }: Props) => {
       await cancelAllScheduledNotifications(); // 설정된 푸시 기능 초기화
       await deleteAllRitualData(); // 리추얼 데이터 전체 삭제
       await clearUserData();
-      // await removeUserData("user"); // async storage에서 유저 데이터 삭제
-
       await unlink(); // 카카오 연결 해제
       navigation.reset({
         index: 0,
@@ -128,124 +126,50 @@ const SettingScreen = ({ navigation }: Props) => {
   }
 
 
-
-
-  // const toggleNotification = (type: "morning" | "night", value: boolean) => {
-  //   setIsActivePush((prevState) => ({ ...prevState, [type]: value }));
-
-  //   setUserData((prevData) => {
-  //     if (!prevData) return null;
-
-  //     const updatedData = {
-  //       ...prevData,
-  //       [`${type}Ritual`]: {
-  //         ...prevData[`${type}Ritual`],
-  //         isPushEnabled: value,
-  //       },
-  //     };
-
-  //     console.log('??', updatedData)
-
-  //     // TODO: 필요 시 서비스나 스토리지에 업데이트된 데이터 저장
-  //     // updateUserData(updatedData); // 예시: async 저장 함수 호출
-
-  //     return updatedData;
-  //   });
-  // };
-
-
-  const toggleNotification = async (type: "morning" | "night", value: boolean) => {
+  const toggleNotification = async (type: RitualType, value: boolean) => {
     setIsActivePush((prevState) => ({ ...prevState, [type]: value }));
+
+    const activity = userData?.[`${type}Ritual`]?.activity
+    const time = userData?.[`${type}Ritual`]?.time || (type === "morning" ? "0700" : "2200")
+    let notificationId = userData?.[`${type}Ritual`]?.notificationId || undefined
+
+    if (value) {
+      try {
+        notificationId = await scheduleDailyPushNotification(time, type, activity);
+      } catch (error) {
+        console.log(error, "Failed to schedule notification");
+      }
+    } else {
+      if (notificationId) {
+        try {
+          await cancelScheduledNotification(notificationId);
+        } catch (error) {
+          console.error("Failed to cancel notification:", error);
+        }
+      }
+      notificationId = ""; // 알림 ID 초기화
+    }
+
+    // 사용자 데이터 업데이트
     const updatedUserData = {
       ...userData,
       [`${type}Ritual`]: {
         ...userData?.[`${type}Ritual`],
         isPushEnabled: value,
-        time: userData?.[`${type}Ritual`]?.time ?? (type === "morning" ? "0700" : "2200"),
+        time,
+        notificationId
       },
     };
-
     setUserData(updatedUserData);
-
-
-    // setUserData((prevData) => {
-    //   if (!prevData) return null;
-
-    //   const existingTime = prevData[`${type}Ritual`]?.time;
-    //   const time = existingTime ? existingTime : type === "morning" ? "0700" : "2200";
-
-
-    //   const hour = parseInt(time.slice(0, 2), 10);
-    //   const minute = parseInt(time.slice(2, 4), 10);
-
-    //   console.log(hour, minute)
-
-    //   const updatedData = {
-    //     ...prevData,
-    //     [`${type}Ritual`]: {
-    //       ...prevData[`${type}Ritual`],
-    //       isPushEnabled: value,
-    //       time: time, // 시간을 설정
-    //     },
-    //   };
-    //   saveUserData(updatedData);
-    //   getScheduledNotifications()
-    //   return updatedData;
-    // });
   };
 
 
-  // const fetchUserData = React.useCallback(async () => {
-  //   try {
-  //     // 사용자 데이터를 가져와서 상태를 업데이트
-  //     const fetchedUserData = await getUserData();
-
-  //     setUserData(fetchedUserData);
-  //     setIsActivePush({
-  //       morning: fetchedUserData?.morningRitual?.isPushEnabled ?? false,
-  //       night: fetchedUserData?.nightRitual?.isPushEnabled ?? false,
-  //     });
-  //   } catch (error) {
-  //     console.warn("Failed to fetch user data:", error);
-  //   }
-  // }, []);
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchUserData();
-  //   }, [fetchUserData])
-  // );
 
   return (
     <Layout>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={150}>
         <View style={styles.mainSection}>
-          {/* <SettingInfoBox
-            name="앱 정보"
-            content={
-              <View style={[styles.content, {
-                backgroundColor: theme.FORM_BG,
-                borderColor: Colors.BORDER,
-              }]}>
-                <FlexRowTexts
-                  gap={20}
-                  first={<CustomText>앱 이름</CustomText>}
-                  second={<CustomText fontFamily="NotoSansKR_400Regular">Ritual +ing</CustomText>}
-                />
-                <FlexRowTexts
-                  gap={20}
-                  first={<CustomText>앱 버전</CustomText>}
-                  second={<CustomText fontFamily="NotoSansKR_400Regular">1.0</CustomText>}
-                />
-                <FlexRowTexts
-                  gap={20}
-                  first={<CustomText>개발자</CustomText>}
-                  second={<CustomText fontFamily="NotoSansKR_400Regular">YOONCOMOU</CustomText>}
-                />
 
-              </View>
-            }
-          /> */}
           <SettingInfoBox name="앱" content="Ritual +ing" />
           <SettingInfoBox name="버전 정보" content="현재 버전 1.0" />
           <SettingInfoBox

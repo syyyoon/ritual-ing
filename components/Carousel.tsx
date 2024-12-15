@@ -13,6 +13,7 @@ type CarouselProps = {
 }
 
 const Carousel = ({ images, rituals, onImagePress }: CarouselProps) => {
+  console.log('images', images)
   const [currentPage, setCurrentPage] = useState<number>(0);
   const { theme } = useTheme()
 

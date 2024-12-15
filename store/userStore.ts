@@ -11,15 +11,17 @@ const initialUserData  = {
   nickname: "",
   profileImageUrl: "",
   morningRitual :{
-    activity:"string",
+    activity:"",
     time:"",
     isPushEnabled:false,
-
+    notificationId:""
   },
   nightRitual :{
     activity:"",
     time:"",
     isPushEnabled:false,
+    notificationId:""
+
   },
   setupDone:false
 
@@ -44,22 +46,20 @@ const useUserStore = create<Store>((set) => ({
     await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(userData)); // AsyncStorage에 저장
   },
   // 유저 데이터 조회
-  loadUserData: async () => {
-    console.log('loadUserdata 실행!')
-    try {
+  loadUserData: async () => {    try {
       const storedUserData = await AsyncStorage.getItem(USER_DATA_KEY);
       if (storedUserData) {
-        set({ userData: JSON.parse(storedUserData) }); // AsyncStorage에서 데이터를 불러와 zustand 상태 업데이트
-      }
+        set({ userData: JSON.parse(storedUserData) }); 
+      } 
     } catch (error) {
       console.error("Failed to load user data from AsyncStorage:", error);
     }
   },
   // 유저데이터 삭제
   clearUserData: async () => {
-    console.log('clear User data')
-    set({ userData: initialUserData }); // zustand 상태 초기화
+    set({ userData: initialUserData }); 
     await AsyncStorage.removeItem(USER_DATA_KEY); 
+     console.log('clear User data')
   },
 }));
 

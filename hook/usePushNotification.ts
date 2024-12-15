@@ -176,6 +176,7 @@ export const usePushNotifications = (): PushNotificationState => {
 
 // 알림 취소 함수
 export const cancelScheduledNotification = async (notificationId:string) => {
+  console.log('알림 취소요청 ')
   try {
     await Notifications.cancelScheduledNotificationAsync(notificationId);
     console.log("Cancelled notification ID:", notificationId);

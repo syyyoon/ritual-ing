@@ -9,6 +9,7 @@ import Layout from "../components/Layout";
 import Colors from "../constants/colors";
 import { parse } from "date-fns";
 import SortableButtons from "../components/SortableButtons";
+import LoadingIcon from "../components/LoadingIcon";
 
 
 type RitualListScreenProps = {
@@ -18,9 +19,7 @@ type RitualListScreenProps = {
 
 const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
   const [filterValue, setFilterValue] = useState<RitualFilterValue>("all");
-  // const [rituals, setRituals] = useState<RitualData[]>([]);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
-
 
   const sortRituals = (data: RitualData[], order: "newest" | "oldest") => {
     return [...data].sort((a, b) => {
@@ -49,12 +48,7 @@ const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
 
   if (!rituals) {
     return (
-      <Layout>
-        <View style={styles.indicatorWrapper}>
-          <ActivityIndicator size={"large"} color={Colors.PRIMARY} />
-        </View>
-      </Layout>
-
+      <LoadingIcon />
     );
   }
   return (

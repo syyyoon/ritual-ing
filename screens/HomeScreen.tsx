@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import CustomButton from "../components/CustomButton";
 import { login, me } from "@react-native-kakao/user";
 import Logo from "../components/Logo";
@@ -7,7 +7,6 @@ import { HomeScreenNavigationProp } from "../types/navigation";
 import CustomText from "../components/CustomText";
 import { generateUniqueId } from "../utils/uniqueId";
 import Layout from "../components/Layout";
-// import { getUserData } from "../service/userDataService";
 import useUserStore from "../store/userStore";
 import { User } from "../types/user";
 
@@ -16,13 +15,8 @@ type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-const USER_DATA_KEY = process.env.EXPO_PUBLIC_USER_DATA_KEY || "user"
-
-
 const HomeScreen = ({ navigation }: Props) => {
   const backgroundImage = require("../assets/bgImage.png");
-
-  // zustand state
   const { userData, setUserData, loadUserData } = useUserStore()
 
   const handleLogin = async (): Promise<void> => {
@@ -38,11 +32,13 @@ const HomeScreen = ({ navigation }: Props) => {
           activity: "",
           time: "",
           isPushEnabled: false,
+          notificationId: ""
         },
         nightRitual: {
           activity: "",
           time: "",
           isPushEnabled: false,
+          notificationId: ""
         },
         setupDone: false,
       };
@@ -52,6 +48,17 @@ const HomeScreen = ({ navigation }: Props) => {
       //   id: generateUniqueId(),
       //   nickname: "윤선영",
       //   profileImageUrl: undefined,
+      //   morningRitual: {
+      //     activity: "",
+      //     time: "",
+      //     isPushEnabled: false,
+      //   },
+      //   nightRitual: {
+      //     activity: "",
+      //     time: "",
+      //     isPushEnabled: false,
+      //   },
+      //   setupDone: false,
       // };
 
       if (userData?.setupDone) {

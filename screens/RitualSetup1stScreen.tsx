@@ -48,7 +48,7 @@ const RitualSetup1stScreen = ({ navigation }: Props) => {
         userData.morningRitual = {
           activity,
           time,
-          isPushEnabled
+          isPushEnabled,
         };
         setUserData(userData);
         navigation.navigate("RitualSetup2nd");

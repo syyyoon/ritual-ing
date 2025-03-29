@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { useTheme } from "../context/ThemeContext";
+import * as FileSystem from "expo-file-system";
 
 type Props = {
   selectedImage: string | undefined;
@@ -17,7 +18,13 @@ const ImageViewer = React.memo(({ selectedImage }: Props) => {
       />
     );
   } else {
-    return <Image resizeMethod="auto" source={{ uri: selectedImage }} style={styles.image} />;
+    return (
+      <Image
+        resizeMethod="auto"
+        source={{ uri: FileSystem.documentDirectory + `${selectedImage}` }}
+        style={styles.image}
+      />
+    );
   }
 });
 

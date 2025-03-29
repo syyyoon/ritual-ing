@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View, Text, Modal, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, View, Text, Modal, TouchableOpacity, Image } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -37,7 +37,8 @@ const ImagePickerScreen = () => {
 
     if (!dirInfo.exists) {
       console.log("img dirctory does not exist, creating... ");
-      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
+
+      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: false });
     }
   };
 
@@ -123,6 +124,7 @@ const ImagePickerScreen = () => {
   };
 
   const captureAndNavigate = async () => {
+    const date = Date.now();
     if (imageRef.current) {
       try {
         let tempUri = await captureRef(imageRef.current, {
@@ -130,8 +132,12 @@ const ImagePickerScreen = () => {
           quality: 1,
         });
         if (tempUri) {
+          console.log(tempUri);
           tempUri = "file://" + tempUri;
-          const newUri = imgDir + `${Date.now()}.png`;
+
+          // const imgDir = FileSystem.documentDirectory + "images/";
+          const newUri = imgDir + `${date}.png`;
+
           const fileInfo = await FileSystem.getInfoAsync(tempUri);
           if (!fileInfo.exists) {
             throw new Error("Temporary file does not exist.");
@@ -141,7 +147,7 @@ const ImagePickerScreen = () => {
             from: tempUri,
             to: newUri,
           });
-          navigation.navigate("RitualForm", { imageUri: newUri });
+          navigation.navigate("RitualForm", { imageUri: `images/${date}.png` });
         } else {
           console.warn("Capture failed: tempUri is null");
         }
@@ -160,7 +166,8 @@ const ImagePickerScreen = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
       <View ref={imageRef} collapsable={false}>
-        <ImageViewer selectedImage={imageUri ?? undefined} />
+        {/* <ImageViewer selectedImage={imageUri ?? undefined} /> */}
+        <Image src={imageUri ? imageUri : ""} style={styles.image} />
         {pickedEmoji && (
           <DateEmoji
             text={pickedEmoji}
@@ -220,5 +227,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  image: {
+    width: "100%",
+    height: undefined,
+    aspectRatio: 1.0,
   },
 });

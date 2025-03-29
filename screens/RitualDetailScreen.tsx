@@ -24,7 +24,7 @@ const RitualDetailScreen = () => {
 
         if (existingData) {
           setOriginData(existingData);
-          checkFileExists(`file://${existingData.imageUrl}`)
+          checkFileExists(existingData.imageUrl!);
         } else {
           Alert.alert("알림", "해당 데이터를 찾을 수 없습니다.");
         }
@@ -42,11 +42,9 @@ const RitualDetailScreen = () => {
   if (!originData) {
     return (
       <Layout>
-        <CustomText style={styles.noContent}>
-          해당 데이터 없음
-        </CustomText>
+        <CustomText style={styles.noContent}>해당 데이터 없음</CustomText>
       </Layout>
-    )
+    );
   } else {
     return (
       <Layout>
@@ -61,6 +59,6 @@ export default RitualDetailScreen;
 const styles = StyleSheet.create({
   noContent: {
     textAlign: "center",
-    marginTop: "20%"
-  }
-})
+    marginTop: "20%",
+  },
+});

@@ -9,7 +9,8 @@ import { images } from "../source/image";
 import { RitualData, RitualFilterValue } from "../types/ritual";
 import Colors from "../constants/colors";
 import { useTheme } from "../context/ThemeContext";
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from "@expo/vector-icons/Entypo";
+import * as FileSystem from "expo-file-system";
 
 type RitualCardProps = {
   item: RitualData;
@@ -19,12 +20,13 @@ type RitualCardProps = {
 const RitualCard = ({ item, filter }: RitualCardProps) => {
   const navigation = useNavigation<ListScreenNavigationProp>();
 
-  const { theme } = useTheme()
+  const { theme } = useTheme();
   const marginValue = filter === "all" ? 1 : 10;
-  const imageRatio = filter === "all" ? 1 : 1.5
+  const imageRatio = filter === "all" ? 1 : 1.5;
+
+  console.log("1!", FileSystem.documentDirectory + `${item.imageUrl}`);
 
   const handleMoveDetail = () => {
-
     navigation.navigate("Detail", { item });
   };
   const defaultImage = require("../assets/default.png");
@@ -34,24 +36,39 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
       <TouchableOpacity onPress={handleMoveDetail}>
         <View style={[styles.contentWrapper]}>
           {item.imageUrl && item.id > 10 ? (
-            <Image source={{ uri: item.imageUrl }} style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG, aspectRatio: imageRatio }]} />
+            <Image
+              // source={{ uri: item.imageUrl }}
+              source={{ uri: FileSystem.documentDirectory + `${item.imageUrl}` }}
+              style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG, aspectRatio: imageRatio }]}
+            />
           ) : (
             <Image
-              source={item.imageUrl ? images[item.imageUrl] : defaultImage}
+              source={item.imageUrl ? FileSystem.documentDirectory + `${images[item.imageUrl]}` : defaultImage}
               defaultSource={defaultImage}
               style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG, aspectRatio: imageRatio }]}
             />
           )}
 
           <View style={{ paddingLeft: 5 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 3 }}>
-              {item.title && <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>{item.title}</CustomText>}
-              {!item.title && <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>-</CustomText>}
-              {filter !== "all" && item.like && <Entypo
-                name="heart"
-                size={12}
-                color="#f15b5b"
-              />}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingVertical: 3,
+              }}
+            >
+              {item.title && (
+                <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>
+                  {item.title}
+                </CustomText>
+              )}
+              {!item.title && (
+                <CustomText fontFamily="NotoSansKR_400Regular" fontSize={12}>
+                  -
+                </CustomText>
+              )}
+              {filter !== "all" && item.like && <Entypo name="heart" size={12} color="#f15b5b" />}
             </View>
 
             {filter !== "all" && item.content && <CustomText fontSize={12}>{item.content}</CustomText>}
@@ -59,13 +76,8 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
               <View style={styles.date}>
                 <MaterialCommunityIcons name="tag" size={12} color={Colors.BORDER} />
                 <CustomText fontSize={12}>{item.date}</CustomText>
-
               </View>
-              {filter === "all" && item.like && <Entypo
-                name="heart"
-                size={12}
-                color="#f15b5b"
-              />}
+              {filter === "all" && item.like && <Entypo name="heart" size={12} color="#f15b5b" />}
             </View>
           </View>
         </View>
@@ -82,11 +94,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 25,
-
   },
   contentWrapper: {
     width: "100%",
-
   },
   image: {
     width: "100%",

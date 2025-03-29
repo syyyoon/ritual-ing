@@ -8,6 +8,7 @@ const RITUAL_DATA_KEY = process.env.EXPO_PUBLIC_RITUAL__DATA_KEY || "ritualDataL
 export const getRitualDataList = async (): Promise<RitualData[]> => {
   try {
     const storedData = await AsyncStorage.getItem(RITUAL_DATA_KEY);
+
     return storedData ? JSON.parse(storedData) : [];
   } catch (error) {
     Alert.alert("알림", "리추얼 데이터 조회 중 오류가 발생했습니다. 다시 시도해주세요.");

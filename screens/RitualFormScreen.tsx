@@ -8,6 +8,8 @@ const RitualFormScreen = () => {
   const route = useRoute<RitualFormRouteProp>();
   const { imageUri } = route.params;
 
+  console.log("RitualFormScreen, imageUri:", imageUri);
+
   return (
     <Layout>
       <Editor image={imageUri} isEdit={false} />

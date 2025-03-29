@@ -3,16 +3,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RitualData } from "./ritual";
 
 export type RootStackParamList = {
-  Home: undefined; 
+  Home: undefined;
   RitualSetup1st: undefined;
   RitualSetup2nd: undefined;
   RitualSetup3rd: undefined;
   Splash: undefined;
-  Main: undefined; 
+  Main: undefined;
   List: undefined;
   Profile: { userId: string };
   Setting: undefined;
   ImagePicker: undefined;
+  EditImage: { imageUri: string | null };
   RitualForm: { imageUri: string | null };
   Search: undefined;
   Detail: { item: RitualData };
@@ -24,6 +25,7 @@ export type ProfileScreenRouteProp = RouteProp<RootStackParamList, "Profile">;
 export type ListScreenRouteProp = RouteProp<RootStackParamList, "List">;
 export type RitualFormRouteProp = RouteProp<RootStackParamList, "RitualForm">;
 export type DetailScreenRouteProp = RouteProp<RootStackParamList, "Detail">;
+export type EditImageScreenRouteProp = RouteProp<RootStackParamList, "EditImage">;
 
 // Navigation
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home">;
@@ -32,12 +34,10 @@ export type RitualSetup2ndNavigationProp = NativeStackNavigationProp<RootStackPa
 export type RitualSetup3rdNavigationProp = NativeStackNavigationProp<RootStackParamList, "RitualSetup3rd">;
 
 export type ListScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "List">;
-export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList,"Profile">
+export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Profile">;
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Detail">;
 export type ImagePickerScreenNavigation = NativeStackNavigationProp<RootStackParamList, "ImagePicker">;
+export type EditImageScreenNavigation = NativeStackNavigationProp<RootStackParamList, "EditImage">;
 export type RitualFormScreenNavigation = NativeStackNavigationProp<RootStackParamList, "RitualForm">;
 export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Search">;
 export type SettingScreenNavigation = NativeStackNavigationProp<RootStackParamList, "Setting">;
-
-
-

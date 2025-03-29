@@ -11,11 +11,10 @@ import { parse } from "date-fns";
 import SortableButtons from "../components/SortableButtons";
 import LoadingIcon from "../components/LoadingIcon";
 
-
 type RitualListScreenProps = {
-  rituals: RitualData[],
-  setRituals: React.Dispatch<React.SetStateAction<RitualData[]>>
-}
+  rituals: RitualData[];
+  setRituals: React.Dispatch<React.SetStateAction<RitualData[]>>;
+};
 
 const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
   const [filterValue, setFilterValue] = useState<RitualFilterValue>("all");
@@ -35,6 +34,7 @@ const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
 
   const loadRitualListData = async () => {
     const data = await getRitualDataList();
+
     if (data) {
       setRituals(sortRituals(data, sortOrder)); // 데이터 로드 후 정렬
     }
@@ -47,9 +47,7 @@ const RitualListScreen = ({ rituals, setRituals }: RitualListScreenProps) => {
   );
 
   if (!rituals) {
-    return (
-      <LoadingIcon />
-    );
+    return <LoadingIcon />;
   }
   return (
     <Layout>
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 10,
-    margin: "30%"
+    margin: "30%",
   },
   mainSection: {
     flexDirection: "row",

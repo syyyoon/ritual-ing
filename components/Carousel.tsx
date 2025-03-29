@@ -5,17 +5,15 @@ import Colors from "../constants/colors";
 import { useTheme } from "../context/ThemeContext";
 import { RitualData } from "../types/ritual";
 
-
 type CarouselProps = {
   images: ImageSourcePropType[];
-  rituals?: RitualData[]
+  rituals?: RitualData[];
   onImagePress?: (item: RitualData) => void;
-}
+};
 
 const Carousel = ({ images, rituals, onImagePress }: CarouselProps) => {
-  console.log('images', images)
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   const defaultImage = require("../assets/default.png");
 
@@ -41,15 +39,10 @@ const Carousel = ({ images, rituals, onImagePress }: CarouselProps) => {
           >
             <Image
               style={styles.image}
-              source={
-                image && (image as { uri: string }).uri !== ""
-                  ? image
-                  : defaultImage
-              }
+              source={image && (image as { uri: string }).uri !== "" ? image : defaultImage}
             />
           </TouchableOpacity>
         ))}
-
       </PagerView>
       <View style={styles.indicatorContainer}>
         {images.map((_, index) => (
@@ -65,7 +58,7 @@ export default Carousel;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 10
+    marginVertical: 10,
   },
   pagerView: {
     flex: 1,
@@ -73,13 +66,11 @@ const styles = StyleSheet.create({
   page: {
     justifyContent: "center",
     alignItems: "center",
-
   },
   image: {
     width: "100%",
     height: "100%",
     resizeMode: "contain",
-
   },
 
   indicatorContainer: {

@@ -1,20 +1,11 @@
-import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, Keyboard, ScrollView, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "./CustomButton";
 import ImageViewer from "./ImageViewer";
 import RitualTypeSelector from "./RitualTypeSelector";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from "@expo/vector-icons/Entypo";
 import Colors from "../constants/colors";
 import ModalCalendar from "./ModalCalendar";
 import { getCurrentDate } from "../utils/currentDate";
@@ -41,14 +32,13 @@ const Editor = ({ image, isEdit, originData }: Props) => {
     title: "",
     imageUrl: "",
     content: "",
-    like: false
+    like: false,
   });
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const navigation = useNavigation<RitualFormScreenNavigation>();
   const scrollViewRef = useRef<ScrollView>(null);
   const contentInputRef = useRef<TextInput>(null);
-  const { theme } = useTheme()
-
+  const { theme } = useTheme();
 
   const handleTypeSelect = (type: RitualType) => {
     setRitualData((prevData) => ({ ...prevData, type }));
@@ -64,7 +54,6 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   const toggleLike = () => {
     setRitualData((prevData) => ({ ...prevData, like: !prevData.like }));
   };
-
 
   const saveRitualData = async () => {
     try {
@@ -101,7 +90,7 @@ const Editor = ({ image, isEdit, originData }: Props) => {
             try {
               if (originData) {
                 deleteRitualData(originData.id);
-                navigation.navigate("List")
+                navigation.navigate("List");
               }
             } catch (error) {
               console.error("오류 발생:", error);
@@ -141,15 +130,16 @@ const Editor = ({ image, isEdit, originData }: Props) => {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={100}
-    >
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
       <ScrollView contentContainerStyle={styles.scrollContainer} ref={scrollViewRef}>
         {/* <ScrollView> */}
         {/* 리추얼 타입 */}
         <FlexRowTexts
-          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Type</CustomText>}
+          first={
+            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>
+              Type
+            </CustomText>
+          }
           second={<RitualTypeSelector type={ritualData.type} onTypeSelect={handleTypeSelect} />}
           gap={5}
           style={styles.common}
@@ -157,9 +147,27 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         {/* 날짜 + 모달 캘린더 */}
         <View style={{ flexDirection: "row", gap: 20, width: "95%" }}>
           <FlexRowTexts
-            first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Date</CustomText>}
-            second={<TextInput style={{ color: theme.TEXT }} placeholderTextColor={Colors.BORDER} value={ritualData.date} editable={false} />}
-            third={<MaterialIcons name="calendar-month" size={20} onPress={() => setShowDatePicker(true)} color={theme.TEXT} />}
+            first={
+              <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>
+                Date
+              </CustomText>
+            }
+            second={
+              <TextInput
+                style={{ color: theme.TEXT }}
+                placeholderTextColor={Colors.BORDER}
+                value={ritualData.date}
+                editable={false}
+              />
+            }
+            third={
+              <MaterialIcons
+                name="calendar-month"
+                size={20}
+                onPress={() => setShowDatePicker(true)}
+                color={theme.TEXT}
+              />
+            }
             gap={5}
             style={styles.common}
           />
@@ -172,7 +180,11 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         />
         {/* 타이틀 */}
         <FlexRowTexts
-          first={<CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Title</CustomText>}
+          first={
+            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>
+              Title
+            </CustomText>
+          }
           second={
             <TextInput
               style={[styles.title, { color: theme.TEXT }]}
@@ -187,7 +199,9 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         />
 
         {/* 이미지 */}
-        <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>Image</CustomText>
+        <CustomText fontFamily="NotoSansKR_500Medium" style={[styles.label, { margin: 10 }]}>
+          Image
+        </CustomText>
         <View style={styles.imagePicker}>
           <ImageViewer selectedImage={isEdit && originData ? originData.imageUrl : image ?? undefined} />
         </View>
@@ -195,7 +209,9 @@ const Editor = ({ image, isEdit, originData }: Props) => {
         {/* 컨텐츠 */}
         <View style={{ paddingVertical: 10 }}>
           <View style={{ flexDirection: "row", paddingVertical: 3 }}>
-            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>Content</CustomText>
+            <CustomText fontFamily="NotoSansKR_500Medium" style={styles.label}>
+              Content
+            </CustomText>
             {/* 좋아요 */}
             <Entypo
               style={{ marginRight: 10 }}
@@ -243,7 +259,6 @@ const Editor = ({ image, isEdit, originData }: Props) => {
 export default Editor;
 
 const styles = StyleSheet.create({
-
   scrollContainer: {
     padding: 10,
   },
@@ -271,7 +286,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.PRIMARY,
     borderWidth: 2,
     borderRadius: 5,
-
   },
   label: {
     marginHorizontal: 10,
@@ -281,6 +295,6 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     alignItems: "center",
-    marginBottom: 50
+    marginBottom: 50,
   },
 });

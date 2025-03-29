@@ -8,21 +8,16 @@ import { useNavigation } from "@react-navigation/native";
 import { ImagePickerScreenNavigation } from "../types/navigation";
 import IconButton from "../components/IconButton";
 import ImageViewer from "../components/ImageViewer";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EmojiPicker from "../components/EmojiPicker";
 import EmojiList from "../components/EmojiList";
 import DateEmoji from "../components/DateEmoji";
 import { useTheme } from "../context/ThemeContext";
-import Layout from "../components/Layout";
-import CustomText from "../components/CustomText";
-import { MaterialIcons } from "@expo/vector-icons";
-import Colors from "../constants/colors";
-import CustomColorPicker from "../components/CustomColorPicker";
-
-
-
-
-
+// import Layout from "../components/Layout";
+// import CustomText from "../components/CustomText";
+// import { MaterialIcons } from "@expo/vector-icons";
+// import Colors from "../constants/colors";
+// import CustomColorPicker from "../components/CustomColorPicker";
 
 const ImagePickerScreen = () => {
   const [showActionOptions, setShowActionOptions] = useState<boolean>(false);
@@ -35,17 +30,16 @@ const ImagePickerScreen = () => {
   const navigation = useNavigation<ImagePickerScreenNavigation>();
   const { theme } = useTheme();
 
-  const imgDir = FileSystem.documentDirectory + 'images/';
+  const imgDir = FileSystem.documentDirectory + "images/";
 
   const ensureDirExists = async () => {
     const dirInfo = await FileSystem.getInfoAsync(imgDir);
 
     if (!dirInfo.exists) {
-      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true })
+      console.log("img dirctory does not exist, creating... ");
+      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
     }
-  }
-
-
+  };
 
   const pickImage = async () => {
     const permissionMediaLibray = await MediaLibrary.requestPermissionsAsync();
@@ -114,18 +108,19 @@ const ImagePickerScreen = () => {
 
   const resetEmojiSelection = () => {
     setIsModalVisible(true);
-    setPickedEmoji(null)
-  }
+    setPickedEmoji(null);
+  };
 
   const colorSelectHandler = (color: string) => {
     setSelectedColor(color);
-    setTimeout(() => { setIsModalVisible(false) }, 1000)
+    setTimeout(() => {
+      setIsModalVisible(false);
+    }, 1000);
   };
 
   const onEmojiSelected = (emoji: string) => {
-    setPickedEmoji(emoji)
-  }
-
+    setPickedEmoji(emoji);
+  };
 
   const captureAndNavigate = async () => {
     if (imageRef.current) {
@@ -135,11 +130,11 @@ const ImagePickerScreen = () => {
           quality: 1,
         });
         if (tempUri) {
-          tempUri = 'file://' + tempUri
-          const newUri = imgDir + `${Date.now()}.png`
-          const fileInfo = await FileSystem.getInfoAsync(tempUri)
+          tempUri = "file://" + tempUri;
+          const newUri = imgDir + `${Date.now()}.png`;
+          const fileInfo = await FileSystem.getInfoAsync(tempUri);
           if (!fileInfo.exists) {
-            throw new Error("Temporary file does not exist.")
+            throw new Error("Temporary file does not exist.");
           }
 
           await FileSystem.copyAsync({
@@ -148,24 +143,23 @@ const ImagePickerScreen = () => {
           });
           navigation.navigate("RitualForm", { imageUri: newUri });
         } else {
-          console.warn("Capture failed: tempUri is null")
+          console.warn("Capture failed: tempUri is null");
         }
       } catch (error) {
         console.error("Error capturing view:", error);
       }
     } else {
-      console.warn("imageRef is null when attempting to capture.")
+      console.warn("imageRef is null when attempting to capture.");
     }
   };
 
   useEffect(() => {
-    ensureDirExists()
-  }, [])
-
+    ensureDirExists();
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
-      <View ref={imageRef} collapsable={false} >
+      <View ref={imageRef} collapsable={false}>
         <ImageViewer selectedImage={imageUri ?? undefined} />
         {pickedEmoji && (
           <DateEmoji
@@ -180,14 +174,9 @@ const ImagePickerScreen = () => {
       {showActionOptions ? (
         <View style={styles.buttonsContainer}>
           <IconButton iconType="MaterialIcons" icon="refresh" onPress={clearSelectedPhoto} />
-          <IconButton
-            iconType="MaterialIcons"
-            icon="auto-awesome"
-            onPress={resetEmojiSelection}
-          />
+          <IconButton iconType="MaterialIcons" icon="auto-awesome" onPress={resetEmojiSelection} />
           <IconButton iconType="MaterialIcons" icon="download" onPress={saveImageToLibrary} />
           <IconButton iconType="MaterialIcons" icon="check" onPress={captureAndNavigate} />
-
         </View>
       ) : (
         <View style={styles.buttonsContainer}>
@@ -213,7 +202,6 @@ const ImagePickerScreen = () => {
         <EmojiList onSelect={onEmojiSelected} pickedEmoji={pickedEmoji} selectedColor={selectedColor} />
       </EmojiPicker>
     </View>
-
   );
 };
 
@@ -223,7 +211,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: "25%",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   buttonsContainer: {
@@ -233,5 +221,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
-
 });

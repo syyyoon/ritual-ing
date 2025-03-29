@@ -12,24 +12,25 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { SettingScreenNavigation } from "../types/navigation";
 import { useTheme } from "../context/ThemeContext";
 import Layout from "../components/Layout";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { deleteAllRitualData } from "../service/ritualDataService";
-import { cancelAllScheduledNotifications, cancelScheduledNotification, scheduleDailyPushNotification } from "../hook/usePushNotification";
+import {
+  cancelAllScheduledNotifications,
+  cancelScheduledNotification,
+  getScheduledNotificationIds,
+  scheduleDailyPushNotification,
+} from "../hook/usePushNotification";
 import CustomToggleButton from "../components/CustomToggleButton";
 import useUserStore from "../store/userStore";
 import { RitualType } from "../types/ritual";
 
-
-
-
-
 type Push = {
-  morning: boolean,
-  night: boolean
-}
+  morning: boolean;
+  night: boolean;
+};
 type Props = {
-  navigation: SettingScreenNavigation
-}
+  navigation: SettingScreenNavigation;
+};
 const SettingScreen = ({ navigation }: Props) => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
 
@@ -46,13 +47,12 @@ const SettingScreen = ({ navigation }: Props) => {
     logout()
       .then(() => {
         navigation.reset({
-          index: 0, routes: [{ name: "Home" }]
-        })
-
+          index: 0,
+          routes: [{ name: "Home" }],
+        });
       })
       .catch((error) => console.log(error));
   };
-
 
   const handleLogout = async () => {
     try {
@@ -101,38 +101,31 @@ const SettingScreen = ({ navigation }: Props) => {
 
   // }
 
-
   const handleMemberWithdrow = () => {
-    Alert.alert(
-      "회원탈퇴",
-      "회원 탈퇴 하시겠습니까?",
-      [
-        { text: "취소" },
-        { text: "확인", onPress: handleLogout },
-      ]
-    );
+    Alert.alert("회원탈퇴", "회원 탈퇴 하시겠습니까?", [{ text: "취소" }, { text: "확인", onPress: handleLogout }]);
   };
 
   const confirmDeleteHandler = () => {
     Alert.alert("전체삭제", "모든 리추얼 데이터를 삭제하시겠습니까?", [
       { text: "취소" },
       {
-        text: "확인", onPress: async () => {
+        text: "확인",
+        onPress: async () => {
           await deleteAllRitualData();
           navigation.navigate("List");
         },
-      }
-    ])
-  }
-
+      },
+    ]);
+  };
 
   const toggleNotification = async (type: RitualType, value: boolean) => {
     setIsActivePush((prevState) => ({ ...prevState, [type]: value }));
 
-    const activity = userData?.[`${type}Ritual`]?.activity
-    const time = userData?.[`${type}Ritual`]?.time || (type === "morning" ? "0700" : "2200")
-    let notificationId = userData?.[`${type}Ritual`]?.notificationId || undefined
+    const activity = userData?.[`${type}Ritual`]?.activity;
+    const time = userData?.[`${type}Ritual`]?.time || (type === "morning" ? "0700" : "2200");
+    let notificationId = userData?.[`${type}Ritual`]?.notificationId || undefined;
 
+    console.log("noti id", notificationId);
     if (value) {
       try {
         notificationId = await scheduleDailyPushNotification(time, type, activity);
@@ -157,34 +150,35 @@ const SettingScreen = ({ navigation }: Props) => {
         ...userData?.[`${type}Ritual`],
         isPushEnabled: value,
         time,
-        notificationId
+        notificationId,
       },
     };
     setUserData(updatedUserData);
   };
 
-
-
   return (
     <Layout>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={150}>
         <View style={styles.mainSection}>
-
           <SettingInfoBox name="앱" content="Ritual +ing" />
           <SettingInfoBox name="버전 정보" content="현재 버전 1.0" />
           <SettingInfoBox
             name="모드 변경"
             content={
-              <View style={[styles.content, {
-                backgroundColor: theme.FORM_BG,
-                borderColor: Colors.BORDER,
-              }]}>
+              <View
+                style={[
+                  styles.content,
+                  {
+                    backgroundColor: theme.FORM_BG,
+                    borderColor: Colors.BORDER,
+                  },
+                ]}
+              >
                 {isDarkMode ? (
                   <TouchableOpacity onPress={toggleTheme} style={styles.modeButton}>
                     <MaterialIcons name="dark-mode" size={24} color={Colors.PRIMARY} />
                     <CustomText fontFamily="NotoSansKR_400Regular">DARK</CustomText>
                   </TouchableOpacity>
-
                 ) : (
                   <TouchableOpacity onPress={toggleTheme} style={styles.modeButton}>
                     <Ionicons name="sunny" size={25} color={Colors.PRIMARY} />
@@ -198,10 +192,15 @@ const SettingScreen = ({ navigation }: Props) => {
           <SettingInfoBox
             name="계정관리"
             content={
-              <View style={[styles.content, {
-                backgroundColor: theme.FORM_BG,
-                borderColor: Colors.BORDER,
-              }]}>
+              <View
+                style={[
+                  styles.content,
+                  {
+                    backgroundColor: theme.FORM_BG,
+                    borderColor: Colors.BORDER,
+                  },
+                ]}
+              >
                 <FlexRowTexts
                   gap={20}
                   first={<CustomText>닉네임</CustomText>}
@@ -236,36 +235,64 @@ const SettingScreen = ({ navigation }: Props) => {
           />
 
           <SettingInfoBox name="1:1 문의" content={<InQuiryForm />} />
-          <SettingInfoBox name="리추얼 삭제" content={<View style={[styles.content, {
-            backgroundColor: theme.FORM_BG,
-            borderColor: Colors.BORDER,
-          }]}>
-            <TouchableOpacity onPress={confirmDeleteHandler} style={styles.modeButton}>
-              <FontAwesome5 name="trash" size={20} color={Colors.BORDER} />
-              <CustomText fontFamily="NotoSansKR_400Regular">데이터 전체 삭제</CustomText>
-            </TouchableOpacity>
-
-          </View>} />
-          <SettingInfoBox name="리추얼 알림 푸쉬" content={<View style={[styles.content, {
-            backgroundColor: theme.FORM_BG,
-            borderColor: Colors.BORDER,
-          }]}>
-            <FlexRowTexts first={<CustomToggleButton
-              text={`모닝 ${isActivePush.morning ? "ON  " : "OFF"}`}
-              isActive={isActivePush.morning}
-              onChange={(value) => toggleNotification("morning", value)}
-            />} second={<CustomToggleButton
-              text={`나이트 ${isActivePush.night ? "ON  " : "OFF"}`}
-              isActive={isActivePush.night}
-              onChange={(value) => toggleNotification("night", value)}
-            />}
-              style={{ justifyContent: 'space-evenly' }} />
-            <CustomText fontSize={12} style={{ marginLeft: 5 }}> - 알림 시간 변경 은 'Profile' 에서 변경 가능합니다.</CustomText>
-          </View>} />
-
+          <SettingInfoBox
+            name="리추얼 삭제"
+            content={
+              <View
+                style={[
+                  styles.content,
+                  {
+                    backgroundColor: theme.FORM_BG,
+                    borderColor: Colors.BORDER,
+                  },
+                ]}
+              >
+                <TouchableOpacity onPress={confirmDeleteHandler} style={styles.modeButton}>
+                  <FontAwesome5 name="trash" size={20} color={Colors.BORDER} />
+                  <CustomText fontFamily="NotoSansKR_400Regular">데이터 전체 삭제</CustomText>
+                </TouchableOpacity>
+              </View>
+            }
+          />
+          <SettingInfoBox
+            name="리추얼 알림 푸쉬"
+            content={
+              <View
+                style={[
+                  styles.content,
+                  {
+                    backgroundColor: theme.FORM_BG,
+                    borderColor: Colors.BORDER,
+                  },
+                ]}
+              >
+                <FlexRowTexts
+                  first={
+                    <CustomToggleButton
+                      text={`모닝 ${isActivePush.morning ? "ON  " : "OFF"}`}
+                      isActive={isActivePush.morning}
+                      onChange={(value) => toggleNotification("morning", value)}
+                    />
+                  }
+                  second={
+                    <CustomToggleButton
+                      text={`나이트 ${isActivePush.night ? "ON  " : "OFF"}`}
+                      isActive={isActivePush.night}
+                      onChange={(value) => toggleNotification("night", value)}
+                    />
+                  }
+                  style={{ justifyContent: "space-evenly" }}
+                />
+                <CustomText fontSize={12} style={{ marginLeft: 5 }}>
+                  {" "}
+                  - 알림 시간 변경 은 'Profile' 에서 변경 가능합니다.
+                </CustomText>
+              </View>
+            }
+          />
         </View>
       </KeyboardAwareScrollView>
-    </Layout >
+    </Layout>
   );
 };
 

@@ -21,44 +21,44 @@ const HomeScreen = ({ navigation }: Props) => {
   const handleLogin = async (): Promise<void> => {
     try {
       // npx expo run: ios
-      // await login();
-      // const result = await me();
-      // const user: User = {
-      //   id: result.id,
-      //   nickname: result.nickname,
-      //   profileImageUrl: result.profileImageUrl,
-      //   morningRitual: {
-      //     activity: "",
-      //     time: "",
-      //     isPushEnabled: false,
-      //     notificationId: ""
-      //   },
-      //   nightRitual: {
-      //     activity: "",
-      //     time: "",
-      //     isPushEnabled: false,
-      //     notificationId: ""
-      //   },
-      //   setupDone: false,
-      // };
-      // console.log('login', user)
-      // npx expo  start 로 실행할때 - 회원탈퇴나 로그아웃 기능은 사용 x
-      const user = {
-        id: generateUniqueId(),
-        nickname: "윤선영",
-        profileImageUrl: undefined,
+      await login();
+      const result = await me();
+      const user: User = {
+        id: result.id,
+        nickname: result.nickname,
+        profileImageUrl: result.profileImageUrl,
         morningRitual: {
           activity: "",
           time: "",
           isPushEnabled: false,
+          notificationId: "",
         },
         nightRitual: {
           activity: "",
           time: "",
           isPushEnabled: false,
+          notificationId: "",
         },
         setupDone: false,
       };
+      console.log("login", user);
+      // npx expo  start 로 실행할때 - 회원탈퇴나 로그아웃 기능은 사용 x
+      // const user = {
+      //   id: generateUniqueId(),
+      //   nickname: "윤선영",
+      //   profileImageUrl: undefined,
+      //   morningRitual: {
+      //     activity: "",
+      //     time: "",
+      //     isPushEnabled: false,
+      //   },
+      //   nightRitual: {
+      //     activity: "",
+      //     time: "",
+      //     isPushEnabled: false,
+      //   },
+      //   setupDone: false,
+      // };
 
       if (userData?.setupDone) {
         console.log("기존유저");

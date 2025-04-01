@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import CustomText from "./CustomText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -24,12 +24,16 @@ const RitualCard = ({ item, filter }: RitualCardProps) => {
   const marginValue = filter === "all" ? 1 : 10;
   const imageRatio = filter === "all" ? 1 : 1.5;
 
-  console.log("1!", FileSystem.documentDirectory + `${item.imageUrl}`);
+  // console.log("1!", FileSystem.documentDirectory + `${item.imageUrl}`);
 
   const handleMoveDetail = () => {
     navigation.navigate("Detail", { item });
   };
   const defaultImage = require("../assets/default.png");
+
+  useEffect(() => {
+    console.log("1!", FileSystem.documentDirectory + `${item.imageUrl}`);
+  }, []);
 
   return (
     <View style={[styles.cardLayout, { marginHorizontal: marginValue }]}>

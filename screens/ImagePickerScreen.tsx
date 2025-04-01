@@ -163,11 +163,17 @@ const ImagePickerScreen = () => {
     ensureDirExists();
   }, []);
 
+  //  <Image
+  //       source={require("../assets/default.png")}
+  //       style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]}
+  //     />
   return (
     <View style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
       <View ref={imageRef} collapsable={false}>
-        {/* <ImageViewer selectedImage={imageUri ?? undefined} /> */}
-        <Image src={imageUri ? imageUri : ""} style={styles.image} />
+        <Image
+          source={imageUri ? { uri: imageUri } : require("../assets/default.png")}
+          style={[styles.image, !imageUri && { backgroundColor: theme.DEFAULT_IMG_BG }]}
+        />
         {pickedEmoji && (
           <DateEmoji
             text={pickedEmoji}

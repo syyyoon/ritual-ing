@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View, Text, Modal, TouchableOpacity, Image } from "react-native";
+import { Alert, StyleSheet, View, Image } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -7,17 +7,10 @@ import { captureRef } from "react-native-view-shot";
 import { useNavigation } from "@react-navigation/native";
 import { ImagePickerScreenNavigation } from "../types/navigation";
 import IconButton from "../components/IconButton";
-import ImageViewer from "../components/ImageViewer";
-// import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EmojiPicker from "../components/EmojiPicker";
 import EmojiList from "../components/EmojiList";
 import DateEmoji from "../components/DateEmoji";
 import { useTheme } from "../context/ThemeContext";
-// import Layout from "../components/Layout";
-// import CustomText from "../components/CustomText";
-// import { MaterialIcons } from "@expo/vector-icons";
-// import Colors from "../constants/colors";
-// import CustomColorPicker from "../components/CustomColorPicker";
 
 const ImagePickerScreen = () => {
   const [showActionOptions, setShowActionOptions] = useState<boolean>(false);
@@ -163,10 +156,6 @@ const ImagePickerScreen = () => {
     ensureDirExists();
   }, []);
 
-  //  <Image
-  //       source={require("../assets/default.png")}
-  //       style={[styles.image, { backgroundColor: theme.DEFAULT_IMG_BG }]}
-  //     />
   return (
     <View style={[styles.container, { backgroundColor: theme.BACKGROUND }]}>
       <View ref={imageRef} collapsable={false}>

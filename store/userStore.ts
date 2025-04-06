@@ -1,30 +1,26 @@
-
-import {create} from "zustand"
-import { User } from '../types/user';  
+import { create } from "zustand";
+import { User } from "../types/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const USER_DATA_KEY = process.env.EXPO_PUBLIC_USER_DATA_KEY || "user";
 
-const USER_DATA_KEY = process.env.EXPO_PUBLIC_USER_DATA_KEY  || "user"
-
-const initialUserData  = {
+const initialUserData = {
   id: 0,
   nickname: "",
   profileImageUrl: "",
-  morningRitual :{
-    activity:"",
-    time:"",
-    isPushEnabled:false,
-    notificationId:""
+  morningRitual: {
+    activity: "",
+    time: "",
+    isPushEnabled: false,
+    notificationId: "",
   },
-  nightRitual :{
-    activity:"",
-    time:"",
-    isPushEnabled:false,
-    notificationId:""
-
+  nightRitual: {
+    activity: "",
+    time: "",
+    isPushEnabled: false,
+    notificationId: "",
   },
-  setupDone:false
-
+  setupDone: false,
 };
 
 interface Store {
@@ -34,32 +30,30 @@ interface Store {
   clearUserData: () => Promise<void>;
 }
 
-
-
-// zustand store 정의
 const useUserStore = create<Store>((set) => ({
   userData: initialUserData,
   // 유저 데이터 저장
   setUserData: async (userData) => {
-    console.log('setUserData!')
+    console.log("setUserData!", userData);
     set({ userData }); // zustand state 업데이트
     await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(userData)); // AsyncStorage에 저장
   },
   // 유저 데이터 조회
-  loadUserData: async () => {    try {
+  loadUserData: async () => {
+    try {
       const storedUserData = await AsyncStorage.getItem(USER_DATA_KEY);
       if (storedUserData) {
-        set({ userData: JSON.parse(storedUserData) }); 
-      } 
+        set({ userData: JSON.parse(storedUserData) });
+      }
     } catch (error) {
       console.error("Failed to load user data from AsyncStorage:", error);
     }
   },
   // 유저데이터 삭제
   clearUserData: async () => {
-    set({ userData: initialUserData }); 
-    await AsyncStorage.removeItem(USER_DATA_KEY); 
-     console.log('clear User data')
+    set({ userData: initialUserData });
+    await AsyncStorage.removeItem(USER_DATA_KEY);
+    console.log("clear User data");
   },
 }));
 

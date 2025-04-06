@@ -18,29 +18,24 @@ type Props = {
 };
 
 const RitualSetup3rdScreen = ({ navigation }: Props) => {
-  const { theme } = useTheme()
-  const { userData, setUserData, loadUserData } = useUserStore()
-
-
+  const { theme } = useTheme();
+  const { userData, setUserData, loadUserData } = useUserStore();
 
   const carouselImages = [
-    require("../assets/example/example1.jpg"),
-    require("../assets/example/example2.jpg"),
-    require("../assets/example/example3.jpg"),
-    require("../assets/example/example4.jpg"),
+    require("../assets/example/example5.jpg"),
+    require("../assets/example/example6.jpg"),
+    require("../assets/example/example7.jpg"),
   ];
 
   const isUserDataValid = (data: User | null): boolean => {
     if (!data) return false;
     return (
-      // * TO DO REVISE
       data.id !== undefined &&
       data.nickname.length > 1 &&
       data.morningRitual.activity.length > 1 &&
       data.nightRitual.activity.length > 1
     );
   };
-
 
   const startHandler = async () => {
     if (isUserDataValid(userData)) {
@@ -49,35 +44,39 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
 
         // 모닝 리추얼 알림 설정
         if (userData.morningRitual.isPushEnabled && userData.morningRitual.time) {
-          const notificationId = await scheduleDailyPushNotification(userData.morningRitual.time, "morning", userData.morningRitual.activity);
+          const notificationId = await scheduleDailyPushNotification(
+            userData.morningRitual.time,
+            "morning",
+            userData.morningRitual.activity
+          );
           if (notificationId) {
             userData.morningRitual.notificationId = notificationId;
           } else {
-            userData.morningRitual.notificationId = ""
+            userData.morningRitual.notificationId = "";
           }
         }
 
         // 나이트 리추얼 알림 설정
         if (userData.nightRitual.isPushEnabled && userData.nightRitual.time) {
-          const notificationId = await scheduleDailyPushNotification(userData.nightRitual.time, "night", userData.nightRitual.activity);
+          const notificationId = await scheduleDailyPushNotification(
+            userData.nightRitual.time,
+            "night",
+            userData.nightRitual.activity
+          );
           if (notificationId) {
             userData.nightRitual.notificationId = notificationId;
           } else {
-            userData.nightRitual.notificationId = ""
+            userData.nightRitual.notificationId = "";
           }
         }
 
-        await setUserData(userData)
-        navigation.navigate('Main');
+        await setUserData(userData);
+        navigation.navigate("Main");
       }
     } else {
-      Alert.alert(
-        "알림",
-        "리추얼 양식을 완성하여주세요.",
-      );
+      Alert.alert("알림", "리추얼 양식을 완성하여주세요.");
     }
   };
-
 
   useEffect(() => {
     const initializeUserData = async () => {
@@ -85,11 +84,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
         await loadUserData();
       } catch (error) {
         console.warn("Failed to load user data:", error);
-        Alert.alert(
-          "알림",
-          "유저 데이터를 불러오는 중 문제가 발생했습니다. 다시 시도해주세요.",
-          [{ text: "확인" }]
-        )
+        Alert.alert("알림", "유저 데이터를 불러오는 중 문제가 발생했습니다. 다시 시도해주세요.", [{ text: "확인" }]);
       }
     };
 
@@ -118,11 +113,7 @@ const RitualSetup3rdScreen = ({ navigation }: Props) => {
             navigation.navigate("RitualSetup2nd");
           }}
         />
-        <CustomButton
-          label="Start"
-          theme="dark"
-          onPress={startHandler}
-        />
+        <CustomButton label="Start" theme="dark" onPress={startHandler} />
       </View>
     </Layout>
   );

@@ -69,37 +69,6 @@ const SettingScreen = ({ navigation }: Props) => {
       Alert.alert("알림", "계정 삭제가 실패하였습니다. 다시 시도해주세요.", [{ text: "OK" }]);
     }
   };
-  // const handleLogout = async () => {
-  //   try {
-  //     await cancelAllScheduledNotifications() // 설정된 푸시 기능 초기화
-  //     await deleteAllRitualData() // 리추얼 데이터 전체 삭제
-  //     await removeUserData('user') // async storage에서 유저 데이터 삭제
-
-  //     try {
-  //       const userInfo = await me();
-  //       if (!userInfo) {
-  //         await getScheduledNotifications()
-  //         await login();// 세션 만료로 유저 정보가 없으면 재로그인 시도
-  //       }
-  //     } catch (error) {
-  //       console.warn("Failed to get user info:", error);
-  //       await login();
-  //     }
-  //     await unlink()  // 카카오 연결 해제
-
-  //     navigation.reset({
-  //       index: 0, routes: [{ name: "Home" }]
-  //     })
-  //   } catch (error) {
-  //     console.warn("Failed to remove user data:", error);
-  //     Alert.alert(
-  //       "알림",
-  //       "계정 삭제가 실패하였습니다. 다시 시도해주세요.",
-  //       [{ text: "OK" }]
-  //     );
-  //   }
-
-  // }
 
   const handleMemberWithdrow = () => {
     Alert.alert("회원탈퇴", "회원 탈퇴 하시겠습니까?", [{ text: "취소" }, { text: "확인", onPress: handleLogout }]);
@@ -118,6 +87,10 @@ const SettingScreen = ({ navigation }: Props) => {
     ]);
   };
 
+  const navigateSetupScreen = () => {
+    navigation.navigate("RitualSetup1st");
+  };
+
   const toggleNotification = async (type: RitualType, value: boolean) => {
     setIsActivePush((prevState) => ({ ...prevState, [type]: value }));
 
@@ -125,7 +98,6 @@ const SettingScreen = ({ navigation }: Props) => {
     const time = userData?.[`${type}Ritual`]?.time || (type === "morning" ? "0700" : "2200");
     let notificationId = userData?.[`${type}Ritual`]?.notificationId || undefined;
 
-    console.log("noti id", notificationId);
     if (value) {
       try {
         notificationId = await scheduleDailyPushNotification(time, type, activity);
@@ -255,6 +227,24 @@ const SettingScreen = ({ navigation }: Props) => {
             }
           />
           <SettingInfoBox
+            name="리추얼 설정"
+            content={
+              <View
+                style={[
+                  styles.content,
+                  {
+                    backgroundColor: theme.FORM_BG,
+                    borderColor: Colors.BORDER,
+                  },
+                ]}
+              >
+                <TouchableOpacity onPress={navigateSetupScreen} style={styles.modeButton}>
+                  <CustomText fontFamily="NotoSansKR_400Regular">리추얼 설정 스크린으로 이동</CustomText>
+                </TouchableOpacity>
+              </View>
+            }
+          />
+          <SettingInfoBox
             name="리추얼 알림 푸쉬"
             content={
               <View
@@ -284,7 +274,6 @@ const SettingScreen = ({ navigation }: Props) => {
                   style={{ justifyContent: "space-evenly" }}
                 />
                 <CustomText fontSize={12} style={{ marginLeft: 5 }}>
-                  {" "}
                   - 알림 시간 변경 은 'Profile' 에서 변경 가능합니다.
                 </CustomText>
               </View>

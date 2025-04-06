@@ -9,7 +9,7 @@ type Props = {
 
 const ImageViewer = React.memo(({ selectedImage }: Props) => {
   const { theme } = useTheme();
-
+  console.log("imgViewer:", FileSystem.documentDirectory + `${selectedImage}`);
   if (!selectedImage) {
     return (
       <Image

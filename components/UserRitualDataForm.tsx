@@ -12,6 +12,7 @@ import Dropdown from "./DropDown";
 import { formattedMorningTimes, formattedNightTimes } from "../utils/timeList";
 import { scheduleDailyPushNotification } from "../hook/usePushNotification";
 import Colors from "../constants/colors";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 type Props = {
   type: "morning" | "night";
@@ -118,7 +119,6 @@ const UserRitualDataForm = ({ type, qty }: Props) => {
           first={<CustomText> ◦ 리추얼 시간 : </CustomText>}
           second={
             <CustomText>
-              {" "}
               {ritualData.time
                 ? `${ritualData.time.slice(0, 2)}시 ${ritualData.time.slice(2, 4)}분`
                 : "설정한 데이터 없음"}
@@ -143,6 +143,10 @@ const UserRitualDataForm = ({ type, qty }: Props) => {
         <Modal visible={isModalVisible} transparent={true} animationType="slide" onRequestClose={modalHandler}>
           <View style={styles.modalOverlay}>
             <View style={[styles.modalContent, { backgroundColor: theme.BACKGROUND }]}>
+              <Text style={[styles.CloseButton, { color: theme.TEXT }]} onPress={modalHandler}>
+                <AntDesign name="close" size={20} />
+              </Text>
+
               <Text style={[styles.modalTitle, { color: theme.TEXT }]}>{ritualName} 리추얼 시간 설정</Text>
               <View
                 style={{
@@ -196,15 +200,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    padding: 20,
-    borderRadius: 10,
-    width: "80%",
+    // padding: 20,
+    // borderRadius: 10,
+    // width: "80%",
+    // alignItems: "center",
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   modalTitle: {
     fontSize: 16,
+    paddingVertical: 10,
   },
   message: {
     color: "tomato",
+  },
+  CloseButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
   },
 });
